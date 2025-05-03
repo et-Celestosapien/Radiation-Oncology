@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Exam Mode</title>
+  <style>
+    * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #71ffe3;
+      color: #333;
+    }
+    .banner {
+      position: fixed;
+      width: 100%;
+      left: 0;
+      padding: 3px 8px;
+      background: #ddd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 1000;
+      font-size: 0.9rem;
+    }
+    .top-banner {
+      top: 0;
+    }
+    .bottom-banner {
+      bottom: 0;
+      justify-content: space-between;
+    }
+    .mid-bottom-banner {
+      position: fixed;
+      bottom: 40px;
+      width: 100%;
+      background: #eee;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 5px;
+      z-index: 999;
+      overflow-y: auto;
+      max-height: 30vh;
+    }
+    button {
+      padding: 6px 12px;
+      margin: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+
+    .btn-hover{
+      padding: 6px 12px;
+      margin: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 10px;
+      color: #fff;
+      cursor: pointer;
+      text-align:center;
+      border: none;
+      background-size: 300% 100%;
+      moz-transition: all .4s ease-in-out;
+      -o-transition: all .4s ease-in-out;
+      -webkit-transition: all .4s ease-in-out;
+      transition: all .4s ease-in-out;
+      background-image: linear-gradient(to right, #29323c, #485563, #2b5876, #4e4376);
+      box-shadow: 0 4px 15px 0 rgba(45, 54, 65, 0.75);
+    }
+    .btn-hover:hover {
+      background-position: 100% 0;
+      moz-transition: all .4s ease-in-out;
+      -o-transition: all .4s ease-in-out;
+      -webkit-transition: all .4s ease-in-out;
+      transition: all .4s ease-in-out;
+    }
+    .btn-hover:focus {
+        outline: none;
+    }
+    
+    .unattempted-btn {
+      margin: 2px;
+      padding: 4px 6px;
+      background: #ffc107;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .container {
+      padding: 60px 10px 100px;
+      max-width: 100vw;
+      margin: auto;
+      box-sizing: border-box;
+    }
+    .card {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      max-width: 100vw;
+      margin: 0 auto;
+    }
+    .option {
+      background: #eee;
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .option.selected {
+      background: #cce5ff;
+      border-left: 4px solid #007bff;
+    }
+    .option.correct {
+      background: #d4edda;
+      border-left: 4px solid #28a745;
+    }
+    .option.incorrect {
+      background: #f8d7da;
+      border-left: 4px solid #dc3545;
+    }
+    .hidden {
+      display: none;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #f0f0f0;
+    }
+    #resultChart {
+      margin-top: 1rem;
+      max-width: 300px;
+      max-height: 300px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="banner top-banner">
+    <span>Time Left: <span id="timer">10:00</span></span>
+    <button class="btn-hover" style="margin-right: 10px;" onclick="confirmExit()">Home</button>
+  </div>
+
+  <div class="container">
+    <div class="card" id="examCard"></div>
+    <div class="card hidden" id="resultCard">
+      <h2>Exam Summary</h2>
+      <p id="scoreSummary"></p>
+      <div id="reportTable"></div>
+      <canvas id="resultChart" width="300" height="300"></canvas>
+    </div>
+  </div>
+
+  <div class="mid-bottom-banner" id="unattemptedList"></div>
+
+  <div class="banner bottom-banner">
+    <button class="btn-hover" style="margin-left: 10px;" onclick="prevQuestion()">Previous</button>
+    <button class="btn-hover" style="margin-right: 10px;" onclick="nextQuestion()">Next</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    let mcqs = [];
+    let currentIndex = 0;
+    let selectedAnswers = [];
+    let timerInterval;
+    let timeRemaining = 600;
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeRemaining--;
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        document.getElementById('timer').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        if (timeRemaining <= 0) {
+          clearInterval(timerInterval);
+          finishExam();
+        }
+      }, 1000);
+    }
+
+    function renderQuestion(index) {
+      const mcq = mcqs[index];
+      const card = document.getElementById('examCard');
+      card.innerHTML = '';
+      const q = document.createElement('h3');
+      q.textContent = `${index + 1}. ${mcq.question}`;
+      card.appendChild(q);
+      mcq.options.forEach((opt, i) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'option';
+        optDiv.textContent = opt;
+        if (selectedAnswers[index] === i) optDiv.classList.add('selected');
+        optDiv.onclick = () => {
+          selectedAnswers[index] = i;
+          updateUnattemptedList();
+          renderQuestion(index);
+        };
+        card.appendChild(optDiv);
+      });
+    }
+
+    function updateUnattemptedList() {
+      const list = document.getElementById('unattemptedList');
+      list.innerHTML = '';
+      mcqs.forEach((_, i) => {
+        if (selectedAnswers[i] === undefined) {
+          const btn = document.createElement('button');
+          btn.textContent = i + 1;
+          btn.className = 'unattempted-btn';
+          btn.onclick = () => {
+            currentIndex = i;
+            renderQuestion(i);
+          };
+          list.appendChild(btn);
+        }
+      });
+    }
+
+    function prevQuestion() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion(currentIndex);
+      }
+    }
+
+    function nextQuestion() {
+      if (currentIndex < mcqs.length - 1) {
+        currentIndex++;
+        renderQuestion(currentIndex);
+      } else {
+        const unanswered = selectedAnswers.filter(a => a === undefined).length;
+        if (unanswered > 0) {
+          if (confirm(`You have ${unanswered} unanswered questions. Are you sure you want to finish the exam?`)) {
+            finishExam();
+          }
+        } else {
+          if (confirm('Do you want to finish the exam?')) {
+            finishExam();
+          }
+        }
+      }
+    }
+
+    function confirmExit() {
+      if (confirm('Are you sure you want to exit exam mode? Your progress will be lost.')) {
+        location.href = 'index.html';
+      }
+    }
+
+    function finishExam() {
+      clearInterval(timerInterval);
+      document.getElementById('examCard').classList.add('hidden');
+      document.getElementById('resultCard').classList.remove('hidden');
+      document.getElementById('unattemptedList').classList.add('hidden');
+      showResults();
+    }
+
+    function showResults() {
+      let score = 0;
+      let total = mcqs.length;
+      const table = document.createElement('table');
+      const header = '<tr><th>#</th><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Explanation</th></tr>';
+      table.innerHTML = header;
+
+      mcqs.forEach((mcq, i) => {
+        const tr = document.createElement('tr');
+        const userAnswer = selectedAnswers[i];
+        const correctIndex = mcq.correctIndex;
+        const isCorrect = userAnswer === correctIndex;
+        if (isCorrect) score++;
+        tr.innerHTML = `
+          <td>${i + 1}</td>
+          <td>${mcq.question}</td>
+          <td>${userAnswer !== undefined ? mcq.options[userAnswer] : 'No Answer'}</td>
+          <td>${mcq.options[correctIndex]}</td>
+          <td>${mcq.explanation}</td>
+        `;
+        table.appendChild(tr);
+      });
+      document.getElementById('scoreSummary').textContent = `You scored ${score} out of ${total}.`;
+      document.getElementById('reportTable').appendChild(table);
+
+      const ctx = document.getElementById('resultChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['Correct', 'Incorrect', 'Unanswered'],
+          datasets: [{
+            data: [
+              selectedAnswers.filter((a, i) => a === mcqs[i].correctIndex).length,
+              selectedAnswers.filter((a, i) => a !== undefined && a !== mcqs[i].correctIndex).length,
+              selectedAnswers.filter(a => a === undefined).length
+            ],
+            backgroundColor: ['#28a745', '#dc3545', '#ffc107']
+          }]
+        }
+      });
+    }
+
+    fetch('Physics_R.json')
+      .then(res => res.json())
+      .then(data => {
+        mcqs = data.sort(() => 0.5 - Math.random()).slice(0, 5);
+        renderQuestion(currentIndex);
+        updateUnattemptedList();
+        startTimer();
+      })
+      .catch(err => {
+        document.getElementById('examCard').innerHTML = '<p>Error loading exam questions.</p>';
+        console.error(err);
+      });
+  </script>
+</body>
+</html>

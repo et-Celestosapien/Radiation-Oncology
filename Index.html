@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no" />
+  <title>MCQ WebApp</title>
+  <style>
+    * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #71ffe3;
+      color: #333;
+
+    }
+    .top-banner, .bottom-banner {
+      position: fixed;
+      width: 100%;
+      left: 0;
+      background: #e0e0e0;
+      padding: 2px 6px;
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      z-index: 1000;
+      transition: opacity 1.0s ease;
+    }
+    .top-banner {
+      top: 0;
+    }
+    .bottom-banner {
+      bottom: 0;
+    }
+    .container {
+      padding: 2rem 1rem 3rem;
+      max-width: 100vw;
+      margin: 0 auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    button {
+      padding: 6px 12px;
+      margin: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+    .btn-hover{
+      padding: 6px 12px;
+      margin: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 10px;
+      color: #fff;
+      cursor: pointer;
+      text-align:center;
+      border: none;
+      background-size: 300% 100%;
+      moz-transition: all .4s ease-in-out;
+      -o-transition: all .4s ease-in-out;
+      -webkit-transition: all .4s ease-in-out;
+      transition: all .4s ease-in-out;
+
+    }
+    .btn-hover-1{
+      background-image: linear-gradient(to right, #29323c, #485563, #2b5876, #4e4376);
+      box-shadow: 0 4px 15px 0 rgba(45, 54, 65, 0.75);
+    }
+    .btn-hover-2 {
+      background-image: linear-gradient(to right, #25aae1, #40e495, #30dd8a, #2bb673);
+      box-shadow: 0 4px 15px 0 rgba(49, 196, 190, 0.75);
+    }
+    .btn-hover:hover {
+      background-position: 100% 0;
+      moz-transition: all .4s ease-in-out;
+      -o-transition: all .4s ease-in-out;
+      -webkit-transition: all .4s ease-in-out;
+      transition: all .4s ease-in-out;
+    }
+
+    .btn-hover:focus {
+        outline: none;
+    }
+    .mcq {
+      margin-bottom: 1.5rem;
+      border-radius: 6px;
+      background: white;
+      padding: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .option {
+      padding: 0.5rem;
+      margin: 0.3rem 0;
+      border-radius: 4px;
+      background: #eee;
+      text-transform: capitalize;
+    }
+    .correct {
+      background: #d4edda;
+      border-left: 4px solid #28a745;
+    }
+    .explanation {
+      margin-top: 1rem;
+      padding: 0.5rem;
+      background: #e9f5ff;
+      border-left: 4px solid #007bff;
+    }
+    .dropdown-container {
+      position: fixed;
+      top: 40px;
+      left: 15px;
+      z-index: 1001;
+    }
+    #mcqList {
+      display: none;
+      background: white;
+      border: 1px solid #ccc;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      padding: 10px;
+      width: 90px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      position: absolute;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+      border-radius: 10px;
+    }
+    #mcqList.show {
+      display: block;
+      opacity: 0.9;
+    }
+    #mcqList ul {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    #mcqList li button {
+      display: block;
+      margin: 5px 0;
+      width: 100%;
+      padding: 6px;
+      text-align: left;
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    @media (max-width: 768px) {
+      .center {
+        padding: 2rem 1rem;
+      }
+      .mcq {
+        padding: 1rem 0.5rem;
+      }
+      #mcqList {
+        width: 80vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-banner" id="topBanner">
+    <button class="btn-hover btn-hover-1" style="margin-left: 10px;" onclick="toggleList()">MCQ List</button>
+    <button class="btn-hover btn-hover-1" style="margin-right: 10px;" onclick="location.hash = ''">Home</button>
+  </div>
+
+  <div id="home" class="center">
+    <h1>Radiation Physics MCQs</h1>
+    <button class="btn-hover btn-hover-2" onclick="location.hash='#practice'">Practice Mode</button>
+    <a href="ExamMode.html"><button class="btn-hover btn-hover-2">Exam Mode</button></a>
+  </div>
+
+  <div id="practice" class="container" style="display:none">
+    <div class="dropdown-container">
+      <div id="mcqList">
+        <ul id="navList"></ul>
+      </div>
+    </div>
+    <div id="mcqsContainer"></div>
+  </div>
+
+  <div class="bottom-banner" id="bottomBanner">
+    <button class="btn-hover btn-hover-1" style="margin-left: 10px;" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Top</button>
+    <button class="btn-hover btn-hover-1" style="margin-right: 10px;" onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})">Bottom</button>
+  </div>
+
+  <script>
+    const container = document.getElementById('mcqsContainer');
+    const navList = document.getElementById('navList');
+    const mcqList = document.getElementById('mcqList');
+    const topBanner = document.getElementById('topBanner');
+    const bottomBanner = document.getElementById('bottomBanner');
+
+    function capitalizeFirstLetter(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    function renderMCQs(mcqs) {
+      container.innerHTML = '';
+      navList.innerHTML = '';
+      mcqs.forEach((mcq, index) => {
+        const div = document.createElement('div');
+        div.className = 'mcq';
+        div.id = 'mcq-' + index;
+
+        const q = document.createElement('h3');
+        q.textContent = `${index + 1}. ${mcq.question}`;
+        div.appendChild(q);
+
+        mcq.options.forEach((opt, idx) => {
+          const optDiv = document.createElement('div');
+          optDiv.className = 'option';
+          if (idx === mcq.correctIndex) optDiv.classList.add('correct');
+          optDiv.textContent = capitalizeFirstLetter(opt.trim());
+          div.appendChild(optDiv);
+        });
+
+        const explanation = document.createElement('div');
+        explanation.className = 'explanation';
+        explanation.textContent = 'Explanation: ' + mcq.explanation;
+        div.appendChild(explanation);
+
+        container.appendChild(div);
+
+        const navItem = document.createElement('li');
+        const navBtn = document.createElement('button');
+        navBtn.textContent = `Q${index + 1}`;
+        navBtn.onclick = () => document.getElementById('mcq-' + index).scrollIntoView({ behavior: 'smooth' });
+        navItem.appendChild(navBtn);
+        navList.appendChild(navItem);
+      });
+    }
+
+    function toggleList() {
+      mcqList.classList.toggle('show');
+    }
+
+    function checkHashAndLoad() {
+      if (location.hash === '#practice') {
+        document.getElementById('home').style.display = 'none';
+        document.getElementById('practice').style.display = 'block';
+        topBanner.style.display = 'flex';
+        bottomBanner.style.display = 'flex';
+
+        fetch('Physics_R.json')
+          .then(response => response.json())
+          .then(data => renderMCQs(data))
+          .catch(err => {
+            console.error('Error loading JSON:', err);
+            container.innerHTML = '<p>Failed to load MCQs. Please check the JSON file.</p>';
+          });
+      } else {
+        document.getElementById('home').style.display = 'flex';
+        document.getElementById('practice').style.display = 'none';
+        topBanner.style.display = 'none';
+        bottomBanner.style.display = 'none';
+        mcqList.classList.remove('show');
+      }
+    }
+
+    window.addEventListener('hashchange', checkHashAndLoad);
+    checkHashAndLoad();
+  </script>
+</body>
+</html>

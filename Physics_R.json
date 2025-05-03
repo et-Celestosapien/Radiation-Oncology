@@ -1,0 +1,842 @@
+[
+  {
+    "question": "All of the following are SI units that are derived from other base SI units, EXCEPT:",
+    "options": ["Gray", "Joule", "Newton", "Kilogram", "Becquerel"],
+    "correctIndex": 3,
+    "explanation": "In the SI system, the seven base units are second, meter, kilogram, ampere, kelvin, mole, and candela. All other SI units are known as \"derived units\" because they can be built from these base units. For example, the Gray is a Joule per kilogram where a Joule is given in its base units as kg m²/s²."
+  },
+  {
+    "question": "Which of the following factors limits the maximum energy that can be imparted to a proton in a cyclotron?",
+    "options": ["Charge", "The gap between the two dees", "Variation in mass with velocity", "Potential difference between the dees", "The size of the two dees"],
+    "correctIndex": 2,
+    "explanation": "There is a limit to the energy that a charged particle can attain through acceleration in a cyclotron. According to the theory of relativity, as the particle approaches high velocity (in the relativistic range), further acceleration causes the particle to gain mass: m = m₀/√(1−v²/c²). This causes the particle to get out of step with the frequency of the alternating potential applied to the dees. This problem has been solved by using synchrotrons where the frequency of the potential is adjusted to compensate for the increase in mass."
+  },
+  {
+    "question": "Which quantity is conserved in an inelastic collision of two bodies having the same temperature?",
+    "options": ["Kinetic energy", "Temperature", "Momentum", "Speed of one body relative to the other", "Position of the center of mass of the two bodies"],
+    "correctIndex": 2,
+    "explanation": "In an inelastic collision, momentum is conserved but kinetic energy is not. That energy is lost to another form. For example, in the photoelectric effect, the energy of the incident photon is transferred to an orbital electron, and that energy is used to overcome the electron's binding energy. Any additional energy beyond the binding energy contributes to the kinetic energy of the liberated electron."
+  },
+  {
+    "question": "What is the wavelength of a light wave in a vacuum with a frequency of 3000 MHz?",
+    "options": ["0.001 m", "0.01 m", "0.1 m", "1.0 m", "10 m"],
+    "correctIndex": 2,
+    "explanation": "The wavelength can be found by dividing the speed of light in a vacuum by the frequency: λ = c/f = (3×10⁸ m/s)/(3×10⁹ 1/s) = 0.1 m."
+  },
+  {
+    "question": "What expression defines the energy (E) of a photon? Note h = Planck's constant, f = frequency, λ = wavelength, c = speed of light in a vacuum.",
+    "options": ["E = h f", "E = h/f", "E = h c/f", "E = h f/λ", "E = h λ/c"],
+    "correctIndex": 0,
+    "explanation": "The energy of a photon is given by its frequency times Planck's constant: E = h f. Since c = λ f, it can also be expressed as E = h c/λ."
+  },
+  {
+    "question": "Approximately how many times larger is the mass of a proton than that of an electron?",
+    "options": ["1.8", "18", "180", "1800", "18000"],
+    "correctIndex": 3,
+    "explanation": "The mass of a proton is 1.67×10⁻²⁷ kg (rest mass energy = 938 MeV). The mass of an electron is 9.11×10⁻³¹ kg (rest mass energy = 0.511 MeV). Therefore, the proton mass is 1833 times larger than the mass of an electron."
+  },
+  {
+    "question": "What two radioactive decay processes compete with one another?",
+    "options": ["Internal conversion, gamma ray emission", "Positron decay, negatron decay", "Negatron decay, electron capture", "Alpha decay, gamma ray emission", "Negatron decay, alpha decay"],
+    "correctIndex": 0,
+    "explanation": "Internal conversion and gamma ray emission both occur after a nucleus in an excited state emits excess energy in the form of a gamma ray. Internal conversion occurs when the emitted gamma ray is absorbed by an orbital electron, which is then ejected from the atom."
+  },
+  {
+    "question": "Which of the following best describes the parent-daughter relationship between ²²⁶Ra → ²²²Rn?",
+    "options": ["Temporal equilibrium", "Secular equilibrium", "Transient equilibrium", "Positive equilibrium", "No equilibrium"],
+    "correctIndex": 1,
+    "explanation": "Secular equilibrium refers to instances where the daughter half-life is much shorter than the parent half-life, 1620 years for ²²⁶Ra and 4.8 days for ²²²Rn."
+  },
+  {
+    "question": "Given the following activation equation, what is the missing atom? ⁴He + ¹⁴N = ... + ¹H",
+    "options": ["¹⁸C", "¹⁶O", "¹⁷O", "¹⁸O", "¹⁸F"],
+    "correctIndex": 2,
+    "explanation": "The total number of nucleons must be conserved in this activation equation. The helium beam consists of two protons and two neutrons, impacting a nitrogen atom of seven protons and seven neutrons. The resultant particles are a hydrogen atom with one proton and an oxygen atom with eight protons and nine neutrons (¹⁷O)."
+  },
+  {
+    "question": "The atomic number is the number of ___ in the nucleus, while the mass number is the number of ___",
+    "options": ["Protons, nucleons", "Protons, neutrons", "Protons, electrons", "Electrons, nucleons", "Electrons, protons"],
+    "correctIndex": 0,
+    "explanation": "The mass number is the number of protons plus neutrons, which together are called nucleons, in the nucleus of an atom."
+  },
+  {
+    "question": "Which of the following particles can have a bremsstrahlung interaction?",
+    "options": ["Neutron", "Positron", "Neutrino", "Anti-neutrino", "Photon"],
+    "correctIndex": 1,
+    "explanation": "Bremsstrahlung results from the deceleration of a charged particle in an electric field. Neutrons, neutrinos, and photons are not charged."
+  },
+  {
+    "question": "What component is responsible for increasing the input voltage by orders of magnitude to the kilovoltage range as required for diagnostic X-ray production?",
+    "options": ["Capacitor", "Rectifier", "Transformer", "Cathode", "Anode"],
+    "correctIndex": 2,
+    "explanation": "The transformer is responsible for voltage multiplication based on the ratio of the number of wire turns on the secondary and primary sides of the transformer."
+  },
+  {
+    "question": "What increases when a polyenergetic kilovolt (kV) X-ray beam is filtered?",
+    "options": ["Intensity", "Half-value layer", "Maximum photon energy in the beam", "Energy of characteristic peaks", "Electron contamination"],
+    "correctIndex": 1,
+    "explanation": "Filtering a polyenergetic kV X-ray beam will preferentially absorb the lower-energy photons, resulting in a greater average energy and therefore a greater half-value layer. The filter will attenuate the beam, so the intensity will be reduced. The maximum photon energy in the beam and the energy of characteristic X-ray peaks will remain the same."
+  },
+  {
+    "question": "What increases when the anode angle in an X-ray tube increases?",
+    "options": ["Size of the actual focal spot", "Size of the effective focal spot", "Spatial resolution", "Anode heel effect", "Variation in X-ray intensity along the length of the X-ray tube"],
+    "correctIndex": 1,
+    "explanation": "The size of the actual focal spot is a function of the size of the filament in the cathode, not the angle of the anode. From the line-focus principle, a smaller anode angle will reduce the size of the effective focal spot. A smaller effective focal spot will produce sharper images. However, a smaller anode angle will result in a greater heel effect (variation in X-ray intensity along the length of the X-ray tube) and will limit the maximum field size."
+  },
+  {
+    "question": "What is the purpose of an X-ray tube's oil bath?",
+    "options": ["Absorb heat from the anode", "Prevent stray electrons from striking nontarget components of the tube", "Modulate the tube dose rate", "Reduce the size of the effective focal spot", "Prevent the anode heel effect"],
+    "correctIndex": 0,
+    "explanation": "The purpose of the oil bath is to absorb heat from the anode in the X-ray tube. Much of the incident electron energy is converted to heat, and this heat is dispersed by utilizing a rotating anode, an angled anode, and an oil bath. Tubes may also be cooled by air or water if oil is not used."
+  },
+  {
+    "question": "What is the average photon energy resulting from the decay of ⁶⁰Co?",
+    "options": ["0.380 MeV", "0.412 MeV", "0.662 MeV", "1.25 MeV", "1.33 MeV"],
+    "correctIndex": 2,
+    "explanation": "⁶⁰Co decays via β-decay into ⁶⁰Ni. ⁶⁰Ni emits approximately equal numbers of 1.17 MeV and 1.33 MeV photons to move to its ground state, resulting in an average photon energy of approximately 0.662 MeV."
+  },
+  {
+    "question": "All of the following occur when a linac is changed from X-ray mode to electron mode, EXCEPT:",
+    "options": ["Scattering foil is placed in the beam", "Target is removed", "Monitor chamber is removed", "Electron applicator is attached", "Beam current decreases"],
+    "correctIndex": 2,
+    "explanation": "A monitor chamber is always needed to monitor the dose output. In some linear accelerators, however, different monitor chambers are used for photon and electron beams. The scattering foil spreads the electron beam and makes it uniform in cross-section. The beam current decreases for electron mode as higher electron beam currents are required for X-ray production."
+  },
+  {
+    "question": "What function does a thyratron perform in a linear accelerator?",
+    "options": ["Multiplication to high voltage", "Voltage rectification", "High-speed switch and controlled rectifier", "Thermionic emission", "Radio frequency (RF) amplification"],
+    "correctIndex": 2,
+    "explanation": "The thyratron is a gas-filled tube used as a high-power electric switch and controlled rectifier. The switching action can be made very fast, much less than a microsecond. When the thyratron is switched on, it allows large currents from the pulse-forming network to travel through to the pulse transformer and into the klystron."
+  },
+  {
+    "question": "What is the purpose of a linear accelerator interlock?",
+    "options": ["Automate accelerator performance", "Speed up accelerator operation", "Prevent machine operation if necessary conditions are not met", "Reduce radiation levels around the accelerator", "Increase treatment time"],
+    "correctIndex": 2,
+    "explanation": "Interlocks are hard stops designed to ensure that the linear accelerator will only generate a beam and perform an irradiation if the linear accelerator is in a safe condition and operating as expected. Safety interlocks can include preventing treatment if the vault door is opened or if the linac couch is not locked. Machine operation interlocks can include preventing treatment if the accelerator current is too low or the temperature is too high."
+  },
+  {
+    "question": "What does the bending magnet in a linac direct?",
+    "options": ["Electron beam exiting the electron gun toward the accelerator structure", "RF power exiting the klystron toward the RF waveguide", "Electron beam exiting the accelerator structure toward the target", "Photon beam exiting the target toward the exit window", "Electron beam exiting the scattering foil toward the exit window"],
+    "correctIndex": 2,
+    "explanation": "The bending magnet directs the electron beam exiting the accelerator structure toward the target in photon mode or toward the scattering foil in electron mode. A magnet can only bend charged particles, not photons."
+  },
+  {
+    "question": "Which of the following is NOT a component of the radiation output of a linac?",
+    "options": ["Bremsstrahlung", "Pair production", "Characteristic X-rays", "Annihilation radiation", "Compton scattering"],
+    "correctIndex": 1,
+    "explanation": "Bremsstrahlung and characteristic X-rays are produced when the electron beam strikes the target in a linac. Pair production and annihilation radiation may occur when photons interact with matter, but these are not part of the linac output. Compton scattering is an interaction process, not a component of the output."
+  },
+  {
+    "question": "What is the primary source of neutron production in a high-energy linac (>10 MV)?",
+    "options": ["Photonuclear reactions", "Electron capture", "Bremsstrahlung", "Pair production", "Compton scattering"],
+    "correctIndex": 0,
+    "explanation": "Photonuclear reactions occur when high-energy photons (>10 MeV) interact with the nucleus of high-Z materials (e.g., tungsten target or collimators), causing the emission of neutrons."
+  },
+  {
+    "question": "In a linac, what is the purpose of the flattening filter?",
+    "options": ["Increase beam intensity", "Reduce electron contamination", "Make the beam energy uniform", "Make the beam intensity uniform", "Reduce neutron production"],
+    "correctIndex": 3,
+    "explanation": "The flattening filter is used to make the photon beam intensity uniform across the field by attenuating the central portion of the beam, which is more intense due to the forward-peaked nature of bremsstrahlung."
+  },
+  {
+    "question": "What is the typical energy range of electrons used in radiotherapy?",
+    "options": ["1–5 MeV", "6–25 MeV", "25–50 MeV", "50–100 MeV", "100–250 MeV"],
+    "correctIndex": 1,
+    "explanation": "Electrons used in radiotherapy typically have energies between 6 and 25 MeV, suitable for treating superficial and moderately deep tumors."
+  },
+  {
+    "question": "Which component in a linac is responsible for collimating the photon beam?",
+    "options": ["Target", "Flattening filter", "Primary collimator", "Multileaf collimator (MLC)", "Ionization chamber"],
+    "correctIndex": 2,
+    "explanation": "The primary collimator shapes the initial photon beam exiting the target, defining the maximum field size. The MLC further shapes the beam for conformal therapy."
+  },
+  {
+    "question": "What is the primary interaction process for 6 MV photons in tissue?",
+    "options": ["Photoelectric effect", "Compton scattering", "Pair production", "Coherent scattering", "Bremsstrahlung"],
+    "correctIndex": 1,
+    "explanation": "For 6 MV photons in tissue, Compton scattering is the dominant interaction process due to the energy range and the effective atomic number of tissue."
+  },
+  {
+    "question": "What is the approximate half-value layer (HVL) of a 6 MV photon beam in lead?",
+    "options": ["0.5 cm", "1.0 cm", "1.5 cm", "2.0 cm", "2.5 cm"],
+    "correctIndex": 2,
+    "explanation": "The HVL for a 6 MV photon beam in lead is approximately 1.5 cm, depending on beam quality and filtration."
+  },
+  {
+    "question": "Which of the following is a characteristic of a photon beam’s percentage depth dose (PDD) curve?",
+    "options": ["Increases with depth", "Decreases exponentially with depth", "Has a maximum at the surface", "Has a maximum at a depth dependent on energy", "Is constant with depth"],
+    "correctIndex": 3,
+    "explanation": "The PDD curve for a photon beam shows a maximum dose at a depth (d_max) that depends on the beam energy (e.g., ~1.5 cm for 6 MV), then decreases with depth due to attenuation and scatter."
+  },
+  {
+    "question": "What is the primary advantage of using a higher-energy photon beam (e.g., 15 MV vs. 6 MV)?",
+    "options": ["Lower skin dose", "Higher surface dose", "Better beam uniformity", "Reduced penumbra", "Increased scatter"],
+    "correctIndex": 0,
+    "explanation": "Higher-energy photon beams (e.g., 15 MV) have a greater depth of maximum dose (d_max), resulting in lower skin dose due to the skin-sparing effect."
+  },
+  {
+    "question": "What is the primary purpose of a wedge filter in radiotherapy?",
+    "options": ["Increase beam intensity", "Shape the beam", "Modify the dose distribution", "Reduce electron contamination", "Collimate the beam"],
+    "correctIndex": 2,
+    "explanation": "A wedge filter modifies the dose distribution by preferentially attenuating the beam on one side, creating a tilted isodose distribution for angled fields."
+  },
+  {
+    "question": "Which of the following best describes the penumbra of a radiation beam?",
+    "options": ["Region of uniform dose", "Region of maximum dose", "Region of dose fall-off at the beam edge", "Region of electron contamination", "Region of neutron production"],
+    "correctIndex": 2,
+    "explanation": "The penumbra is the region at the edge of the radiation beam where the dose falls off rapidly, affected by source size, collimation, and scatter."
+  },
+  {
+    "question": "What is the typical source-to-surface distance (SSD) for a linac in photon therapy?",
+    "options": ["50 cm", "80 cm", "100 cm", "120 cm", "150 cm"],
+    "correctIndex": 2,
+    "explanation": "The standard SSD for photon therapy on a linac is 100 cm, aligning with the isocenter for most treatment setups."
+  },
+  {
+    "question": "Which of the following is NOT a factor affecting the output of a linac?",
+    "options": ["Field size", "Beam energy", "SSD", "Patient thickness", "Flattening filter"],
+    "correctIndex": 3,
+    "explanation": "Patient thickness affects the dose distribution within the patient but not the linac’s output, which is determined by field size, beam energy, SSD, and components like the flattening filter."
+  },
+  {
+    "question": "What is the primary purpose of a multileaf collimator (MLC)?",
+    "options": ["Increase beam energy", "Shape the beam to conform to the target", "Reduce neutron production", "Monitor beam output", "Filter low-energy photons"],
+    "correctIndex": 1,
+    "explanation": "The MLC shapes the photon or electron beam to conform to the target volume, enabling intensity-modulated radiotherapy (IMRT) and conformal therapy."
+  },
+  {
+    "question": "What is the typical energy of characteristic X-rays produced by a tungsten target in a linac?",
+    "options": ["0.01–0.1 MeV", "0.1–0.5 MeV", "0.5–1.0 MeV", "1.0–2.0 MeV", "2.0–5.0 MeV"],
+    "correctIndex": 1,
+    "explanation": "Characteristic X-rays from a tungsten target in a linac typically have energies in the range of 0.1–0.5 MeV, depending on the electron shell transitions."
+  },
+  {
+    "question": "Which of the following best describes the isocenter of a linac?",
+    "options": ["Point of maximum dose", "Point where the beam exits the gantry", "Point where the gantry, collimator, and couch axes intersect", "Point of minimum penumbra", "Point of beam calibration"],
+    "correctIndex": 2,
+    "explanation": "The isocenter is the point where the gantry, collimator, and couch rotation axes intersect, typically at 100 cm from the source, used as the reference for treatment planning."
+  },
+  {
+    "question": "What is the primary source of electron contamination in a photon beam?",
+    "options": ["Target", "Flattening filter", "Primary collimator", "Patient surface", "Air"],
+    "correctIndex": 3,
+    "explanation": "Electron contamination in a photon beam primarily arises from interactions in the patient or phantom surface, as well as scatter from linac components like the flattening filter."
+  },
+  {
+    "question": "Which of the following is a disadvantage of electron beam therapy compared to photon therapy?",
+    "options": ["Lower skin dose", "Limited penetration depth", "Poor beam collimation", "Higher cost", "Increased neutron production"],
+    "correctIndex": 1,
+    "explanation": "Electron beams have limited penetration depth compared to photon beams, making them suitable for superficial tumors but less effective for deep-seated targets."
+  },
+  {
+    "question": "What is the typical range of a 6 MeV electron beam in water?",
+    "options": ["1 cm", "2 cm", "3 cm", "4 cm", "5 cm"],
+    "correctIndex": 1,
+    "explanation": "The practical range of a 6 MeV electron beam in water is approximately 2 cm, calculated as E/3, where E is the energy in MeV."
+  },
+  {
+    "question": "Which of the following best describes the dose profile of an electron beam?",
+    "options": ["Uniform across the field", "Peaked at the center", "Sharp fall-off at the edges", "Exponential increase with depth", "Constant with depth"],
+    "correctIndex": 2,
+    "explanation": "Electron beams have a sharp dose fall-off at the edges due to their finite range and minimal lateral scatter compared to photons."
+  },
+  {
+    "question": "What is the primary purpose of a bolus in radiotherapy?",
+    "options": ["Increase beam energy", "Shape the beam", "Shift the dose distribution closer to the surface", "Reduce scatter", "Monitor dose"],
+    "correctIndex": 2,
+    "explanation": "A bolus is used to shift the dose distribution closer to the surface by adding material (e.g., tissue-equivalent plastic) to increase the effective depth of the target."
+  },
+  {
+    "question": "Which interaction process is most significant for low-energy photons (<100 keV) in tissue?",
+    "options": ["Photoelectric effect", "Compton scattering", "Pair production", "Coherent scattering", "Bremsstrahlung"],
+    "correctIndex": 0,
+    "explanation": "The photoelectric effect dominates for low-energy photons (<100 keV) in tissue due to the high dependence on atomic number (Z³) and low photon energy (1/E³)."
+  },
+  {
+    "question": "What is the approximate mass attenuation coefficient for 6 MV photons in water?",
+    "options": ["0.01 cm²/g", "0.03 cm²/g", "0.05 cm²/g", "0.07 cm²/g", "0.10 cm²/g"],
+    "correctIndex": 1,
+    "explanation": "The mass attenuation coefficient for 6 MV photons in water is approximately 0.03 cm²/g, primarily due to Compton scattering."
+  },
+  {
+    "question": "Which of the following is a unit of absorbed dose?",
+    "options": ["Sievert", "Gray", "Roentgen", "Rem", "Curie"],
+    "correctIndex": 1,
+    "explanation": "The Gray (Gy) is the SI unit of absorbed dose, defined as 1 J/kg."
+  },
+  {
+    "question": "What is the primary purpose of a treatment planning system (TPS)?",
+    "options": ["Generate the radiation beam", "Monitor patient dose", "Calculate dose distributions", "Collimate the beam", "Calibrate the linac"],
+    "correctIndex": 2,
+    "explanation": "The TPS calculates dose distributions based on patient anatomy, beam parameters, and treatment goals to optimize therapy."
+  },
+  {
+    "question": "Which of the following best describes the monitor unit (MU) in radiotherapy?",
+    "options": ["Unit of absorbed dose", "Unit of beam output", "Unit of patient exposure", "Unit of beam energy", "Unit of treatment time"],
+    "correctIndex": 1,
+    "explanation": "Monitor units (MUs) are a measure of linac beam output, used to deliver a prescribed dose to a specific point in the patient."
+  },
+  {
+    "question": "What is the typical output factor for a 10×10 cm² field at 6 MV?",
+    "options": ["0.8", "0.9", "1.0", "1.1", "1.2"],
+    "correctIndex": 2,
+    "explanation": "The output factor for a 10×10 cm² field at 6 MV is defined as 1.0, serving as the reference field size for linac calibration."
+  },
+  {
+    "question": "Which of the following affects the scatter factor in a photon beam?",
+    "options": ["Beam energy", "Field size", "SSD", "Depth", "All of the above"],
+    "correctIndex": 4,
+    "explanation": "The scatter factor depends on beam energy, field size, SSD, and depth, as these influence the amount of scattered radiation contributing to the dose."
+  },
+  {
+    "question": "What is the primary advantage of intensity-modulated radiotherapy (IMRT)?",
+    "options": ["Lower cost", "Simpler setup", "Improved dose conformity", "Reduced treatment time", "Lower skin dose"],
+    "correctIndex": 2,
+    "explanation": "IMRT uses dynamic MLCs to modulate beam intensity, improving dose conformity to the target while sparing surrounding healthy tissue."
+  },
+  {
+    "question": "Which of the following is a common algorithm used in treatment planning systems?",
+    "options": ["Pencil beam", "Monte Carlo", "Finite element", "Convolution", "Both B and D"],
+    "correctIndex": 4,
+    "explanation": "Monte Carlo and convolution (including superposition) are common dose calculation algorithms in TPS, with Monte Carlo being more accurate but computationally intensive."
+  },
+  {
+    "question": "What is the typical uncertainty in dose delivery for a modern linac?",
+    "options": ["1–2%", "3–5%", "5–10%", "10–15%", "15–20%"],
+    "correctIndex": 0,
+    "explanation": "Modern linacs achieve dose delivery uncertainties of 1–2%, ensured by precise calibration and quality assurance."
+  },
+  {
+    "question": "Which of the following best describes a CT simulator?",
+    "options": ["Device to generate therapeutic beams", "Device to acquire patient imaging for planning", "Device to monitor dose", "Device to collimate beams", "Device to calibrate linacs"],
+    "correctIndex": 1,
+    "explanation": "A CT simulator acquires high-resolution patient images for treatment planning, including tumor and organ delineation."
+  },
+  {
+    "question": "What is the primary purpose of a digitally reconstructed radiograph (DRR)?",
+    "options": ["Deliver radiation", "Verify patient positioning", "Calculate dose", "Shape the beam", "Monitor output"],
+    "correctIndex": 1,
+    "explanation": "DRRs are generated from CT data to simulate X-ray images, used to verify patient positioning during treatment setup."
+  },
+  {
+    "question": "Which of the following is a common immobilization device in radiotherapy?",
+    "options": ["Lead shield", "Bolus", "Headrest", "Multileaf collimator", "Flattening filter"],
+    "correctIndex": 2,
+    "explanation": "Headrests (and other devices like masks or body molds) are used to immobilize patients, ensuring consistent positioning during treatment."
+  },
+  {
+    "question": "What is the typical energy of a kilovoltage (kV) imaging beam used for patient setup?",
+    "options": ["50–100 keV", "100–150 keV", "150–200 keV", "200–250 keV", "250–300 keV"],
+    "correctIndex": 1,
+    "explanation": "kV imaging beams for patient setup (e.g., cone-beam CT) typically operate in the 100–150 keV range for optimal contrast."
+  },
+  {
+    "question": "Which of the following best describes a portal image?",
+    "options": ["Image of the treatment beam’s exit", "Image of the patient’s anatomy", "Image of the beam’s entry", "Image of the linac gantry", "Image of the treatment couch"],
+    "correctIndex": 0,
+    "explanation": "Portal images are acquired using the treatment beam (MV) to visualize the beam’s exit, verifying field shape and alignment."
+  },
+  {
+    "question": "What is the primary purpose of a cone-beam CT (CBCT) in radiotherapy?",
+    "options": ["Deliver therapeutic dose", "Acquire 3D images for setup verification", "Calculate dose distributions", "Shape the beam", "Monitor linac output"],
+    "correctIndex": 1,
+    "explanation": "CBCT acquires 3D images using a kV source on the linac, used for setup verification and image-guided radiotherapy (IGRT)."
+  },
+  {
+    "question": "Which of the following is a common source of error in radiotherapy delivery?",
+    "options": ["Incorrect field size", "Patient movement", "Incorrect beam energy", "Incorrect MLC position", "All of the above"],
+    "correctIndex": 4,
+    "explanation": "All listed factors—incorrect field size, patient movement, incorrect beam energy, and incorrect MLC position—can contribute to errors in radiotherapy delivery."
+  },
+  {
+    "question": "What is the typical frequency of quality assurance (QA) checks for a linac’s output?",
+    "options": ["Daily", "Weekly", "Monthly", "Quarterly", "Annually"],
+    "correctIndex": 0,
+    "explanation": "Daily QA checks are performed to verify linac output, ensuring consistent dose delivery."
+  },
+  {
+    "question": "Which of the following best describes the term “beam-on time”?",
+    "options": ["Time to set up the patient", "Time the linac is powered on", "Time the radiation beam is active", "Time to calibrate the linac", "Time to calculate the dose"],
+    "correctIndex": 2,
+    "explanation": "Beam-on time is the duration the radiation beam is active, delivering dose to the patient."
+  },
+  {
+    "question": "What is the primary purpose of a record and verify system in radiotherapy?",
+    "options": ["Calculate dose", "Shape the beam", "Monitor linac output", "Verify treatment parameters", "Generate patient images"],
+    "correctIndex": 3,
+    "explanation": "A record and verify system ensures that treatment parameters (e.g., field size, MUs, gantry angle) are correctly set and delivered, reducing errors."
+  },
+  {
+    "question": "Which of the following is a common dosimeter used for in-vivo dosimetry?",
+    "options": ["Ionization chamber", "TLD", "Diode", "Film", "All of the above"],
+    "correctIndex": 4,
+    "explanation": "Ionization chambers, TLDs, diodes, and films are all used for in-vivo dosimetry to measure dose delivered to the patient during treatment."
+  },
+  {
+    "question": "What is the typical calibration condition for a linac photon beam?",
+    "options": ["10×10 cm² field, 100 cm SSD, d_max", "5×5 cm² field, 80 cm SSD, surface", "10×10 cm² field, 100 cm SSD, 10 cm depth", "20×20 cm² field, 120 cm SSD, d_max", "10×10 cm² field, 80 cm SSD, d_max"],
+    "correctIndex": 0,
+    "explanation": "Linac photon beams are typically calibrated for a 10×10 cm² field at 100 cm SSD at the depth of maximum dose (d_max)."
+  },
+  {
+    "question": "Which of the following best describes the term “d_max”?",
+    "options": ["Depth of maximum scatter", "Depth of maximum dose", "Depth of maximum penetration", "Depth of maximum attenuation", "Depth of maximum energy"],
+    "correctIndex": 1,
+    "explanation": "d_max is the depth at which the maximum dose occurs in a photon or electron beam, dependent on beam energy (e.g., ~1.5 cm for 6 MV photons)."
+  },
+  {
+    "question": "What is the primary purpose of a water phantom in radiotherapy QA?",
+    "options": ["Simulate patient anatomy", "Calibrate the linac", "Measure dose distributions", "Shape the beam", "Monitor patient movement"],
+    "correctIndex": 2,
+    "explanation": "Water phantoms are used to measure dose distributions and verify linac output, simulating tissue-equivalent conditions."
+  },
+  {
+    "question": "Which of the following is a common source of uncertainty in dose calculation?",
+    "options": ["Patient contour errors", "Beam calibration errors", "Algorithm limitations", "Tissue heterogeneity", "All of the above"],
+    "correctIndex": 4,
+    "explanation": "Patient contour errors, beam calibration errors, algorithm limitations, and tissue heterogeneity all contribute to uncertainties in dose calculations."
+  },
+  {
+    "question": "What is the typical dose rate for a modern linac in photon mode?",
+    "options": ["100–200 MU/min", "200–400 MU/min", "400–600 MU/min", "600–800 MU/min", "800–1000 MU/min"],
+    "correctIndex": 2,
+    "explanation": "Modern linacs typically deliver photon beams at dose rates of 400–600 MU/min, adjustable for specific treatments."
+  },
+  {
+    "question": "Which of the following best describes the term “beam quality”?",
+    "options": ["Beam intensity", "Beam energy spectrum", "Beam collimation", "Beam uniformity", "Beam penetration"],
+    "correctIndex": 1,
+    "explanation": "Beam quality refers to the energy spectrum of the radiation beam, often specified by HVL or nominal energy (e.g., 6 MV)."
+  },
+  {
+    "question": "What is the primary advantage of stereotactic radiosurgery (SRS)?",
+    "options": ["Lower cost", "Reduced treatment time", "High dose conformity", "Simpler planning", "Lower skin dose"],
+    "correctIndex": 2,
+    "explanation": "SRS delivers high doses with precise conformity to small targets (e.g., brain tumors), minimizing damage to surrounding tissues."
+  },
+  {
+    "question": "Which of the following is a common immobilization device for SRS?",
+    "options": ["Body mold", "Vacuum bag", "Head frame", "Thermoplastic mask", "All of the above"],
+    "correctIndex": 4,
+    "explanation": "Body molds, vacuum bags, head frames, and thermoplastic masks are used for SRS to ensure precise patient immobilization."
+  },
+  {
+    "question": "What is the typical fraction size for stereotactic body radiotherapy (SBRT)?",
+    "options": ["1–2 Gy", "3–5 Gy", "5–10 Gy", "10–20 Gy", "20–30 Gy"],
+    "correctIndex": 3,
+    "explanation": "SBRT typically uses high fraction sizes of 10–20 Gy delivered in 1–5 fractions for ablative treatment. [Explanation Incomplete due to document truncation]"
+  },
+  {
+    "question": "Which of the following best describes the term “margin” in radiotherapy?",
+    "options": ["Distance between gantry and patient", "Distance between isocenter and collimator", "Extra volume added to the target to account for uncertainties", "Distance between beam edge and target", "Distance between d_max and surface"],
+    "correctIndex": 2,
+    "explanation": "Margins are added to the clinical target volume (CTV) to create the planning target volume (PTV), accounting for setup errors and motion."
+  },
+  {
+    "question": "What is the primary purpose of a 4D-CT in radiotherapy?",
+    "options": ["Measure dose", "Verify beam shape", "Account for respiratory motion", "Calibrate the linac", "Monitor output"],
+    "correctIndex": 2,
+    "explanation": "4D-CT captures images over the respiratory cycle to account for tumor motion, used in treatments like lung SBRT."
+  },
+  {
+    "question": "Which of the following is a common gating technique in radiotherapy?",
+    "options": ["Gantry rotation", "Beam modulation", "Respiratory gating", "Collimator adjustment", "Dose escalation"],
+    "correctIndex": 2,
+    "explanation": "Respiratory gating synchronizes beam delivery with the patient’s breathing cycle to reduce motion effects."
+  },
+  {
+    "question": "What is the typical energy range for protons used in radiotherapy?",
+    "options": ["50–100 MeV", "100–150 MeV", "150–250 MeV", "250–300 MeV", "300–400 MeV"],
+    "correctIndex": 2,
+    "explanation": "Protons for radiotherapy typically range from 150–250 MeV, allowing precise dose deposition at the Bragg peak."
+  },
+  {
+    "question": "Which of the following best describes the Bragg peak?",
+    "options": ["Point of maximum scatter", "Point of maximum dose", "Point of maximum penetration", "Point of minimum dose", "Point of maximum energy"],
+    "correctIndex": 1,
+    "explanation": "The Bragg peak is the depth at which protons deposit the maximum dose, with a sharp fall-off beyond, ideal for sparing healthy tissue."
+  },
+  {
+    "question": "What is the primary advantage of proton therapy over photon therapy?",
+    "options": ["Lower cost", "Simpler delivery", "Reduced exit dose", "Higher skin dose", "Increased scatter"],
+    "correctIndex": 2,
+    "explanation": "Proton therapy’s Bragg peak allows precise dose deposition with minimal exit dose, sparing healthy tissue beyond the target."
+  },
+  {
+    "question": "Which of the following is a challenge in proton therapy?",
+    "options": ["Beam calibration", "Patient setup", "Range uncertainty", "Tissue heterogeneity", "All of the above"],
+    "correctIndex": 4,
+    "explanation": "Beam calibration, patient setup, range uncertainty, and tissue heterogeneity are all challenges in proton therapy due to the sharp dose fall-off."
+  },
+  {
+    "question": "What is the primary purpose of a range compensator in proton therapy?",
+    "options": ["Increase beam energy", "Shape the beam", "Adjust for tissue heterogeneity", "Reduce scatter", "Monitor dose"],
+    "correctIndex": 2,
+    "explanation": "A range compensator adjusts the proton beam’s range to account for tissue heterogeneity, ensuring uniform dose to the target."
+  },
+  {
+    "question": "Which of the following best describes pencil beam scanning in proton therapy?",
+    "options": ["Fixed beam delivery", "Dynamic beam modulation", "Uniform dose delivery", "Single-field treatment", "High-energy delivery"],
+    "correctIndex": 1,
+    "explanation": "Pencil beam scanning dynamically modulates proton beams to conform the dose to the target in 3D, used in intensity-modulated proton therapy (IMPT)."
+  },
+  {
+    "question": "What is the typical dose constraint for the spinal cord in radiotherapy?",
+    "options": ["20 Gy", "30 Gy", "45 Gy", "60 Gy", "75 Gy"],
+    "correctIndex": 2,
+    "explanation": "The spinal cord typically has a dose constraint of ~45 Gy to avoid myelopathy, depending on fractionation."
+  },
+  {
+    "question": "Which of the following is a common late effect of radiotherapy?",
+    "options": ["Nausea", "Fatigue", "Fibrosis", "Alopecia", "Diarrhea"],
+    "correctIndex": 2,
+    "explanation": "Fibrosis is a common late effect, occurring months to years after radiotherapy due to chronic tissue damage."
+  },
+  {
+    "question": "What is the primary purpose of fractionation in radiotherapy?",
+    "options": ["Reduce treatment time", "Increase skin dose", "Spread dose to reduce toxicity", "Increase scatter", "Simplify planning"],
+    "correctIndex": 2,
+    "explanation": "Fractionation spreads the total dose over multiple sessions, reducing toxicity to normal tissues while maintaining tumor control."
+  },
+  {
+    "question": "Which of the following best describes the linear-quadratic (LQ) model?",
+    "options": ["Model for beam calibration", "Model for dose distribution", "Model for tumor control and normal tissue effects", "Model for beam collimation", "Model for patient setup"],
+    "correctIndex": 2,
+    "explanation": "The LQ model describes tumor control and normal tissue effects as a function of dose per fraction, using α/β ratios."
+  },
+  {
+    "question": "What is the typical α/β ratio for tumors?",
+    "options": ["2–4 Gy", "5–7 Gy", "8–10 Gy", "12–15 Gy", "15–20 Gy"],
+    "correctIndex": 2,
+    "explanation": "Tumors typically have an α/β ratio of 8–10 Gy, indicating sensitivity to fraction size in the LQ model."
+  },
+  {
+    "question": "Which of the following is a common acute effect of radiotherapy to the head and neck?",
+    "options": ["Cardiac toxicity", "Fibrosis", "Skin erythema", "Renal failure", "Bone necrosis"],
+    "correctIndex": 2,
+    "explanation": "Skin erythema is a common acute effect of head and neck radiotherapy, occurring within weeks due to radiation-induced inflammation."
+  },
+  {
+    "question": "What is the primary purpose of a dose-volume histogram (DVH)?",
+    "options": ["Calibrate the linac", "Shape the beam", "Evaluate dose to structures", "Monitor output", "Verify patient position"],
+    "correctIndex": 2,
+    "explanation": "DVHs evaluate the dose delivered to target volumes and organs at risk, summarizing dose-volume relationships."
+  },
+  {
+    "question": "Which of the following best describes the term “OAR” in radiotherapy?",
+    "options": ["Organ at risk", "Output adjustment ratio", "Optimal alignment region", "Organ avoidance rate", "Output accuracy range"],
+    "correctIndex": 0,
+    "explanation": "Organs at risk (OARs) are critical structures near the target that must be spared to minimize toxicity."
+  },
+  {
+    "question": "What is the typical dose constraint for the lens of the eye in radiotherapy?",
+    "options": ["5 Gy", "10 Gy", "15 Gy", "20 Gy", "25 Gy"],
+    "correctIndex": 1,
+    "explanation": "The lens of the eye typically has a dose constraint of ~10 Gy to minimize the risk of cataracts."
+  },
+  {
+    "question": "Which of the following is a common technique to reduce dose to OARs?",
+    "options": ["Increase field size", "Use bolus", "IMRT", "Increase SSD", "Reduce beam energy"],
+    "correctIndex": 2,
+    "explanation": "IMRT modulates beam intensity to reduce dose to OARs while maintaining target coverage."
+  },
+  {
+    "question": "What is the primary purpose of a treatment planning CT scan?",
+    "options": ["Deliver radiation", "Verify beam shape", "Provide anatomical data for planning", "Monitor dose", "Calibrate the linac"],
+    "correctIndex": 2,
+    "explanation": "A treatment planning CT scan provides anatomical data for delineating targets and OARs and calculating dose distributions."
+  },
+  {
+    "question": "Which of the following best describes the term “GTV”?",
+    "options": ["Gross tumor volume", "Geometric target volume", "General treatment volume", "Gross tissue volume", "Guided therapy volume"],
+    "correctIndex": 0,
+    "explanation": "The gross tumor volume (GTV) is the visible tumor identified on imaging, forming the basis for treatment planning."
+  },
+  {
+    "question": "What is the typical margin from CTV to PTV in photon therapy?",
+    "options": ["1–2 mm", "3–5 mm", "5–10 mm", "10–15 mm", "15–20 mm"],
+    "correctIndex": 2,
+    "explanation": "A typical CTV-to-PTV margin is 5–10 mm, accounting for setup errors and organ motion, depending on the site and IGRT use."
+  },
+  {
+    "question": "Which of the following is a common image-guided radiotherapy (IGRT) technique?",
+    "options": ["Portal imaging", "Cone-beam CT", "Ultrasound", "All of the above", "None of the above"],
+    "correctIndex": 3,
+    "explanation": "Portal imaging, cone-beam CT, and ultrasound are all IGRT techniques used to verify patient positioning."
+  },
+  {
+    "question": "What is the primary advantage of adaptive radiotherapy?",
+    "options": ["Fixed treatment plan", "Reduced setup time", "Adjusts plan to anatomical changes", "Lower cost", "Increased scatter"],
+    "correctIndex": 2,
+    "explanation": "Adaptive radiotherapy adjusts the treatment plan to account for anatomical changes (e.g., tumor shrinkage, weight loss) during treatment."
+  },
+  {
+    "question": "Which of the following best describes the term “RBE” in radiotherapy?",
+    "options": ["Relative beam energy", "Relative biological effectiveness", "Radiation beam efficiency", "Relative biological effect", "Radiation beam enhancement"],
+    "correctIndex": 1,
+    "explanation": "Relative biological effectiveness (RBE) compares the biological effect of a radiation type (e.g., protons) to photons for the same dose."
+  },
+  {
+    "question": "What is the typical RBE for protons compared to photons?",
+    "options": ["0.5", "1.0", "1.1", "1.5", "2.0"],
+    "correctIndex": 2,
+    "explanation": "Protons have an RBE of ~1.1 compared to photons, indicating slightly higher biological effectiveness."
+  },
+  {
+    "question": "Which of the following is a common quality assurance (QA) test for IMRT?",
+    "options": ["Output calibration", "Field flatness", "Patient-specific dose verification", "Gantry alignment", "All of the above"],
+    "correctIndex": 4,
+    "explanation": "Patient-specific dose verification (e.g., using phantoms or film) is critical for IMRT QA, alongside other tests like output calibration and gantry alignment."
+  },
+  {
+    "question": "What is the primary purpose of a machine log file in a linac?",
+    "options": ["Calculate dose", "Monitor patient movement", "Record machine parameters", "Shape the beam", "Verify patient position"],
+    "correctIndex": 2,
+    "explanation": "Machine log files record parameters (e.g., MUs, MLC positions, gantry angles) for QA and error detection."
+  },
+  {
+    "question": "Which of the following best describes the term “hot spot” in radiotherapy?",
+    "options": ["Region of minimum dose", "Region of maximum dose", "Region of uniform dose", "Region of scatter", "Region of penumbra"],
+    "correctIndex": 1,
+    "explanation": "A hot spot is a region receiving a significantly higher dose than intended, often evaluated in treatment planning."
+  },
+  {
+    "question": "What is the typical dose rate for HDR brachytherapy?",
+    "options": ["1–2 Gy/min", "2–5 Gy/min", "5–10 Gy/min", "10–20 Gy/min", "20–30 Gy/min"],
+    "correctIndex": 3,
+    "explanation": "High-dose-rate (HDR) brachytherapy typically delivers doses at 10–20 Gy/min using sources like ¹⁹²Ir."
+  },
+  {
+    "question": "Which of the following is a common brachytherapy source?",
+    "options": ["⁶⁰Co", "¹³⁷Cs", "¹⁹²Ir", "¹²⁵I", "All of the above"],
+    "correctIndex": 4,
+    "explanation": "⁶⁰Co, ¹³⁷Cs, ¹⁹²Ir, and ¹²⁵I are all used in brachytherapy, with ¹⁹²Ir and ¹²⁵I being common for HDR and LDR, respectively."
+  },
+  {
+    "question": "What is the primary advantage of brachytherapy?",
+    "options": ["Non-invasive", "Low dose to OARs", "Short treatment time", "Uniform dose", "High penetration"],
+    "correctIndex": 1,
+    "explanation": "Brachytherapy places sources near or in the target, delivering high doses to the tumor while minimizing dose to surrounding OARs."
+  },
+  {
+    "question": "Which of the following best describes LDR brachytherapy?",
+    "options": ["Dose rate < 2 Gy/h", "Dose rate 2–12 Gy/h", "Dose rate > 12 Gy/h", "Dose rate 1–2 Gy/min", "Dose rate > 2 Gy/min"],
+    "correctIndex": 0,
+    "explanation": "Low-dose-rate (LDR) brachytherapy delivers doses at < 2 Gy/h, typically over days, using permanent or temporary implants."
+  },
+  {
+    "question": "What is the typical half-life of ¹⁹²Ir used in HDR brachytherapy?",
+    "options": ["30 days", "60 days", "74 days", "100 days", "120 days"],
+    "correctIndex": 2,
+    "explanation": "¹⁹²Ir has a half-life of approximately 74 days, requiring regular source replacement in HDR brachytherapy."
+  },
+  {
+    "question": "Which of the following is a common applicator for intracavitary brachytherapy?",
+    "options": ["Tandem and ovoid", "Needle", "Seed", "Cylinder", "All of the above"],
+    "correctIndex": 4,
+    "explanation": "Tandem and ovoid, needles, seeds, and cylinders are all used as applicators in intracavitary or interstitial brachytherapy."
+  },
+  {
+    "question": "What is the primary purpose of a source dwell time in HDR brachytherapy?",
+    "options": ["Calibrate the source", "Shape the beam", "Optimize dose distribution", "Monitor output", "Verify position"],
+    "correctIndex": 2,
+    "explanation": "Dwell times in HDR brachytherapy control the time the source remains at each position, optimizing the dose distribution."
+  },
+  {
+    "question": "Which of the following best describes the term “air kerma strength”?",
+    "options": ["Dose in tissue", "Source activity", "Dose rate in air", "Energy per decay", "Dose at d_max"],
+    "correctIndex": 2,
+    "explanation": "Air kerma strength is the dose rate in air at a reference distance (usually 1 m) from a brachytherapy source, measured in μGy m²/h."
+  },
+  {
+    "question": "What is the typical reference distance for air kerma strength?",
+    "options": ["0.5 m", "1.0 m", "1.5 m", "2.0 m", "2.5 m"],
+    "correctIndex": 1,
+    "explanation": "The reference distance for air kerma strength is 1.0 m, standard for brachytherapy source calibration."
+  },
+  {
+    "question": "Which of the following is a common shielding material for brachytherapy suites?",
+    "options": ["Lead", "Concrete", "Steel", "All of the above", "None of the above"],
+    "correctIndex": 3,
+    "explanation": "Lead, concrete, and steel are all used for shielding in brachytherapy suites to protect against gamma radiation."
+  },
+  {
+    "question": "What is the primary purpose of a nomogram in brachytherapy?",
+    "options": ["Calculate dose", "Verify source position", "Plan source placement", "Monitor output", "Shape the beam"],
+    "correctIndex": 2,
+    "explanation": "Nomograms are used to plan source placement and spacing in brachytherapy to achieve the desired dose distribution."
+  },
+  {
+    "question": "Which of the following best describes the Paterson-Parker system?",
+    "options": ["Dose calculation algorithm", "Source placement rules", "Shielding design", "QA protocol", "Imaging technique"],
+    "correctIndex": 1,
+    "explanation": "The Paterson-Parker system provides rules for source placement in brachytherapy to ensure uniform dose distribution."
+  },
+  {
+    "question": "What is the typical energy of gamma rays emitted by ¹²⁵I?",
+    "options": ["10–20 keV", "20–35 keV", "35–50 keV", "50–100 keV", "100–200 keV"],
+    "correctIndex": 1,
+    "explanation": "¹²⁵I emits gamma rays with energies of approximately 20–35 keV, suitable for LDR brachytherapy."
+  },
+  {
+    "question": "Which of the following is a common site for brachytherapy?",
+    "options": ["Prostate", "Breast", "Cervix", "All of the above", "None of the above"],
+    "correctIndex": 3,
+    "explanation": "Prostate, breast, and cervix are common sites for brachytherapy, using interstitial or intracavitary techniques."
+  },
+  {
+    "question": "What is the primary advantage of permanent brachytherapy implants?",
+    "options": ["Short treatment time", "Low cost", "No applicator removal", "High dose rate", "Increased penetration"],
+    "correctIndex": 2,
+    "explanation": "Permanent implants (e.g., ¹²⁵I seeds) remain in the patient, eliminating the need for applicator removal."
+  },
+  {
+    "question": "Which of the following best describes the term “afterloading” in brachytherapy?",
+    "options": ["Source calibration", "Source placement after applicator insertion", "Source removal", "Dose calculation", "Patient imaging"],
+    "correctIndex": 1,
+    "explanation": "Afterloading involves placing the radioactive source in the applicator after it is inserted into the patient, reducing staff exposure."
+  },
+  {
+    "question": "What is the typical dose prescription point for cervical brachytherapy?",
+    "options": ["Point A", "Point B", "Point C", "Point D", "Point E"],
+    "correctIndex": 0,
+    "explanation": "Point A is the standard dose prescription point for cervical brachytherapy, located 2 cm superior and 2 cm lateral to the cervical os."
+  },
+  {
+    "question": "Which of the following is a common QA test for brachytherapy?",
+    "options": ["Source calibration", "Applicator integrity", "Dose verification", "All of the above", "None of the above"],
+    "correctIndex": 3,
+    "explanation": "Source calibration, applicator integrity, and dose verification are all critical QA tests for brachytherapy."
+  },
+  {
+    "question": "What is the primary purpose of a remote afterloader in HDR brachytherapy?",
+    "options": ["Calculate dose", "Deliver the source", "Monitor patient", "Shape the beam", "Verify position"],
+    "correctIndex": 1,
+    "explanation": "A remote afterloader delivers the radioactive source to the applicator in HDR brachytherapy, reducing staff exposure."
+  },
+  {
+    "question": "Which of the following best describes the term “TG-43” in brachytherapy?",
+    "options": ["Shielding guideline", "Dose calculation formalism", "QA protocol", "Imaging technique", "Source calibration method"],
+    "correctIndex": 1,
+    "explanation": "TG-43 is a dose calculation formalism for brachytherapy, providing standardized methods for dose estimation."
+  },
+  {
+    "question": "What is the typical occupational dose limit for radiation workers?",
+    "options": ["20 mSv/year", "50 mSv/year", "100 mSv/year", "150 mSv/year", "200 mSv/year"],
+    "correctIndex": 1,
+    "explanation": "The occupational dose limit for radiation workers is 50 mSv/year, averaged over 5 years, per ICRP recommendations."
+  },
+  {
+    "question": "Which of the following is a common radiation survey instrument?",
+    "options": ["Ionization chamber", "Geiger-Müller counter", "Film badge", "All of the above", "None of the above"],
+    "correctIndex": 3,
+    "explanation": "Ionization chambers, Geiger-Müller counters, and film badges are used for radiation surveys and monitoring."
+  },
+  {
+    "question": "What is the primary purpose of a personnel dosimeter?",
+    "options": ["Calibrate the linac", "Measure patient dose", "Monitor staff exposure", "Shape the beam", "Verify treatment plans"],
+    "correctIndex": 2,
+    "explanation": "Personnel dosimeters (e.g., TLDs, OSLDs) monitor radiation exposure to staff to ensure compliance with dose limits."
+  },
+  {
+    "question": "Which of the following best describes the ALARA principle?",
+    "options": ["As Low As Reasonably Achievable", "Accurate Linear Accelerator Radiation Assessment", "Automated Linac Adjustment for Radiation Accuracy", "As Low As Radiation Allows", "Adaptive Linac Radiation Algorithm"],
+    "correctIndex": 0,
+    "explanation": "ALARA stands for As Low As Reasonably Achievable, a principle to minimize radiation exposure to staff and patients."
+  },
+  {
+    "question": "What is the typical public dose limit from radiotherapy facilities?",
+    "options": ["1 mSv/year", "5 mSv/year", "10 mSv/year", "20 mSv/year", "50 mSv/year"],
+    "correctIndex": 0,
+    "explanation": "The public dose limit from radiotherapy facilities is 1 mSv/year, per regulatory guidelines."
+  },
+  {
+    "question": "Which of the following is a common shielding material for linac vaults?",
+    "options": ["Lead", "Concrete", "Steel", "All of the above", "None of the above"],
+    "correctIndex": 3,
+    "explanation": "Lead, concrete, and steel are used for shielding linac vaults to protect against photons and neutrons."
+  },
+  {
+    "question": "What is the primary purpose of a controlled area in a radiotherapy facility?",
+    "options": ["Patient treatment", "Staff training", "Restrict access to radiation areas", "Equipment storage", "QA testing"],
+    "correctIndex": 2,
+    "explanation": "A controlled area restricts access to areas with potential radiation exposure, ensuring safety."
+  },
+  {
+    "question": "Which of the following best describes a radiation warning sign?",
+    "options": ["Red circle", "Yellow triangle with trefoil", "Blue square", "Green cross", "White diamond"],
+    "correctIndex": 1,
+    "explanation": "A radiation warning sign is a yellow triangle with a black trefoil symbol, indicating radiation hazards."
+  },
+  {
+    "question": "What is the typical frequency of shielding surveys for a new linac vault?",
+    "options": ["Once", "Annually", "Biannually", "Quarterly", "Monthly"],
+    "correctIndex": 0,
+    "explanation": "Shielding surveys are typically performed once during commissioning of a new linac vault, with periodic checks as needed."
+  },
+  {
+    "question": "Which of the following is a common method to reduce staff exposure in radiotherapy?",
+    "options": ["Increase treatment time", "Use remote afterloading", "Increase field size", "Reduce SSD", "Increase dose rate"],
+    "correctIndex": 1,
+    "explanation": "Remote afterloading in brachytherapy and other techniques reduce staff exposure by minimizing time near the source."
+  },
+  {
+    "question": "What is the primary purpose of a radiotherapy incident reporting system?",
+    "options": ["Calibrate equipment", "Monitor patient dose", "Identify and learn from errors", "Shape the beam", "Verify plans"],
+    "correctIndex": 2,
+    "explanation": "Incident reporting systems identify errors or near-misses to improve safety and prevent future incidents."
+  },
+  {
+    "question": "Which of the following best describes the term “leakage radiation”?",
+    "options": ["Radiation from the primary beam", "Radiation from scatter", "Radiation through linac head shielding", "Radiation from patient", "Radiation from collimators"],
+    "correctIndex": 2,
+    "explanation": "Leakage radiation is unintended radiation escaping through the linac head shielding, limited to <0.1% of the primary beam."
+  },
+  {
+    "question": "What is the typical neutron energy in a high-energy linac (>10 MV)?",
+    "options": ["0.1–1 MeV", "1–10 MeV", "10–20 MeV", "20–30 MeV", "30–50 MeV"],
+    "correctIndex": 1,
+    "explanation": "Neutrons from high-energy linacs (>10 MV) typically have energies of 1–10 MeV, produced via photonuclear reactions."
+  },
+  {
+    "question": "Which of the following is a common neutron shielding material?",
+    "options": ["Polyethylene", "Lead", "Steel", "Concrete", "All of the above"],
+    "correctIndex": 4,
+    "explanation": "Polyethylene, lead, steel, and concrete are used for neutron shielding, with polyethylene being effective for thermal neutrons."
+  },
+  {
+    "question": "What is the primary purpose of a door interlock in a linac vault?",
+    "options": ["Monitor dose", "Prevent unauthorized access", "Stop the beam if the door is opened", "Shape the beam", "Calibrate the linac"],
+    "correctIndex": 2,
+    "explanation": "Door interlocks stop the beam if the vault door is opened, ensuring safety during treatment."
+  },
+  {
+    "question": "Which of the following best describes the term “skyshine”?",
+    "options": ["Radiation scatter in the patient", "Radiation leakage through the roof", "Radiation from the primary beam", "Radiation from collimators", "Radiation from the target"],
+    "correctIndex": 1,
+    "explanation": "Skyshine is radiation leakage through the roof of a radiotherapy facility, scattering in the atmosphere."
+  },
+  {
+    "question": "What is the typical energy threshold for neutron production in a linac?",
+    "options": ["5 MeV", "8 MeV", "10 MeV", "12 MeV", "15 MeV"],
+    "correctIndex": 2,
+    "explanation": "Neutron production in linacs occurs above ~10 MeV due to photonuclear reactions in high-Z materials."
+  },
+  {
+    "question": "Which of the following is a common QA test for a linac’s mechanical accuracy?",
+    "options": ["Output calibration", "Gantry isocenter accuracy", "Field flatness", "MLC positioning", "All of the above"],
+    "correctIndex": 4,
+    "explanation": "Gantry isocenter accuracy, field flatness, MLC positioning, and output calibration are all critical QA tests for linac mechanical accuracy."
+  },
+  {
+    "question": "What is the primary purpose of a patient-specific QA plan in IMRT?",
+    "options": ["Calibrate the linac", "Verify dose delivery", "Shape the beam", "Monitor staff exposure", "Calculate scatter"],
+    "correctIndex": 1,
+    "explanation": "Patient-specific QA plans verify dose delivery for IMRT using phantoms or dosimeters to ensure accuracy."
+  },
+  {
+    "question": "Which of the following best describes the term “commissioning” in radiotherapy?",
+    "options": ["Daily QA", "Patient treatment", "Initial setup and testing of equipment", "Routine maintenance", "Staff training"],
+    "correctIndex": 2,
+    "explanation": "Commissioning involves the initial setup, testing, and calibration of radiotherapy equipment to ensure it meets specifications."
+  }
+]
