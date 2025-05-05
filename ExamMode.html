@@ -182,7 +182,7 @@
     let currentIndex = 0;
     let selectedAnswers = [];
     let timerInterval;
-    let timeRemaining = 600;
+    let timeRemaining = 300;
 
     function startTimer() {
       timerInterval = setInterval(() => {
@@ -319,7 +319,7 @@
     fetch('Physics_R.json')
       .then(res => res.json())
       .then(data => {
-        mcqs = data.sort(() => 0.5 - Math.random()).slice(0, 5);
+        mcqs = data.sort(() => 0.5 - Math.random()).slice(0, 10);
         renderQuestion(currentIndex);
         updateUnattemptedList();
         startTimer();
