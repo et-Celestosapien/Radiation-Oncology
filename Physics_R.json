@@ -92,8 +92,8 @@
   {
     "question": "What is the average photon energy resulting from the decay of ⁶⁰Co?",
     "options": ["0.380 MeV", "0.412 MeV", "0.662 MeV", "1.25 MeV", "1.33 MeV"],
-    "correctIndex": 2,
-    "explanation": "⁶⁰Co decays via β-decay into ⁶⁰Ni. ⁶⁰Ni emits approximately equal numbers of 1.17 MeV and 1.33 MeV photons to move to its ground state, resulting in an average photon energy of approximately 0.662 MeV."
+    "correctIndex": 3,
+    "explanation": "⁶⁰Co decays via β-decay into ⁶⁰Ni. ⁶⁰Ni emits approximately equal numbers of 1.17 MeV and 1.33 MeV photons to move to its ground state, resulting in an average photon energy of approximately 1.25 MeV."
   },
   {
     "question": "All of the following occur when a linac is changed from X-ray mode to electron mode, EXCEPT:",
