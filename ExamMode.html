@@ -135,22 +135,39 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      table-layout: fixed;
-      margin-top: 1rem;
+      table-layout: auto;
     }
 
     th, td {
-      border: 1px solid #ccc;
-      padding: 2px;
+      padding: 10px;
       text-align: left;
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-      white-space: normal;
+      border: 1px solid #ddd;
     }
 
-    th {
-      background: #f0f0f0;
+    /* Apply block-level grouping styles */
+    .question-block {
+      border-top: 2px solid #333;
+      border-bottom: 2px solid #333;
     }
+
+    /* Remove bottom border of first row (question row) */
+    .question-block-row {
+      border-bottom: 1px solid #999;
+    }
+
+    /* Remove top border of explanation row to prevent double thickness */
+    .question-explanation-row {
+      border-top: none;
+    }
+
+    /* Zebra striping for each question block */
+    .question-set-odd td {
+      background-color: #f9f9f9;
+    }
+    .question-set-even td {
+      background-color: #afd2ed;
+    }
+
     #resultChart {
       margin-top: 1rem;
       max-width: 300px;
@@ -290,27 +307,25 @@ window.onbeforeunload = function() {
       let score = 0;
       let total = mcqs.length;
       const table = document.createElement('table');
-      
-      // Set table header with new columns
+
+      // Add column widths and header
       const colGroup = `
-      <colgroup>
-        <col style="width: 5%;">
-        <col style="width: 45%;">
-        <col style="width: 25%;">
-        <col style="width: 25%;">
-      </colgroup>
-    `;
-
-    const header = `
-      ${colGroup}
-      <tr>
-        <th>#</th>
-        <th>Question</th>
-        <th>Your Answer</th>
-        <th>Correct Answer</th>
-      </tr>
-    `;
-
+        <colgroup>
+          <col style="width: 5%;">
+          <col style="width: 45%;">
+          <col style="width: 25%;">
+          <col style="width: 25%;">
+        </colgroup>
+      `;
+      const header = `
+        ${colGroup}
+        <tr>
+          <th>#</th>
+          <th>Question</th>
+          <th>Your Answer</th>
+          <th>Correct Answer</th>
+        </tr>
+      `;
       table.innerHTML = header;
 
       mcqs.forEach((mcq, i) => {
@@ -319,10 +334,12 @@ window.onbeforeunload = function() {
         const isCorrect = userAnswer === correctIndex;
         if (isCorrect) score++;
 
-        // Create row for the question, user's answer, and correct answer
-        const tr = document.createElement('tr');
         const yourAnswerText = userAnswer !== undefined ? mcq.options[userAnswer] : 'No Answer';
-        
+        const bgClass = i % 2 === 0 ? 'question-set-even' : 'question-set-odd';
+
+        // Question row
+        const tr = document.createElement('tr');
+        tr.className = `question-block question-block-row ${bgClass}`;
         tr.innerHTML = `
           <td>${i + 1}</td>
           <td>${mcq.question}</td>
@@ -330,20 +347,21 @@ window.onbeforeunload = function() {
           <td>${mcq.options[correctIndex]}</td>
         `;
         table.appendChild(tr);
-        
-        // Create a row for the explanation
+
+        // Explanation row
         const trExplanation = document.createElement('tr');
+        trExplanation.className = `question-block question-explanation-row ${bgClass}`;
         trExplanation.innerHTML = `
           <td colspan="4"><strong>Explanation:</strong> ${mcq.explanation}</td>
         `;
         table.appendChild(trExplanation);
       });
 
-      // Update score summary
+
       document.getElementById('scoreSummary').textContent = `You scored ${score} out of ${total}.`;
       document.getElementById('reportTable').appendChild(table);
 
-      // Create the pie chart
+      // Pie chart for summary
       const ctx = document.getElementById('resultChart').getContext('2d');
       new Chart(ctx, {
         type: 'pie',
@@ -360,6 +378,7 @@ window.onbeforeunload = function() {
         }
       });
     }
+
 
     
     fetch('Physics_R.json')
