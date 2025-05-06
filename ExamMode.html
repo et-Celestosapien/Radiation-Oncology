@@ -100,14 +100,6 @@
       margin: auto;
       box-sizing: border-box;
     }
-    .card {
-      background: #fff;
-      padding: 1rem;
-      border-radius: 6px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      max-width: 100vw;
-      margin: 0 auto;
-    }
     .option {
       background: #eee;
       padding: 8px;
@@ -130,19 +122,34 @@
     .hidden {
       display: none;
     }
+    .card {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      width: 100%;
+      overflow-x: auto;
+      margin: 0 auto;
+    }
+
     table {
-      width: 100vw;
+      width: 100%;
       border-collapse: collapse;
+      table-layout: fixed;
       margin-top: 1rem;
     }
+
     th, td {
       border: 1px solid #ccc;
-      padding: 8px;
+      padding: 2px;
       text-align: left;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
     }
+
     th {
       background: #f0f0f0;
-      widh: 100vw;
     }
     #resultChart {
       margin-top: 1rem;
@@ -156,7 +163,7 @@
 </head>
 <body>
   <div class="banner top-banner">
-    <span>Time Left: <span id="timer">10:00</span></span>
+    <span>Time Left: <span id="timer">5:00</span></span>
     <button class="btn-hover" style="margin-right: 10px;" onclick="confirmExit()">Home</button>
   </div>
 
@@ -181,7 +188,7 @@
   <script>
     let mcqs = [];
     let currentIndex = 0;
-    let selectedAnswers = [];
+    let selectedAnswers = Array(10).fill(undefined);
     let timerInterval;
     let timeRemaining = 300;
     
@@ -198,7 +205,7 @@ window.onbeforeunload = function() {
           clearInterval(timerInterval);
           finishExam();
         }
-      }, 10000);
+      }, 1000);
     }
 
     function renderQuestion(index) {
@@ -275,6 +282,7 @@ window.onbeforeunload = function() {
       document.getElementById('examCard').classList.add('hidden');
       document.getElementById('resultCard').classList.remove('hidden');
       document.getElementById('unattemptedList').classList.add('hidden');
+      document.querySelector('.bottom-banner').classList.add('hidden'); // Hide bottom nav
       showResults();
     }
 
@@ -282,27 +290,60 @@ window.onbeforeunload = function() {
       let score = 0;
       let total = mcqs.length;
       const table = document.createElement('table');
-      const header = '<tr><th>#</th><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Explanation</th></tr>';
+      
+      // Set table header with new columns
+      const colGroup = `
+      <colgroup>
+        <col style="width: 5%;">
+        <col style="width: 45%;">
+        <col style="width: 25%;">
+        <col style="width: 25%;">
+      </colgroup>
+    `;
+
+    const header = `
+      ${colGroup}
+      <tr>
+        <th>#</th>
+        <th>Question</th>
+        <th>Your Answer</th>
+        <th>Correct Answer</th>
+      </tr>
+    `;
+
       table.innerHTML = header;
 
       mcqs.forEach((mcq, i) => {
-        const tr = document.createElement('tr');
         const userAnswer = selectedAnswers[i];
         const correctIndex = mcq.correctIndex;
         const isCorrect = userAnswer === correctIndex;
         if (isCorrect) score++;
+
+        // Create row for the question, user's answer, and correct answer
+        const tr = document.createElement('tr');
+        const yourAnswerText = userAnswer !== undefined ? mcq.options[userAnswer] : 'No Answer';
+        
         tr.innerHTML = `
           <td>${i + 1}</td>
           <td>${mcq.question}</td>
-          <td>${userAnswer !== undefined ? mcq.options[userAnswer] : 'No Answer'}</td>
+          <td>${yourAnswerText}</td>
           <td>${mcq.options[correctIndex]}</td>
-          <td>${mcq.explanation}</td>
         `;
         table.appendChild(tr);
+        
+        // Create a row for the explanation
+        const trExplanation = document.createElement('tr');
+        trExplanation.innerHTML = `
+          <td colspan="4"><strong>Explanation:</strong> ${mcq.explanation}</td>
+        `;
+        table.appendChild(trExplanation);
       });
+
+      // Update score summary
       document.getElementById('scoreSummary').textContent = `You scored ${score} out of ${total}.`;
       document.getElementById('reportTable').appendChild(table);
 
+      // Create the pie chart
       const ctx = document.getElementById('resultChart').getContext('2d');
       new Chart(ctx, {
         type: 'pie',
@@ -320,6 +361,7 @@ window.onbeforeunload = function() {
       });
     }
 
+    
     fetch('Physics_R.json')
       .then(res => res.json())
       .then(data => {
