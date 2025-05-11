@@ -1,283 +1,337 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no" />
-  <title>MCQ WebApp</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>MCQ Quiz App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+    /* Theme Variables */
+    :root {
+      --bg-gradient-start: #0f172a;
+      --bg-gradient-mid: #1e1b4b;
+      --bg-gradient-end: #3b0764;
+      --text-color: #ffffff;
+      --card-bg: rgba(0, 0, 0, 0.4);
+      --card-border: rgba(139, 92, 246, 0.3);
+      --card-hover-border: rgba(139, 92, 246, 0.8);
+      --card-hover-shadow: rgba(139, 92, 246, 0.2);
+      --accent-color: #a855f7;
+      --accent-gradient-start: #22d3ee;
+      --accent-gradient-end: #a855f7;
+      --btn-primary-bg: #7c3aed;
+      --btn-primary-border: #8b5cf6;
+      --btn-primary-hover: #8b5cf6;
+      --muted-text: #9ca3af;
+      --scrollbar-track: rgba(0, 0, 0, 0.2);
+      --scrollbar-thumb: rgba(139, 92, 246, 0.5);
+      --scrollbar-thumb-hover: rgba(139, 92, 246, 0.8);
     }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #71ffe3;
-      color: #333;
 
+    /* Light Theme */
+    [data-theme="light"] {
+      --bg-gradient-start: #f0f9ff;
+      --bg-gradient-mid: #e0f2fe;
+      --bg-gradient-end: #dbeafe;
+      --text-color: #1e293b;
+      --card-bg: rgba(255, 255, 255, 0.7);
+      --card-border: rgba(139, 92, 246, 0.3);
+      --card-hover-border: rgba(139, 92, 246, 0.8);
+      --card-hover-shadow: rgba(139, 92, 246, 0.2);
+      --accent-color: #8b5cf6;
+      --accent-gradient-start: #06b6d4;
+      --accent-gradient-end: #8b5cf6;
+      --btn-primary-bg: #8b5cf6;
+      --btn-primary-border: #7c3aed;
+      --btn-primary-hover: #7c3aed;
+      --muted-text: #6b7280;
+      --scrollbar-track: rgba(0, 0, 0, 0.05);
+      --scrollbar-thumb: rgba(139, 92, 246, 0.3);
+      --scrollbar-thumb-hover: rgba(139, 92, 246, 0.5);
     }
-    .top-banner, .bottom-banner {
-      position: fixed;
-      width: 100%;
-      left: 0;
-      background: #e0e0e0;
-      padding: 2px 6px;
-      display: none;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      z-index: 1000;
-      transition: opacity 1.0s ease;
+
+    /* Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    .top-banner {
-      top: 0;
-    }
-    .bottom-banner {
-      bottom: 0;
-    }
-    .container {
-      padding: 2rem 1rem 3rem;
-      max-width: 100vw;
-      margin: 0 auto;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-    .center {
+
+    body {
+      background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-mid), var(--bg-gradient-end));
+      color: var(--text-color);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      padding: 2rem 1rem;
+      transition: background 0.3s ease;
+    }
+
+    /* Header */
+    .header {
       text-align: center;
-    }
-    button {
-      padding: 6px 12px;
-      margin: 4px;
-      font-size: 1rem;
-      cursor: pointer;
-      border-radius: 10px;
-    }
-    .btn-hover{
-      padding: 6px 12px;
-      margin: 4px;
-      font-size: 1rem;
-      cursor: pointer;
-      border-radius: 10px;
-      color: #fff;
-      cursor: pointer;
-      text-align:center;
-      border: none;
-      background-size: 300% 100%;
-      moz-transition: all .4s ease-in-out;
-      -o-transition: all .4s ease-in-out;
-      -webkit-transition: all .4s ease-in-out;
-      transition: all .4s ease-in-out;
-
-    }
-    .btn-hover-1{
-      background-image: linear-gradient(to right, #29323c, #485563, #2b5876, #4e4376);
-      box-shadow: 0 4px 15px 0 rgba(45, 54, 65, 0.75);
-    }
-    .btn-hover-2 {
-      background-image: linear-gradient(to right, #25aae1, #40e495, #30dd8a, #2bb673);
-      box-shadow: 0 4px 15px 0 rgba(49, 196, 190, 0.75);
-    }
-    .btn-hover:hover {
-      background-position: 100% 0;
-      moz-transition: all .4s ease-in-out;
-      -o-transition: all .4s ease-in-out;
-      -webkit-transition: all .4s ease-in-out;
-      transition: all .4s ease-in-out;
+      margin-bottom: 3rem;
     }
 
-    .btn-hover:focus {
-        outline: none;
+    .title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, var(--accent-gradient-start), var(--accent-gradient-end));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
-    .mcq {
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: var(--muted-text);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Mode Selection */
+    .mode-selection {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .mode-card {
+      background-color: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 300px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .mode-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px var(--card-hover-shadow);
+      border-color: var(--card-hover-border);
+    }
+
+    .mode-icon {
+      font-size: 3rem;
       margin-bottom: 1.5rem;
-      border-radius: 6px;
-      background: white;
-      padding: 1rem;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-      width: 100%;
-      box-sizing: border-box;
+      color: var(--accent-color);
     }
-    .option {
-      padding: 0.5rem;
-      margin: 0.3rem 0;
-      border-radius: 4px;
-      background: #eee;
-      text-transform: capitalize;
+
+    .mode-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
     }
-    .correct {
-      background: #d4edda;
-      border-left: 4px solid #28a745;
+
+    .mode-description {
+      color: var(--muted-text);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
     }
-    .explanation {
-      margin-top: 1rem;
-      padding: 0.5rem;
-      background: #e9f5ff;
-      border-left: 4px solid #007bff;
+
+    /* Button Styles */
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      border: 1px solid var(--btn-primary-border);
+      background-color: var(--btn-primary-bg);
+      color: white;
     }
-    .dropdown-container {
+
+    .btn:hover {
+      background-color: var(--btn-primary-hover);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn i {
+      margin-right: 0.5rem;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
       position: fixed;
-      top: 40px;
-      left: 15px;
-      z-index: 1001;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-color);
+      transition: all 0.2s ease;
+      z-index: 1000;
     }
-    #mcqList {
-      display: none;
-      background: white;
-      border: 1px solid #ccc;
-      max-height: calc(100vh - 100px);
-      overflow-y: auto;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-      padding: 10px;
-      width: 90px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      position: absolute;
-      opacity: 0;
-      transition: opacity 0.3s ease-in-out;
-      border-radius: 10px;
+
+    .theme-toggle:hover {
+      transform: rotate(15deg);
+      border-color: var(--card-hover-border);
     }
-    #mcqList.show {
-      display: block;
-      opacity: 0.9;
+
+    /* Footer */
+    .footer {
+      margin-top: 2rem;
+      text-align: center;
+      color: var(--muted-text);
+      font-size: 0.875rem;
     }
-    #mcqList ul {
-      padding: 0;
-      margin: 0;
-      list-style: none;
-    }
-    #mcqList li button {
-      display: block;
-      margin: 5px 0;
-      width: 100%;
-      padding: 6px;
-      text-align: left;
-      background: #f0f0f0;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-    }
+
+    /* Responsive adjustments */
     @media (max-width: 768px) {
-      .center {
-        padding: 2rem 1rem;
+      .title {
+        font-size: 2rem;
       }
-      .mcq {
-        padding: 1rem 0.5rem;
+      
+      .subtitle {
+        font-size: 1rem;
       }
-      #mcqList {
-        width: 80vw;
+      
+      .mode-selection {
+        gap: 1.5rem;
       }
+      
+      .mode-card {
+        padding: 1.5rem;
+      }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--scrollbar-track);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--scrollbar-thumb-hover);
     }
   </style>
 </head>
 <body>
-  <div class="top-banner" id="topBanner">
-    <button class="btn-hover btn-hover-1" style="margin-left: 10px;" onclick="toggleList()">MCQ List</button>
-    <button class="btn-hover btn-hover-1" style="margin-right: 10px;" onclick="location.hash = ''">Home</button>
+  <button class="theme-toggle" id="themeToggle">
+    <i class="fas fa-moon"></i>
+  </button>
+
+  <div class="header">
+    <h1 class="title">Radiation Physics</h1>
+    <p class="subtitle">Test your knowledge with our interactive quiz application. Choose between Exam Mode or Practice Mode to get started.</p>
   </div>
 
-  <div id="home" class="center">
-    <h1>Radiation Physics MCQs</h1>
-
-    <a href="Khan Physics Keypoints.html"><button class="btn-hover btn-hover-2">Khan Physics Keypoints</button></a>
-    <button class="btn-hover btn-hover-2" onclick="location.hash='#practice'">Practice Mode</button>
-    <a href="ExamMode.html"><button class="btn-hover btn-hover-2">Exam Mode</button></a>
-  </div>
-
-  <div id="practice" class="container" style="display:none">
-    <div class="dropdown-container">
-      <div id="mcqList">
-        <ul id="navList"></ul>
+  <div class="mode-selection">
+    <div class="mode-card" id="examModeCard">
+      <div class="mode-icon">
+        <i class="fas fa-stopwatch"></i>
       </div>
+      <div class="mode-title">Exam Mode</div>
+      <div class="mode-description">
+        Challenge yourself with a timed quiz. You'll have 5 minutes to answer 10 random questions. Test your knowledge under pressure.
+      </div>
+      <a href="exam-mode.html" class="btn">
+        <i class="fas fa-play"></i> Start Exam
+      </a>
     </div>
-    <div id="mcqsContainer"></div>
+    
+    <div class="mode-card" id="practiceModeCard">
+      <div class="mode-icon">
+        <i class="fas fa-book-open"></i>
+      </div>
+      <div class="mode-title">Practice Mode</div>
+      <div class="mode-description">
+        Learn at your own pace with immediate feedback. See explanations after each answer and review all questions in the database.
+      </div>
+      <a href="practice-mode.html" class="btn">
+        <i class="fas fa-play"></i> Start Practice
+      </a>
+    </div>
+
+    <div class="mode-card" id="keyPointsCard">
+      <div class="mode-icon">
+        <i class="fas fa-book"></i>
+      </div>
+      <div class="mode-title">Physics Keypoints</div>
+      <div class="mode-description">
+        Review key physics concepts and formulas. A comprehensive reference guide for physics principles and equations.
+      </div>
+      <a href="Khan Physics Keypoints.html" class="btn">
+        <i class="fas fa-play"></i> Open Keypoints
+      </a>
+    </div>
   </div>
 
-  <div class="bottom-banner" id="bottomBanner">
-    <button class="btn-hover btn-hover-1" style="margin-left: 10px;" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Top</button>
-    <button class="btn-hover btn-hover-1" style="margin-right: 10px;" onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})">Bottom</button>
+  <div class="footer">
+    &copy; 2025 et Celestosapien. All rights reserved.
   </div>
 
   <script>
-    const container = document.getElementById('mcqsContainer');
-    const navList = document.getElementById('navList');
-    const mcqList = document.getElementById('mcqList');
-    const topBanner = document.getElementById('topBanner');
-    const bottomBanner = document.getElementById('bottomBanner');
-
-    function capitalizeFirstLetter(str) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-
-    function renderMCQs(mcqs) {
-      container.innerHTML = '';
-      navList.innerHTML = '';
-      mcqs.forEach((mcq, index) => {
-        const div = document.createElement('div');
-        div.className = 'mcq';
-        div.id = 'mcq-' + index;
-
-        const q = document.createElement('h3');
-        q.textContent = `${index + 1}. ${mcq.question}`;
-        div.appendChild(q);
-
-        mcq.options.forEach((opt, idx) => {
-          const optDiv = document.createElement('div');
-          optDiv.className = 'option';
-          if (idx === mcq.correctIndex) optDiv.classList.add('correct');
-          optDiv.textContent = capitalizeFirstLetter(opt.trim());
-          div.appendChild(optDiv);
-        });
-
-        const explanation = document.createElement('div');
-        explanation.className = 'explanation';
-        explanation.textContent = 'Explanation: ' + mcq.explanation;
-        div.appendChild(explanation);
-
-        container.appendChild(div);
-
-        const navItem = document.createElement('li');
-        const navBtn = document.createElement('button');
-        navBtn.textContent = `Q${index + 1}`;
-        navBtn.onclick = () => document.getElementById('mcq-' + index).scrollIntoView({ behavior: 'smooth' });
-        navItem.appendChild(navBtn);
-        navList.appendChild(navItem);
-      });
-    }
-
-    function toggleList() {
-      mcqList.classList.toggle('show');
-    }
-
-    function checkHashAndLoad() {
-      if (location.hash === '#practice') {
-        document.getElementById('home').style.display = 'none';
-        document.getElementById('practice').style.display = 'block';
-        topBanner.style.display = 'flex';
-        bottomBanner.style.display = 'flex';
-
-        fetch('Physics_R.json')
-          .then(response => response.json())
-          .then(data => renderMCQs(data))
-          .catch(err => {
-            console.error('Error loading JSON:', err);
-            container.innerHTML = '<p>Failed to load MCQs. Please check the JSON file.</p>';
-          });
+    // Theme Toggle
+    const themeToggle = document.getElementById('themeToggle');
+    
+    themeToggle.addEventListener('click', () => {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      html.setAttribute('data-theme', newTheme);
+      
+      // Update theme toggle icon
+      const themeIcon = themeToggle.querySelector('i');
+      if (newTheme === 'dark') {
+        themeIcon.className = 'fas fa-moon';
       } else {
-        document.getElementById('home').style.display = 'flex';
-        document.getElementById('practice').style.display = 'none';
-        topBanner.style.display = 'none';
-        bottomBanner.style.display = 'none';
-        mcqList.classList.remove('show');
+        themeIcon.className = 'fas fa-sun';
       }
-    }
+      
+      // Save theme preference
+      localStorage.setItem('theme', newTheme);
+    });
 
-    window.addEventListener('hashchange', checkHashAndLoad);
-    checkHashAndLoad();
+    // Load saved theme
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        // Update theme toggle icon
+        const themeIcon = themeToggle.querySelector('i');
+        if (savedTheme === 'dark') {
+          themeIcon.className = 'fas fa-moon';
+        } else {
+          themeIcon.className = 'fas fa-sun';
+        }
+      }
+    });
   </script>
 </body>
 </html>

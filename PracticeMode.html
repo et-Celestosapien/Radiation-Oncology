@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Practice Mode - MCQ Quiz</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Theme Variables */
+    :root {
+      --bg-gradient-start: #0f172a;
+      --bg-gradient-mid: #1e1b4b;
+      --bg-gradient-end: #3b0764;
+      --text-color: #ffffff;
+      --card-bg: rgba(0, 0, 0, 0.4);
+      --card-border: rgba(139, 92, 246, 0.3);
+      --banner-bg: rgba(0, 0, 0, 0.5);
+      --option-bg: rgba(0, 0, 0, 0.3);
+      --option-hover-bg: rgba(139, 92, 246, 0.2);
+      --option-selected-bg: rgba(139, 92, 246, 0.5);
+      --option-selected-border: rgba(139, 92, 246, 1);
+      --option-marker-bg: #4b5563;
+      --option-marker-selected-bg: #8b5cf6;
+      --option-correct-bg: rgba(16, 185, 129, 0.3);
+      --option-correct-border: rgba(16, 185, 129, 0.8);
+      --option-incorrect-bg: rgba(239, 68, 68, 0.3);
+      --option-incorrect-border: rgba(239, 68, 68, 0.8);
+      --option-marker-correct-bg: #10b981;
+      --option-marker-incorrect-bg: #ef4444;
+      --accent-color: #a855f7;
+      --accent-gradient-start: #22d3ee;
+      --accent-gradient-end: #a855f7;
+      --dialog-bg: #1f2937;
+      --btn-primary-bg: #7c3aed;
+      --btn-primary-border: #8b5cf6;
+      --btn-primary-hover: #8b5cf6;
+      --btn-secondary-bg: #374151;
+      --btn-secondary-border: #4b5563;
+      --btn-secondary-hover: #4b5563;
+      --scrollbar-track: rgba(0, 0, 0, 0.2);
+      --scrollbar-thumb: rgba(139, 92, 246, 0.5);
+      --scrollbar-thumb-hover: rgba(139, 92, 246, 0.8);
+      --muted-text: #9ca3af;
+      --explanation-bg: rgba(0, 0, 0, 0.3);
+      --explanation-title: #a855f7;
+    }
+
+    /* Light Theme */
+    [data-theme="light"] {
+      --bg-gradient-start: #f0f9ff;
+      --bg-gradient-mid: #e0f2fe;
+      --bg-gradient-end: #dbeafe;
+      --text-color: #1e293b;
+      --card-bg: rgba(255, 255, 255, 0.7);
+      --card-border: rgba(139, 92, 246, 0.3);
+      --banner-bg: rgba(255, 255, 255, 0.8);
+      --option-bg: rgba(255, 255, 255, 0.7);
+      --option-hover-bg: rgba(139, 92, 246, 0.1);
+      --option-selected-bg: rgba(139, 92, 246, 0.2);
+      --option-selected-border: rgba(139, 92, 246, 0.8);
+      --option-marker-bg: #d1d5db;
+      --option-marker-selected-bg: #8b5cf6;
+      --option-correct-bg: rgba(16, 185, 129, 0.15);
+      --option-correct-border: rgba(16, 185, 129, 0.6);
+      --option-incorrect-bg: rgba(239, 68, 68, 0.15);
+      --option-incorrect-border: rgba(239, 68, 68, 0.6);
+      --option-marker-correct-bg: #10b981;
+      --option-marker-incorrect-bg: #ef4444;
+      --accent-color: #8b5cf6;
+      --accent-gradient-start: #06b6d4;
+      --accent-gradient-end: #8b5cf6;
+      --dialog-bg: #ffffff;
+      --btn-primary-bg: #8b5cf6;
+      --btn-primary-border: #7c3aed;
+      --btn-primary-hover: #7c3aed;
+      --btn-secondary-bg: #e5e7eb;
+      --btn-secondary-border: #d1d5db;
+      --btn-secondary-hover: #d1d5db;
+      --scrollbar-track: rgba(0, 0, 0, 0.05);
+      --scrollbar-thumb: rgba(139, 92, 246, 0.3);
+      --scrollbar-thumb-hover: rgba(139, 92, 246, 0.5);
+      --muted-text: #6b7280;
+      --explanation-bg: rgba(226, 232, 240, 0.7);
+      --explanation-title: #8b5cf6;
+    }
+
+    /* Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-mid), var(--bg-gradient-end));
+      color: var(--text-color);
+      min-height: 100vh;
+      padding-bottom: 80px;
+      transition: background 0.3s ease;
+    }
+
+    /* Typography */
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Layout */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 1rem;
+      padding-top: 70px; /* Added padding to account for the fixed top banner */
+    }
+
+    /* Card Styles */
+    .card {
+      background-color: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease, border 0.3s ease;
+    }
+
+    /* Banner Styles */
+    .banner {
+      position: fixed;
+      width: 100%;
+      left: 0;
+      padding: 0.75rem 1rem;
+      background-color: var(--banner-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      border-bottom: 1px solid var(--card-border);
+      transition: background-color 0.3s ease, border 0.3s ease;
+    }
+
+    .top-banner {
+      top: 0;
+    }
+
+    .bottom-banner {
+      bottom: 0;
+      border-top: 1px solid var(--card-border);
+      border-bottom: none;
+    }
+
+    /* Button Styles */
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      border: 1px solid var(--card-border);
+      background-color: transparent;
+      color: var(--text-color);
+    }
+
+    .btn:hover {
+      background-color: var(--option-hover-bg);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn i {
+      margin-right: 0.5rem;
+    }
+
+    .btn-disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-disabled:hover {
+      background-color: transparent;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      padding: 0.4rem;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-color);
+      transition: all 0.2s ease;
+      margin-right: 0.5rem;
+    }
+
+    .theme-toggle:hover {
+      background-color: var(--option-hover-bg);
+    }
+
+    /* Question Navigation */
+    .question-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* Options */
+    .option {
+      padding: 1rem;
+      margin: 0.75rem 0;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: var(--option-bg);
+      border: 1px solid var(--card-border);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .option:hover {
+      background-color: var(--option-hover-bg);
+      transform: translateY(-2px);
+    }
+
+    .option:active {
+      transform: translateY(0);
+    }
+
+    .option.selected {
+      background-color: var(--option-selected-bg);
+      border-color: var(--option-selected-border);
+    }
+
+    .option.correct {
+      background-color: var(--option-correct-bg);
+      border-color: var(--option-correct-border);
+    }
+
+    .option.incorrect {
+      background-color: var(--option-incorrect-bg);
+      border-color: var(--option-incorrect-border);
+    }
+
+    .option-marker {
+      width: 24px;
+      height: 24px;
+      min-width: 24px; /* Prevent shrinking */
+      min-height: 24px; /* Prevent shrinking */
+      border-radius: 50%;
+      background-color: var(--option-marker-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      font-size: 0.75rem;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .option.selected .option-marker {
+      background-color: var(--option-marker-selected-bg);
+    }
+
+    .option.correct .option-marker {
+      background-color: var(--option-marker-correct-bg);
+    }
+
+    .option.incorrect .option-marker {
+      background-color: var(--option-marker-incorrect-bg);
+    }
+
+    /* Explanation Box */
+    .explanation-box {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: 8px;
+      background-color: var(--explanation-bg);
+      border: 1px solid var(--card-border);
+      transition: background-color 0.3s ease, border 0.3s ease;
+    }
+
+    .explanation-box h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--explanation-title);
+    }
+
+    /* Question List */
+    .question-list-dialog {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .question-list-content {
+      background-color: var(--dialog-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      transition: background-color 0.3s ease, border 0.3s ease;
+    }
+
+    .question-list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .question-list-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .question-list-close {
+      background: none;
+      border: none;
+      color: var(--muted-text);
+      cursor: pointer;
+      font-size: 1.25rem;
+    }
+
+    .question-list-item {
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: var(--option-bg);
+      border: 1px solid var(--card-border);
+      transition: all 0.2s ease;
+    }
+
+    .question-list-item:hover {
+      background-color: var(--option-hover-bg);
+    }
+
+    .question-list-item.current {
+      border-color: var(--option-selected-border);
+      background-color: var(--option-selected-bg);
+    }
+
+    .question-list-item.answered {
+      border-left: 4px solid var(--option-marker-correct-bg);
+    }
+
+    /* Dialog */
+    .dialog-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .dialog {
+      background-color: var(--dialog-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      transition: background-color 0.3s ease, border 0.3s ease;
+    }
+
+    .dialog-header {
+      margin-bottom: 1rem;
+    }
+
+    .dialog-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .dialog-description {
+      color: var(--muted-text);
+      font-size: 0.875rem;
+    }
+
+    .dialog-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn-secondary {
+      background-color: var(--btn-secondary-bg);
+      border-color: var(--btn-secondary-border);
+      color: var(--text-color);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--btn-secondary-hover);
+    }
+
+    .btn-primary {
+      background-color: var(--btn-primary-bg);
+      border-color: var(--btn-primary-border);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--btn-primary-hover);
+    }
+
+    /* Gradient Text */
+    .gradient-text {
+      background: linear-gradient(to right, var(--accent-gradient-start), var(--accent-gradient-end));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+      .card {
+        padding: 1rem;
+      }
+
+      .option {
+        padding: 0.75rem;
+      }
+
+      .btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.875rem;
+      }
+      
+      /* Ensure option markers stay circular */
+      .option-marker {
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+        min-height: 24px;
+        flex-shrink: 0;
+      }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--scrollbar-track);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--scrollbar-thumb-hover);
+    }
+
+    /* Utility classes */
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="banner top-banner">
+    <div style="font-weight: 500;">Practice Mode</div>
+    <div style="display: flex; align-items: center;">
+      <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button class="btn" id="questionListBtn">
+        <i class="fas fa-list"></i> Questions
+      </button>
+      <button class="btn" id="homeBtn">
+        <i class="fas fa-home"></i> Home
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="card" id="practiceCard">
+      <!-- Practice content will be rendered here -->
+    </div>
+  </div>
+
+  <div class="banner bottom-banner">
+    <div class="question-nav">
+      <button class="btn" id="prevBtn">
+        <i class="fas fa-chevron-left"></i> Previous
+      </button>
+      <span id="questionCounter">Question 1 of 10</span>
+      <button class="btn" id="nextBtn">
+        Next <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Question List Dialog -->
+  <div class="question-list-dialog hidden" id="questionListDialog">
+    <div class="question-list-content">
+      <div class="question-list-header">
+        <div class="question-list-title">Question List</div>
+        <button class="question-list-close" id="questionListCloseBtn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="questionListItems">
+        <!-- Question list items will be rendered here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Exit Confirmation Dialog -->
+  <div class="dialog-overlay hidden" id="exitDialog">
+    <div class="dialog">
+      <div class="dialog-header">
+        <div class="dialog-title">Exit Practice?</div>
+        <div class="dialog-description">
+          Are you sure you want to exit? Your progress will be lost.
+        </div>
+      </div>
+      <div class="dialog-footer">
+        <button class="btn btn-secondary" id="exitCancelBtn">Cancel</button>
+        <button class="btn btn-primary" id="exitConfirmBtn">Exit</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State variables
+    let mcqs = [];
+    let currentIndex = 0;
+    let selectedAnswers = [];
+    let practiceAnswers = []; // Track answered questions
+
+    // DOM Elements
+    const practiceCard = document.getElementById('practiceCard');
+    const questionCounter = document.getElementById('questionCounter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const homeBtn = document.getElementById('homeBtn');
+    const questionListBtn = document.getElementById('questionListBtn');
+    const questionListDialog = document.getElementById('questionListDialog');
+    const questionListItems = document.getElementById('questionListItems');
+    const questionListCloseBtn = document.getElementById('questionListCloseBtn');
+    const exitDialog = document.getElementById('exitDialog');
+    const exitCancelBtn = document.getElementById('exitCancelBtn');
+    const exitConfirmBtn = document.getElementById('exitConfirmBtn');
+    const themeToggle = document.getElementById('themeToggle');
+
+    // Theme Toggle
+    themeToggle.addEventListener('click', () => {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      html.setAttribute('data-theme', newTheme);
+      
+      // Update theme toggle icon
+      const themeIcon = themeToggle.querySelector('i');
+      if (newTheme === 'dark') {
+        themeIcon.className = 'fas fa-moon';
+      } else {
+        themeIcon.className = 'fas fa-sun';
+      }
+      
+      // Save theme preference
+      localStorage.setItem('theme', newTheme);
+    });
+
+    // Load saved theme
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        // Update theme toggle icon
+        const themeIcon = themeToggle.querySelector('i');
+        if (savedTheme === 'dark') {
+          themeIcon.className = 'fas fa-moon';
+        } else {
+          themeIcon.className = 'fas fa-sun';
+        }
+      }
+    });
+
+    // Initialize the practice mode
+    function initPractice() {
+      fetch('Physics_R.json')
+        .then(res => res.json())
+        .then(data => {
+          // Use all questions from the JSON file
+          mcqs = data;
+          selectedAnswers = new Array(mcqs.length).fill(undefined);
+          practiceAnswers = new Array(mcqs.length).fill(false);
+          renderQuestion(currentIndex);
+          updateQuestionCounter();
+          updateQuestionList();
+        })
+        .catch(err => {
+          practiceCard.innerHTML = '<p>Error loading practice questions.</p>';
+          console.error(err);
+        });
+    }
+
+    // Render the current question
+    function renderQuestion(index) {
+      const mcq = mcqs[index];
+      if (!mcq) return;
+
+      let html = `
+        <h2><span class="gradient-text">${index + 1}.</span> ${mcq.question}</h2>
+        <div class="options">
+      `;
+
+      mcq.options.forEach((option, i) => {
+        let optionClass = '';
+        
+        if (practiceAnswers[index]) {
+          // If question has been answered, show correct/incorrect
+          if (i === mcq.correctIndex) {
+            optionClass = 'correct';
+          } else if (selectedAnswers[index] === i) {
+            optionClass = 'incorrect';
+          }
+        } else if (selectedAnswers[index] === i) {
+          // If not answered yet but option is selected
+          optionClass = 'selected';
+        }
+        
+        html += `
+          <div class="option ${optionClass}" data-index="${i}">
+            <div class="option-marker">${String.fromCharCode(65 + i)}</div>
+            <div>${option}</div>
+          </div>
+        `;
+      });
+
+      html += '</div>';
+      
+      // Add explanation if question has been answered
+      if (practiceAnswers[index]) {
+        html += `
+          <div class="explanation-box">
+            <h3>Explanation</h3>
+            <p>${mcq.explanation}</p>
+          </div>
+        `;
+      }
+      
+      practiceCard.innerHTML = html;
+
+      // Add event listeners to options (only if not answered yet)
+      if (!practiceAnswers[index]) {
+        document.querySelectorAll('#practiceCard .option').forEach(option => {
+          option.addEventListener('click', () => {
+            const optionIndex = parseInt(option.dataset.index);
+            selectedAnswers[currentIndex] = optionIndex;
+            practiceAnswers[currentIndex] = true;
+            renderQuestion(currentIndex);
+            updateQuestionList();
+          });
+        });
+      }
+    }
+
+    // Update the question list dialog
+    function updateQuestionList() {
+      let html = '';
+      
+      mcqs.forEach((mcq, index) => {
+        const isCurrent = index === currentIndex;
+        const isAnswered = practiceAnswers[index];
+        const currentClass = isCurrent ? 'current' : '';
+        const answeredClass = isAnswered ? 'answered' : '';
+        
+        html += `
+          <div class="question-list-item ${currentClass} ${answeredClass}" data-index="${index}">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span>${index + 1}. ${mcq.question.length > 50 ? mcq.question.substring(0, 50) + '...' : mcq.question}</span>
+              ${isAnswered ? '<i class="fas fa-check" style="color: #10b981;"></i>' : ''}
+            </div>
+          </div>
+        `;
+      });
+      
+      questionListItems.innerHTML = html;
+      
+      // Add event listeners to question list items
+      document.querySelectorAll('.question-list-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const index = parseInt(item.dataset.index);
+          currentIndex = index;
+          renderQuestion(index);
+          updateQuestionCounter();
+          questionListDialog.classList.add('hidden');
+        });
+      });
+    }
+
+    // Update the question counter
+    function updateQuestionCounter() {
+      questionCounter.textContent = `Question ${currentIndex + 1} of ${mcqs.length}`;
+    }
+
+    // Navigate to the previous question
+    function prevQuestion() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion(currentIndex);
+        updateQuestionCounter();
+      }
+    }
+
+    // Navigate to the next question
+    function nextQuestion() {
+      if (currentIndex < mcqs.length - 1) {
+        currentIndex++;
+        renderQuestion(currentIndex);
+        updateQuestionCounter();
+      }
+    }
+
+    // Event Listeners
+    prevBtn.addEventListener('click', prevQuestion);
+    nextBtn.addEventListener('click', nextQuestion);
+    homeBtn.addEventListener('click', () => exitDialog.classList.remove('hidden'));
+    questionListBtn.addEventListener('click', () => {
+      updateQuestionList();
+      questionListDialog.classList.remove('hidden');
+    });
+    questionListCloseBtn.addEventListener('click', () => questionListDialog.classList.add('hidden'));
+    exitCancelBtn.addEventListener('click', () => exitDialog.classList.add('hidden'));
+    exitConfirmBtn.addEventListener('click', () => {
+      location.href = 'index.html';
+    });
+
+    // Close dialogs when clicking outside
+    questionListDialog.addEventListener('click', (e) => {
+      if (e.target === questionListDialog) {
+        questionListDialog.classList.add('hidden');
+      }
+    });
+    
+    exitDialog.addEventListener('click', (e) => {
+      if (e.target === exitDialog) {
+        exitDialog.classList.add('hidden');
+      }
+    });
+
+    // Initialize practice mode
+    initPractice();
+  </script>
+</body>
+</html>

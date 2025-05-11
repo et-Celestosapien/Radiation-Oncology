@@ -1,223 +1,780 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <title>Exam Mode</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Exam Mode - MCQ Quiz</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
+    /* Theme Variables */
+    :root {
+      --bg-gradient-start: #0f172a;
+      --bg-gradient-mid: #1e1b4b;
+      --bg-gradient-end: #3b0764;
+      --text-color: #ffffff;
+      --card-bg: rgba(0, 0, 0, 0.4);
+      --card-border: rgba(139, 92, 246, 0.3);
+      --banner-bg: rgba(0, 0, 0, 0.5);
+      --option-bg: rgba(0, 0, 0, 0.3);
+      --option-hover-bg: rgba(139, 92, 246, 0.2);
+      --option-selected-bg: rgba(139, 92, 246, 0.5);
+      --option-selected-border: rgba(139, 92, 246, 1);
+      --option-marker-bg: #4b5563;
+      --option-marker-selected-bg: #8b5cf6;
+      --accent-color: #a855f7;
+      --accent-gradient-start: #22d3ee;
+      --accent-gradient-end: #a855f7;
+      --dialog-bg: #1f2937;
+      --btn-primary-bg: #7c3aed;
+      --btn-primary-border: #8b5cf6;
+      --btn-primary-hover: #8b5cf6;
+      --btn-secondary-bg: #374151;
+      --btn-secondary-border: #4b5563;
+      --btn-secondary-hover: #4b5563;
+      --scrollbar-track: rgba(0, 0, 0, 0.2);
+      --scrollbar-thumb: rgba(139, 92, 246, 0.5);
+      --scrollbar-thumb-hover: rgba(139, 92, 246, 0.8);
+      --muted-text: #9ca3af;
+    }
+
+    /* Light Theme */
+    [data-theme="light"] {
+      --bg-gradient-start: #f0f9ff;
+      --bg-gradient-mid: #e0f2fe;
+      --bg-gradient-end: #dbeafe;
+      --text-color: #1e293b;
+      --card-bg: rgba(255, 255, 255, 0.7);
+      --card-border: rgba(139, 92, 246, 0.3);
+      --banner-bg: rgba(255, 255, 255, 0.8);
+      --option-bg: rgba(255, 255, 255, 0.7);
+      --option-hover-bg: rgba(139, 92, 246, 0.1);
+      --option-selected-bg: rgba(139, 92, 246, 0.2);
+      --option-selected-border: rgba(139, 92, 246, 0.8);
+      --option-marker-bg: #d1d5db;
+      --option-marker-selected-bg: #8b5cf6;
+      --accent-color: #8b5cf6;
+      --accent-gradient-start: #06b6d4;
+      --accent-gradient-end: #8b5cf6;
+      --dialog-bg: #ffffff;
+      --btn-primary-bg: #8b5cf6;
+      --btn-primary-border: #7c3aed;
+      --btn-primary-hover: #7c3aed;
+      --btn-secondary-bg: #e5e7eb;
+      --btn-secondary-border: #d1d5db;
+      --btn-secondary-hover: #d1d5db;
+      --scrollbar-track: rgba(0, 0, 0, 0.05);
+      --scrollbar-thumb: rgba(139, 92, 246, 0.3);
+      --scrollbar-thumb-hover: rgba(139, 92, 246, 0.5);
+      --muted-text: #6b7280;
+    }
+
+    /* Base Styles */
     * {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    }
-    body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #71ffe3;
-      color: #333;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+
+    body {
+      background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-mid), var(--bg-gradient-end));
+      color: var(--text-color);
+      min-height: 100vh;
+      padding-bottom: 80px;
+      transition: background 0.3s ease;
+    }
+
+    /* Typography */
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Layout */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 1rem;
+      padding-top: 70px; /* Added padding to account for the fixed top banner */
+    }
+
+    /* Card Styles */
+    .card {
+      background-color: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease, border 0.3s ease;
+    }
+
+    /* Banner Styles */
     .banner {
       position: fixed;
       width: 100%;
       left: 0;
-      padding: 3px 8px;
-      background: #ddd;
+      padding: 0.75rem 1rem;
+      background-color: var(--banner-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       z-index: 1000;
-      font-size: 0.9rem;
+      border-bottom: 1px solid var(--card-border);
+      transition: background-color 0.3s ease, border 0.3s ease;
     }
+
     .top-banner {
       top: 0;
     }
+
     .bottom-banner {
       bottom: 0;
-      justify-content: space-between;
+      border-top: 1px solid var(--card-border);
+      border-bottom: none;
     }
+
     .mid-bottom-banner {
       position: fixed;
-      bottom: 40px;
+      bottom: 60px;
       width: 100%;
-      background: #eee;
+      background-color: var(--banner-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      padding: 5px;
+      padding: 0.75rem 1rem;
       z-index: 999;
-      overflow-y: auto;
-      max-height: 30vh;
-    }
-    button {
-      padding: 6px 12px;
-      margin: 4px;
-      font-size: 1rem;
-      cursor: pointer;
-      border-radius: 10px;
+      border-top: 1px solid var(--card-border);
+      max-height: 120px; /* Limit height on mobile */
+      overflow-y: auto; /* Add scrolling if needed */
+      transition: background-color 0.3s ease, border 0.3s ease;
     }
 
-    .btn-hover{
-      padding: 6px 12px;
-      margin: 4px;
-      font-size: 1rem;
+    /* Button Styles */
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
       cursor: pointer;
-      border-radius: 10px;
-      color: #fff;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      border: 1px solid var(--card-border);
+      background-color: transparent;
+      color: var(--text-color);
+    }
+
+    .btn:hover {
+      background-color: var(--option-hover-bg);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn i {
+      margin-right: 0.5rem;
+    }
+
+    .btn-disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-disabled:hover {
+      background-color: transparent;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      padding: 0.4rem;
+      border-radius: 50%;
       cursor: pointer;
-      text-align:center;
-      border: none;
-      background-size: 300% 100%;
-      moz-transition: all .4s ease-in-out;
-      -o-transition: all .4s ease-in-out;
-      -webkit-transition: all .4s ease-in-out;
-      transition: all .4s ease-in-out;
-      background-image: linear-gradient(to right, #29323c, #485563, #2b5876, #4e4376);
-      box-shadow: 0 4px 15px 0 rgba(45, 54, 65, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-color);
+      transition: all 0.2s ease;
+      margin-right: 0.5rem;
     }
-    .btn-hover:hover {
-      background-position: 100% 0;
-      moz-transition: all .4s ease-in-out;
-      -o-transition: all .4s ease-in-out;
-      -webkit-transition: all .4s ease-in-out;
-      transition: all .4s ease-in-out;
+
+    .theme-toggle:hover {
+      background-color: var(--option-hover-bg);
     }
-    .btn-hover:focus {
-        outline: none;
-    }
-    
-    .unattempted-btn {
-      margin: 2px;
-      padding: 4px 6px;
-      background: #ffc107;
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-    .container {
-      padding: 60px 10px 100px;
-      max-width: 100vw;
-      margin: auto;
-      box-sizing: border-box;
-    }
-    .option {
-      background: #eee;
-      padding: 8px;
-      margin: 5px 0;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .option.selected {
-      background: #cce5ff;
-      border-left: 4px solid #007bff;
-    }
-    .option.correct {
-      background: #d4edda;
-      border-left: 4px solid #28a745;
-    }
-    .option.incorrect {
-      background: #f8d7da;
-      border-left: 4px solid #dc3545;
-    }
-    .hidden {
-      display: none;
-    }
-    .card {
-      background: #fff;
-      padding: 1rem;
-      border-radius: 6px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+
+    /* Question Navigation */
+    .question-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       width: 100%;
-      overflow-x: auto;
+      max-width: 1000px;
       margin: 0 auto;
     }
 
-    table {
+    /* Timer */
+    .timer {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: monospace;
+      font-size: 1.25rem;
+    }
+
+    .timer.warning {
+      color: #f87171;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    /* Options */
+    .option {
+      padding: 1rem;
+      margin: 0.75rem 0;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: var(--option-bg);
+      border: 1px solid var(--card-border);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .option:hover {
+      background-color: var(--option-hover-bg);
+      transform: translateY(-2px);
+    }
+
+    .option:active {
+      transform: translateY(0);
+    }
+
+    .option.selected {
+      background-color: var(--option-selected-bg);
+      border-color: var(--option-selected-border);
+    }
+
+    .option-marker {
+      width: 24px;
+      height: 24px;
+      min-width: 24px; /* Prevent shrinking */
+      min-height: 24px; /* Prevent shrinking */
+      border-radius: 50%;
+      background-color: var(--option-marker-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      font-size: 0.75rem;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .option.selected .option-marker {
+      background-color: var(--option-marker-selected-bg);
+    }
+
+    /* Unattempted Questions */
+    .unattempted-btn {
+      min-width: 2.5rem;
+      height: 2rem;
+      padding: 0;
+      margin: 0.25rem;
+      background-color: rgba(245, 158, 11, 0.3);
+      border: 1px solid rgba(245, 158, 11, 0.5);
+      color: #fbbf24;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+
+    .unattempted-btn:hover {
+      background-color: rgba(245, 158, 11, 0.5);
+    }
+
+    .unattempted-btn.current {
+      box-shadow: 0 0 0 2px #fbbf24;
+    }
+
+    /* Results */
+    .score-summary {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .score-value {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .score-value span {
+      font-weight: bold;
+    }
+
+    .score-value .correct {
+      color: var(--accent-gradient-start);
+    }
+
+    .score-value .total {
+      color: var(--accent-gradient-end);
+    }
+
+    .chart-container {
       width: 100%;
-      border-collapse: collapse;
-      table-layout: auto;
-    }
-
-    th, td {
-      padding: 10px;
-      text-align: left;
-      border: 1px solid #ddd;
-    }
-
-    /* Apply block-level grouping styles */
-    .question-block {
-      border-top: 2px solid #333;
-      border-bottom: 2px solid #333;
-    }
-
-    /* Remove bottom border of first row (question row) */
-    .question-block-row {
-      border-bottom: 1px solid #999;
-    }
-
-    /* Remove top border of explanation row to prevent double thickness */
-    .question-explanation-row {
-      border-top: none;
-    }
-
-    /* Zebra striping for each question block */
-    .question-set-odd td {
-      background-color: #f9f9f9;
-    }
-    .question-set-even td {
-      background-color: #afd2ed;
-    }
-
-    #resultChart {
-      margin-top: 1rem;
       max-width: 300px;
-      max-height: 300px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 0 auto 2rem auto;
+      position: relative;
+      height: 300px; /* Fixed height for chart container */
+    }
+
+    /* Result Details */
+    .result-item {
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background-color: var(--option-bg);
+      transition: background-color 0.3s ease, border 0.3s ease;
+    }
+
+    .result-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .result-status {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .status-correct {
+      background-color: #10b981;
+    }
+
+    .status-incorrect {
+      background-color: #ef4444;
+    }
+
+    .status-unanswered {
+      background-color: #f59e0b;
+    }
+
+    .result-question {
+      font-size: 1.125rem;
+      font-weight: 500;
+    }
+
+    .result-details {
+      margin-left: 2.75rem;
+    }
+
+    .answer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .answer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .answer-label {
+      font-size: 0.875rem;
+      color: var(--muted-text);
+      margin-bottom: 0.25rem;
+    }
+
+    .answer-value {
+      font-size: 0.875rem;
+      padding: 0.5rem;
+      border-radius: 4px;
+    }
+
+    .answer-correct {
+      background-color: rgba(16, 185, 129, 0.3);
+      color: #6ee7b7;
+    }
+
+    .answer-incorrect {
+      background-color: rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+    }
+
+    .answer-unanswered {
+      background-color: rgba(245, 158, 11, 0.3);
+      color: #fcd34d;
+    }
+
+    .explanation {
+      margin-top: 1rem;
+    }
+
+    .explanation-label {
+      font-size: 0.875rem;
+      color: var(--muted-text);
+      margin-bottom: 0.25rem;
+    }
+
+    .explanation-value {
+      font-size: 0.875rem;
+      background-color: rgba(75, 85, 99, 0.5);
+      padding: 0.75rem;
+      border-radius: 4px;
+    }
+
+    /* Dialog */
+    .dialog-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .dialog {
+      background-color: var(--dialog-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      transition: background-color 0.3s ease, border 0.3s ease;
+    }
+
+    .dialog-header {
+      margin-bottom: 1rem;
+    }
+
+    .dialog-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .dialog-title i {
+      color: #fbbf24;
+    }
+
+    .dialog-description {
+      color: var(--muted-text);
+      font-size: 0.875rem;
+    }
+
+    .dialog-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn-secondary {
+      background-color: var(--btn-secondary-bg);
+      border-color: var(--btn-secondary-border);
+      color: var(--text-color);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--btn-secondary-hover);
+    }
+
+    .btn-primary {
+      background-color: var(--btn-primary-bg);
+      border-color: var(--btn-primary-border);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--btn-primary-hover);
+    }
+
+    /* Gradient Text */
+    .gradient-text {
+      background: linear-gradient(to right, var(--accent-gradient-start), var(--accent-gradient-end));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+      .card {
+        padding: 1rem;
+      }
+
+      .option {
+        padding: 0.75rem;
+      }
+
+      .btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.875rem;
+      }
+
+      .timer {
+        font-size: 1rem;
+      }
+      
+      /* Fix for unattempted questions banner on mobile */
+      .mid-bottom-banner {
+        max-height: 100px;
+        padding: 0.5rem;
+      }
+      
+      .unattempted-btn {
+        min-width: 2rem;
+        height: 1.75rem;
+        margin: 0.15rem;
+        font-size: 0.75rem;
+      }
+      
+      /* Ensure option markers stay circular */
+      .option-marker {
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+        min-height: 24px;
+        flex-shrink: 0;
+      }
+      
+      /* Fix for chart legend on mobile */
+      .chart-container {
+        height: 350px; /* Increase height to accommodate legend */
+        padding-bottom: 50px; /* Add padding for legend */
+      }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--scrollbar-track);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--scrollbar-thumb-hover);
+    }
+
+    /* Utility classes */
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
   <div class="banner top-banner">
-    <span>Time Left: <span id="timer">5:00</span></span>
-    <button class="btn-hover" style="margin-right: 10px;" onclick="confirmExit()">Home</button>
-  </div>
-
-  <div class="container">
-    <div class="card" id="examCard"></div>
-    <div class="card hidden" id="resultCard">
-      <h2>Exam Summary</h2>
-      <p id="scoreSummary"></p>
-      <div id="reportTable"></div>
-      <canvas id="resultChart" width="300" height="300"></canvas>
+    <div class="timer" id="timer">
+      <i class="fas fa-clock"></i>
+      <span>5:00</span>
+    </div>
+    <div style="display: flex; align-items: center;">
+      <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button class="btn" id="homeBtn">
+        <i class="fas fa-home"></i> Home
+      </button>
     </div>
   </div>
 
-  <div class="mid-bottom-banner" id="unattemptedList"></div>
-
-  <div class="banner bottom-banner">
-    <button class="btn-hover" style="margin-left: 10px;" onclick="prevQuestion()">Previous</button>
-    <button class="btn-hover" style="margin-right: 10px;" onclick="nextQuestion()">Next</button>
+  <div class="container">
+    <div class="card" id="examCard">
+      <!-- Quiz content will be rendered here -->
+    </div>
+    
+    <div class="card hidden" id="resultCard">
+      <!-- Results will be rendered here -->
+    </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <div class="mid-bottom-banner hidden" id="unattemptedList">
+    <!-- Unattempted questions will be rendered here -->
+  </div>
+
+  <div class="banner bottom-banner">
+    <div class="question-nav">
+      <button class="btn" id="prevBtn">
+        <i class="fas fa-chevron-left"></i> Previous
+      </button>
+      <span id="questionCounter">Question 1 of 10</span>
+      <button class="btn" id="nextBtn">
+        Next <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Exit Confirmation Dialog -->
+  <div class="dialog-overlay hidden" id="exitDialog">
+    <div class="dialog">
+      <div class="dialog-header">
+        <div class="dialog-title">Exit Quiz?</div>
+        <div class="dialog-description">
+          Are you sure you want to exit? Your progress will be lost.
+        </div>
+      </div>
+      <div class="dialog-footer">
+        <button class="btn btn-secondary" id="exitCancelBtn">Cancel</button>
+        <button class="btn btn-primary" id="exitConfirmBtn">Exit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Finish Confirmation Dialog -->
+  <div class="dialog-overlay hidden" id="finishDialog">
+    <div class="dialog">
+      <div class="dialog-header">
+        <div class="dialog-title">
+          <i class="fas fa-triangle-exclamation"></i>
+          Unanswered Questions
+        </div>
+        <div class="dialog-description" id="finishDialogText">
+          You have unanswered questions. Are you sure you want to finish the quiz?
+        </div>
+      </div>
+      <div class="dialog-footer">
+        <button class="btn btn-secondary" id="finishCancelBtn">Continue Quiz</button>
+        <button class="btn btn-primary" id="finishConfirmBtn">Finish Quiz</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // State variables
     let mcqs = [];
     let currentIndex = 0;
-    let selectedAnswers = Array(10).fill(undefined);
+    let selectedAnswers = [];
+    let timeRemaining = 300; // 5 minutes
     let timerInterval;
-    let timeRemaining = 300;
-    
-window.onbeforeunload = function() {
+    let isFinished = false;
+    let finishDialogShown = false;
+
+    // DOM Elements
+    const examCard = document.getElementById('examCard');
+    const resultCard = document.getElementById('resultCard');
+    const unattemptedList = document.getElementById('unattemptedList');
+    const timer = document.getElementById('timer');
+    const questionCounter = document.getElementById('questionCounter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const homeBtn = document.getElementById('homeBtn');
+    const exitDialog = document.getElementById('exitDialog');
+    const exitCancelBtn = document.getElementById('exitCancelBtn');
+    const exitConfirmBtn = document.getElementById('exitConfirmBtn');
+    const finishDialog = document.getElementById('finishDialog');
+    const finishDialogText = document.getElementById('finishDialogText');
+    const finishCancelBtn = document.getElementById('finishCancelBtn');
+    const finishConfirmBtn = document.getElementById('finishConfirmBtn');
+    const themeToggle = document.getElementById('themeToggle');
+
+    // Theme Toggle
+    themeToggle.addEventListener('click', () => {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      html.setAttribute('data-theme', newTheme);
+      
+      // Update theme toggle icon
+      const themeIcon = themeToggle.querySelector('i');
+      if (newTheme === 'dark') {
+        themeIcon.className = 'fas fa-moon';
+      } else {
+        themeIcon.className = 'fas fa-sun';
+      }
+      
+      // Save theme preference
+      localStorage.setItem('theme', newTheme);
+    });
+
+    // Load saved theme
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        // Update theme toggle icon
+        const themeIcon = themeToggle.querySelector('i');
+        if (savedTheme === 'dark') {
+          themeIcon.className = 'fas fa-moon';
+        } else {
+          themeIcon.className = 'fas fa-sun';
+        }
+      }
+    });
+
+    // Prevent accidental navigation
+    window.onbeforeunload = function() {
+      if (!isFinished) {
         return 'Are you sure you want to exit exam mode? Your progress will be lost.';
-}
+      }
+    };
+
+    // Initialize the quiz
+    function initQuiz() {
+      fetch('Physics_R.json')
+        .then(res => res.json())
+        .then(data => {
+          // Randomize and take 10 questions
+          mcqs = data.sort(() => 0.5 - Math.random()).slice(0, 10);
+          selectedAnswers = new Array(mcqs.length).fill(undefined);
+          renderQuestion(currentIndex);
+          updateUnattemptedList();
+          updateQuestionCounter();
+          startTimer();
+        })
+        .catch(err => {
+          examCard.innerHTML = '<p>Error loading exam questions.</p>';
+          console.error(err);
+        });
+    }
+
+    // Start the timer
     function startTimer() {
+      updateTimerDisplay();
       timerInterval = setInterval(() => {
         timeRemaining--;
-        const minutes = Math.floor(timeRemaining / 60);
-        const seconds = timeRemaining % 60;
-        document.getElementById('timer').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        updateTimerDisplay();
         if (timeRemaining <= 0) {
           clearInterval(timerInterval);
           finishExam();
@@ -225,174 +782,308 @@ window.onbeforeunload = function() {
       }, 1000);
     }
 
+    // Update timer display
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeRemaining / 60);
+      const seconds = timeRemaining % 60;
+      const timerText = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      timer.querySelector('span').textContent = timerText;
+      
+      // Add warning class if less than 1 minute remains
+      if (timeRemaining <= 60) {
+        timer.classList.add('warning');
+      } else {
+        timer.classList.remove('warning');
+      }
+    }
+
+    // Render the current question
     function renderQuestion(index) {
       const mcq = mcqs[index];
-      const card = document.getElementById('examCard');
-      card.innerHTML = '';
-      const q = document.createElement('h3');
-      q.textContent = `${index + 1}. ${mcq.question}`;
-      card.appendChild(q);
-      mcq.options.forEach((opt, i) => {
-        const optDiv = document.createElement('div');
-        optDiv.className = 'option';
-        optDiv.textContent = opt;
-        if (selectedAnswers[index] === i) optDiv.classList.add('selected');
-        optDiv.onclick = () => {
-          selectedAnswers[index] = i;
+      if (!mcq) return;
+
+      let html = `
+        <h2><span class="gradient-text">${index + 1}.</span> ${mcq.question}</h2>
+        <div class="options">
+      `;
+
+      mcq.options.forEach((option, i) => {
+        const isSelected = selectedAnswers[index] === i;
+        const selectedClass = isSelected ? 'selected' : '';
+        html += `
+          <div class="option ${selectedClass}" data-index="${i}">
+            <div class="option-marker">${String.fromCharCode(65 + i)}</div>
+            <div>${option}</div>
+          </div>
+        `;
+      });
+
+      html += '</div>';
+      examCard.innerHTML = html;
+
+      // Add event listeners to options
+      document.querySelectorAll('#examCard .option').forEach(option => {
+        option.addEventListener('click', () => {
+          const optionIndex = parseInt(option.dataset.index);
+          selectedAnswers[currentIndex] = optionIndex;
+          renderQuestion(currentIndex);
           updateUnattemptedList();
-          renderQuestion(index);
-        };
-        card.appendChild(optDiv);
+        });
       });
     }
 
+    // Update the list of unattempted questions
     function updateUnattemptedList() {
-      const list = document.getElementById('unattemptedList');
-      list.innerHTML = '';
-      mcqs.forEach((_, i) => {
-        if (selectedAnswers[i] === undefined) {
-          const btn = document.createElement('button');
-          btn.textContent = i + 1;
-          btn.className = 'unattempted-btn';
-          btn.onclick = () => {
-            currentIndex = i;
-            renderQuestion(i);
-          };
-          list.appendChild(btn);
-        }
+      const unattemptedIndices = selectedAnswers
+        .map((answer, index) => answer === undefined ? index : -1)
+        .filter(index => index !== -1);
+
+      if (unattemptedIndices.length === 0) {
+        unattemptedList.classList.add('hidden');
+        return;
+      }
+
+      unattemptedList.classList.remove('hidden');
+      
+      // Removed the "Unattempted Questions" text line as requested
+      let html = '';
+
+      unattemptedIndices.forEach(index => {
+        const isCurrent = index === currentIndex;
+        const currentClass = isCurrent ? 'current' : '';
+        html += `<button class="unattempted-btn ${currentClass}" data-index="${index}">${index + 1}</button>`;
+      });
+
+      unattemptedList.innerHTML = html;
+
+      // Add event listeners to unattempted buttons
+      document.querySelectorAll('.unattempted-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const index = parseInt(btn.dataset.index);
+          currentIndex = index;
+          renderQuestion(index);
+          updateQuestionCounter();
+          updateUnattemptedList();
+        });
       });
     }
 
+    // Update the question counter
+    function updateQuestionCounter() {
+      questionCounter.textContent = `Question ${currentIndex + 1} of ${mcqs.length}`;
+    }
+
+    // Navigate to the previous question
     function prevQuestion() {
       if (currentIndex > 0) {
         currentIndex--;
         renderQuestion(currentIndex);
+        updateQuestionCounter();
+        updateUnattemptedList();
       }
     }
 
+    // Navigate to the next question
     function nextQuestion() {
       if (currentIndex < mcqs.length - 1) {
         currentIndex++;
         renderQuestion(currentIndex);
+        updateQuestionCounter();
+        updateUnattemptedList();
       } else {
+        // Only show the finish dialog if it hasn't been shown before
+        // or if the user has already dismissed it
         const unanswered = selectedAnswers.filter(a => a === undefined).length;
-        if (unanswered > 0) {
-          if (confirm(`You have ${unanswered} unanswered questions. Are you sure you want to finish the exam?`)) {
-            finishExam();
-          }
+        
+        if (unanswered > 0 && !finishDialogShown) {
+          finishDialogText.textContent = `You have ${unanswered} unanswered questions. Are you sure you want to finish the quiz?`;
+          finishDialog.classList.remove('hidden');
+          finishDialogShown = true;
         } else {
-          if (confirm('Do you want to finish the exam?')) {
-            finishExam();
-          }
+          finishExam();
         }
       }
     }
 
-    function confirmExit() {
-      if (confirm('Are you sure you want to exit exam mode? Your progress will be lost.')) {
-        location.href = 'index.html';
-      }
-    }
-
+    // Finish the exam
     function finishExam() {
       clearInterval(timerInterval);
-      document.getElementById('examCard').classList.add('hidden');
-      document.getElementById('resultCard').classList.remove('hidden');
-      document.getElementById('unattemptedList').classList.add('hidden');
-      document.querySelector('.bottom-banner').classList.add('hidden'); // Hide bottom nav
+      isFinished = true;
+      finishDialog.classList.add('hidden'); // Hide the dialog
+      examCard.classList.add('hidden');
+      resultCard.classList.remove('hidden');
+      unattemptedList.classList.add('hidden');
+      document.querySelector('.bottom-banner').classList.add('hidden');
       showResults();
     }
 
+    // Show the results
     function showResults() {
-      let score = 0;
-      let total = mcqs.length;
-      const table = document.createElement('table');
+      const correctCount = selectedAnswers.filter(
+        (answer, index) => answer !== undefined && answer === mcqs[index].correctIndex
+      ).length;
 
-      // Add column widths and header
-      const colGroup = `
-        <colgroup>
-          <col style="width: 5%;">
-          <col style="width: 45%;">
-          <col style="width: 25%;">
-          <col style="width: 25%;">
-        </colgroup>
+      const incorrectCount = selectedAnswers.filter(
+        (answer, index) => answer !== undefined && answer !== mcqs[index].correctIndex
+      ).length;
+
+      const unansweredCount = selectedAnswers.filter(answer => answer === undefined).length;
+
+      let resultHtml = `
+        <h2 class="gradient-text" style="text-align: center;">Quiz Results</h2>
+        
+        <div class="score-summary">
+          <p class="score-value">
+            You scored <span class="correct">${correctCount}</span> out of <span class="total">${mcqs.length}</span>
+          </p>
+          <p style="color: var(--muted-text); font-size: 0.875rem;">
+            ${correctCount === mcqs.length
+              ? "Perfect score! Excellent work!"
+              : correctCount >= mcqs.length * 0.7
+                ? "Great job! Keep it up!"
+                : "Keep practicing to improve your score!"}
+          </p>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="resultChart"></canvas>
+        </div>
+
+        <h3 style="margin-bottom: 1rem;">Detailed Results</h3>
+        <div class="result-details-list">
       `;
-      const header = `
-        ${colGroup}
-        <tr>
-          <th>#</th>
-          <th>Question</th>
-          <th>Your Answer</th>
-          <th>Correct Answer</th>
-        </tr>
-      `;
-      table.innerHTML = header;
 
-      mcqs.forEach((mcq, i) => {
-        const userAnswer = selectedAnswers[i];
-        const correctIndex = mcq.correctIndex;
-        const isCorrect = userAnswer === correctIndex;
-        if (isCorrect) score++;
+      mcqs.forEach((mcq, index) => {
+        const userAnswer = selectedAnswers[index];
+        const isCorrect = userAnswer === mcq.correctIndex;
+        const isUnanswered = userAnswer === undefined;
 
-        const yourAnswerText = userAnswer !== undefined ? mcq.options[userAnswer] : 'No Answer';
-        const bgClass = i % 2 === 0 ? 'question-set-even' : 'question-set-odd';
+        let statusClass, statusIcon;
+        if (isUnanswered) {
+          statusClass = 'status-unanswered';
+          statusIcon = 'fa-question';
+        } else if (isCorrect) {
+          statusClass = 'status-correct';
+          statusIcon = 'fa-check';
+        } else {
+          statusClass = 'status-incorrect';
+          statusIcon = 'fa-xmark';
+        }
 
-        // Question row
-        const tr = document.createElement('tr');
-        tr.className = `question-block question-block-row ${bgClass}`;
-        tr.innerHTML = `
-          <td>${i + 1}</td>
-          <td>${mcq.question}</td>
-          <td>${yourAnswerText}</td>
-          <td>${mcq.options[correctIndex]}</td>
+        let userAnswerClass, userAnswerText;
+        if (isUnanswered) {
+          userAnswerClass = 'answer-unanswered';
+          userAnswerText = 'No answer provided';
+        } else if (isCorrect) {
+          userAnswerClass = 'answer-correct';
+          userAnswerText = mcq.options[userAnswer];
+        } else {
+          userAnswerClass = 'answer-incorrect';
+          userAnswerText = mcq.options[userAnswer];
+        }
+
+        resultHtml += `
+          <div class="result-item">
+            <div class="result-header">
+              <div class="result-status ${statusClass}">
+                <i class="fas ${statusIcon}"></i>
+              </div>
+              <div class="result-question">
+                ${index + 1}. ${mcq.question}
+              </div>
+            </div>
+            <div class="result-details">
+              <div class="answer-grid">
+                <div>
+                  <div class="answer-label">Your Answer:</div>
+                  <div class="answer-value ${userAnswerClass}">${userAnswerText}</div>
+                </div>
+                <div>
+                  <div class="answer-label">Correct Answer:</div>
+                  <div class="answer-value answer-correct">${mcq.options[mcq.correctIndex]}</div>
+                </div>
+              </div>
+              <div class="explanation">
+                <div class="explanation-label">Explanation:</div>
+                <div class="explanation-value">${mcq.explanation}</div>
+              </div>
+            </div>
+          </div>
         `;
-        table.appendChild(tr);
-
-        // Explanation row
-        const trExplanation = document.createElement('tr');
-        trExplanation.className = `question-block question-explanation-row ${bgClass}`;
-        trExplanation.innerHTML = `
-          <td colspan="4"><strong>Explanation:</strong> ${mcq.explanation}</td>
-        `;
-        table.appendChild(trExplanation);
       });
 
+      resultHtml += '</div>';
+      resultCard.innerHTML = resultHtml;
 
-      document.getElementById('scoreSummary').textContent = `You scored ${score} out of ${total}.`;
-      document.getElementById('reportTable').appendChild(table);
-
-      // Pie chart for summary
+      // Create the chart with adjusted options for mobile
       const ctx = document.getElementById('resultChart').getContext('2d');
       new Chart(ctx, {
-        type: 'pie',
+        type: 'doughnut',
         data: {
           labels: ['Correct', 'Incorrect', 'Unanswered'],
           datasets: [{
-            data: [
-              selectedAnswers.filter((a, i) => a === mcqs[i].correctIndex).length,
-              selectedAnswers.filter((a, i) => a !== undefined && a !== mcqs[i].correctIndex).length,
-              selectedAnswers.filter(a => a === undefined).length
-            ],
-            backgroundColor: ['#28a745', '#dc3545', '#ffc107']
+            data: [correctCount, incorrectCount, unansweredCount],
+            backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
+            borderWidth: 0,
+            hoverOffset: 4
           }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false, // This allows the chart to fill the container
+          cutout: '70%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: document.documentElement.getAttribute('data-theme') === 'dark' ? 'white' : '#1e293b',
+                font: {
+                  size: 14
+                },
+                padding: 20,
+                boxWidth: 15 // Smaller color boxes in legend
+              }
+            }
+          }
         }
       });
     }
 
-
+    // Event Listeners
+    prevBtn.addEventListener('click', prevQuestion);
+    nextBtn.addEventListener('click', nextQuestion);
+    homeBtn.addEventListener('click', () => exitDialog.classList.remove('hidden'));
+    exitCancelBtn.addEventListener('click', () => exitDialog.classList.add('hidden'));
+    exitConfirmBtn.addEventListener('click', () => {
+      location.href = 'index.html';
+    });
     
-    fetch('Physics_R.json')
-      .then(res => res.json())
-      .then(data => {
-        mcqs = data.sort(() => 0.5 - Math.random()).slice(0, 10);
-        renderQuestion(currentIndex);
-        updateUnattemptedList();
-        startTimer();
-      })
-      .catch(err => {
-        document.getElementById('examCard').innerHTML = '<p>Error loading exam questions.</p>';
-        console.error(err);
-      });
+    finishCancelBtn.addEventListener('click', () => {
+      finishDialog.classList.add('hidden');
+      finishDialogShown = false; // Reset so user can see dialog again if needed
+    });
+    
+    finishConfirmBtn.addEventListener('click', () => {
+      finishDialog.classList.add('hidden');
+      finishExam();
+    });
+
+    // Close dialogs when clicking outside
+    exitDialog.addEventListener('click', (e) => {
+      if (e.target === exitDialog) {
+        exitDialog.classList.add('hidden');
+      }
+    });
+    
+    finishDialog.addEventListener('click', (e) => {
+      if (e.target === finishDialog) {
+        finishDialog.classList.add('hidden');
+        finishDialogShown = false;
+      }
+    });
+
+    // Initialize the quiz
+    initQuiz();
   </script>
 </body>
 </html>
