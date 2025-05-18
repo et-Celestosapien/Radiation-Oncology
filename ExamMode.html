@@ -93,7 +93,7 @@
 
     /* Layout */
     .container {
-      max-width: 1000px;
+      max-width: 95vw;
       margin: 0 auto;
       padding: 1rem;
       padding-top: 70px; /* Added padding to account for the fixed top banner */
@@ -110,6 +110,8 @@
       margin-bottom: 1.5rem;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
       transition: background-color 0.3s ease, border 0.3s ease;
+      width: 95vw;
+      max-width: 95vw;
     }
 
     /* Banner Styles */
@@ -349,6 +351,7 @@
       margin-bottom: 1rem;
       background-color: var(--option-bg);
       transition: background-color 0.3s ease, border 0.3s ease;
+      width: 100%;
     }
 
     .result-header {
@@ -528,6 +531,88 @@
       color: transparent;
     }
 
+    /* Setup Form Styles */
+    .setup-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group label {
+      font-weight: 500;
+    }
+
+    .form-control {
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      background-color: var(--option-bg);
+      color: var(--text-color);
+      font-size: 1rem;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      background-color: var(--option-bg);
+      border: 1px solid var(--card-border);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .checkbox-item:hover {
+      background-color: var(--option-hover-bg);
+    }
+
+    .checkbox-item.selected {
+      background-color: var(--option-selected-bg);
+      border-color: var(--option-selected-border);
+    }
+
+    .checkbox-item input {
+      display: none;
+    }
+
+    .checkbox-item .checkbox-marker {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: transparent;
+      transition: all 0.2s ease;
+    }
+
+    .checkbox-item.selected .checkbox-marker {
+      background-color: var(--accent-color);
+      border-color: var(--accent-color);
+      color: white;
+    }
+
     /* Responsive adjustments */
     @media (max-width: 640px) {
       .card {
@@ -606,7 +691,7 @@
   <div class="banner top-banner">
     <div class="timer" id="timer">
       <i class="fas fa-clock"></i>
-      <span>5:00</span>
+      <span>0:00</span>
     </div>
     <div style="display: flex; align-items: center;">
       <button class="theme-toggle" id="themeToggle">
@@ -619,7 +704,38 @@
   </div>
 
   <div class="container">
-    <div class="card" id="examCard">
+    <div class="card" id="setupCard">
+      <h2 class="gradient-text" style="text-align: center;">Exam Setup</h2>
+      <div class="setup-form">
+        <div class="form-group">
+          <label for="numQuestions">Number of Questions:</label>
+          <input type="number" id="numQuestions" class="form-control" min="5" max="50" value="10">
+        </div>
+        
+        <div class="form-group">
+          <label>Select Topics:</label>
+          <div class="checkbox-group" id="topicsContainer">
+            <!-- Topics will be populated here -->
+            <div class="checkbox-item selected">
+              <input type="checkbox" id="topic-all" checked>
+              <div class="checkbox-marker"><i class="fas fa-check"></i></div>
+              <label for="topic-all">All Topics</label>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <p>Time Limit: <span id="timeDisplay">20 minutes</span></p>
+          <p class="answer-label">Time is calculated as 2 minutes per question</p>
+        </div>
+        
+        <button class="btn btn-primary" id="startExamBtn" style="align-self: center;">
+          <i class="fas fa-play"></i> Start Exam
+        </button>
+      </div>
+    </div>
+    
+    <div class="card hidden" id="examCard">
       <!-- Quiz content will be rendered here -->
     </div>
     
@@ -632,7 +748,7 @@
     <!-- Unattempted questions will be rendered here -->
   </div>
 
-  <div class="banner bottom-banner">
+  <div class="banner bottom-banner hidden" id="navigationBar">
     <div class="question-nav">
       <button class="btn" id="prevBtn">
         <i class="fas fa-chevron-left"></i> Previous
@@ -682,17 +798,22 @@
   <script>
     // State variables
     let mcqs = [];
+    let allTopics = [];
+    let selectedTopics = ['all'];
     let currentIndex = 0;
     let selectedAnswers = [];
-    let timeRemaining = 300; // 5 minutes
+    let timeRemaining = 0;
     let timerInterval;
     let isFinished = false;
     let finishDialogShown = false;
+    let numQuestions = 10;
 
     // DOM Elements
+    const setupCard = document.getElementById('setupCard');
     const examCard = document.getElementById('examCard');
     const resultCard = document.getElementById('resultCard');
     const unattemptedList = document.getElementById('unattemptedList');
+    const navigationBar = document.getElementById('navigationBar');
     const timer = document.getElementById('timer');
     const questionCounter = document.getElementById('questionCounter');
     const prevBtn = document.getElementById('prevBtn');
@@ -706,6 +827,10 @@
     const finishCancelBtn = document.getElementById('finishCancelBtn');
     const finishConfirmBtn = document.getElementById('finishConfirmBtn');
     const themeToggle = document.getElementById('themeToggle');
+    const numQuestionsInput = document.getElementById('numQuestions');
+    const timeDisplay = document.getElementById('timeDisplay');
+    const topicsContainer = document.getElementById('topicsContainer');
+    const startExamBtn = document.getElementById('startExamBtn');
 
     // Theme Toggle
     themeToggle.addEventListener('click', () => {
@@ -741,32 +866,186 @@
           themeIcon.className = 'fas fa-sun';
         }
       }
+      
+      // Initialize the setup form
+      initSetupForm();
     });
 
     // Prevent accidental navigation
     window.onbeforeunload = function() {
-      if (!isFinished) {
+      if (!isFinished && !setupCard.classList.contains('hidden')) {
         return 'Are you sure you want to exit exam mode? Your progress will be lost.';
       }
     };
 
-    // Initialize the quiz
-    function initQuiz() {
-      fetch('Physics_R.json')
+    // Initialize the setup form
+    function initSetupForm() {
+      // Load topics from JSON
+      fetch('Devi.json')
         .then(res => res.json())
         .then(data => {
-          // Randomize and take 10 questions
-          mcqs = data.sort(() => 0.5 - Math.random()).slice(0, 10);
-          selectedAnswers = new Array(mcqs.length).fill(undefined);
-          renderQuestion(currentIndex);
-          updateUnattemptedList();
-          updateQuestionCounter();
-          startTimer();
+          if (data.topics) {
+            // New JSON format with topics
+            allTopics = data.topics;
+            populateTopics(data.topics);
+          } else {
+            // Old JSON format without topics
+            allTopics = [{ topic: "All Topics", mcqs: data }];
+            // No need to populate topics as we only have one
+          }
         })
         .catch(err => {
-          examCard.innerHTML = '<p>Error loading exam questions.</p>';
-          console.error(err);
+          console.error('Error loading topics:', err);
         });
+      
+      // Update time display when number of questions changes
+      numQuestionsInput.addEventListener('input', updateTimeDisplay);
+      
+      // Start exam button
+      startExamBtn.addEventListener('click', startExam);
+    }
+
+    // Populate topics in the setup form
+    function populateTopics(topics) {
+      // Clear existing topics except "All Topics"
+      const allTopicsItem = topicsContainer.querySelector('.checkbox-item');
+      topicsContainer.innerHTML = '';
+      topicsContainer.appendChild(allTopicsItem);
+      
+      // Add topics to the container
+      topics.forEach((topic, index) => {
+        const topicItem = document.createElement('div');
+        topicItem.className = 'checkbox-item';
+        topicItem.innerHTML = `
+          <input type="checkbox" id="topic-${index}">
+          <div class="checkbox-marker"><i class="fas fa-check"></i></div>
+          <label for="topic-${index}">${topic.topic}</label>
+        `;
+        
+        topicItem.addEventListener('click', () => {
+          // Toggle selection
+          topicItem.classList.toggle('selected');
+          
+          // Update selected topics
+          const allTopicsItem = document.getElementById('topic-all').parentNode;
+          
+          if (topicItem.classList.contains('selected')) {
+            // If "All Topics" is clicked
+            if (topicItem.querySelector('input').id === 'topic-all') {
+              // Deselect all other topics
+              document.querySelectorAll('.checkbox-item').forEach(item => {
+                if (item.querySelector('input').id !== 'topic-all') {
+                  item.classList.remove('selected');
+                }
+              });
+              selectedTopics = ['all'];
+            } else {
+              // If a specific topic is selected, deselect "All Topics"
+              allTopicsItem.classList.remove('selected');
+              
+              // Add to selected topics
+              const topicId = topicItem.querySelector('input').id.split('-')[1];
+              if (!selectedTopics.includes(topicId) && topicId !== 'all') {
+                selectedTopics.push(topicId);
+              }
+              
+              // Remove 'all' from selected topics if it exists
+              selectedTopics = selectedTopics.filter(id => id !== 'all');
+            }
+          } else {
+            // Remove from selected topics
+            const topicId = topicItem.querySelector('input').id.split('-')[1];
+            selectedTopics = selectedTopics.filter(id => id !== topicId);
+            
+            // If no topics are selected, select "All Topics"
+            if (selectedTopics.length === 0) {
+              allTopicsItem.classList.add('selected');
+              selectedTopics = ['all'];
+            }
+          }
+        });
+        
+        topicsContainer.appendChild(topicItem);
+      });
+    }
+
+    // Update time display based on number of questions
+    function updateTimeDisplay() {
+      numQuestions = parseInt(numQuestionsInput.value);
+      if (isNaN(numQuestions) || numQuestions < 5) {
+        numQuestions = 5;
+        numQuestionsInput.value = 5;
+      } else if (numQuestions > 50) {
+        numQuestions = 50;
+        numQuestionsInput.value = 50;
+      }
+      
+      // Calculate time (2 minutes per question)
+      const timeInMinutes = numQuestions * 2;
+      timeDisplay.textContent = `${timeInMinutes} minutes`;
+    }
+
+    // Start the exam
+    function startExam() {
+      // Get selected questions based on topics
+      let examQuestions = [];
+      
+      if (selectedTopics.includes('all')) {
+        // If "All Topics" is selected, get questions from all topics
+        allTopics.forEach(topic => {
+          examQuestions = examQuestions.concat(topic.mcqs);
+        });
+        
+        // Randomize and limit to selected number of questions
+        mcqs = examQuestions.sort(() => 0.5 - Math.random()).slice(0, numQuestions);
+      } else {
+        // Get questions equally from each selected topic
+        const selectedTopicObjects = selectedTopics.map(topicId => {
+          const index = parseInt(topicId);
+          return allTopics[index];
+        }).filter(topic => topic !== undefined);
+        
+        // Calculate how many questions to take from each topic
+        const questionsPerTopic = Math.floor(numQuestions / selectedTopicObjects.length);
+        let remainingQuestions = numQuestions - (questionsPerTopic * selectedTopicObjects.length);
+        
+        // Get questions from each selected topic
+        mcqs = [];
+        selectedTopicObjects.forEach(topic => {
+          // Randomize the questions from this topic
+          const topicQuestions = [...topic.mcqs].sort(() => 0.5 - Math.random());
+          
+          // Take the calculated number of questions plus one extra if we have remaining questions
+          const questionsToTake = questionsPerTopic + (remainingQuestions > 0 ? 1 : 0);
+          if (remainingQuestions > 0) remainingQuestions--;
+          
+          // Add questions to the exam
+          mcqs = mcqs.concat(topicQuestions.slice(0, questionsToTake));
+        });
+        
+        // Final shuffle of all selected questions
+        mcqs = mcqs.sort(() => 0.5 - Math.random());
+      }
+      
+      // Initialize exam state
+      selectedAnswers = new Array(mcqs.length).fill(undefined);
+      currentIndex = 0;
+      isFinished = false;
+      finishDialogShown = false;
+      
+      // Calculate time (2 minutes per question in seconds)
+      timeRemaining = numQuestions * 2 * 60;
+      
+      // Show exam UI
+      setupCard.classList.add('hidden');
+      examCard.classList.remove('hidden');
+      navigationBar.classList.remove('hidden');
+      
+      // Start the exam
+      renderQuestion(currentIndex);
+      updateUnattemptedList();
+      updateQuestionCounter();
+      startTimer();
     }
 
     // Start the timer
@@ -803,11 +1082,12 @@
       if (!mcq) return;
 
       let html = `
-        <h2><span class="gradient-text">${index + 1}.</span> ${mcq.question}</h2>
+        <h2><span class="gradient-text">${index + 1}.</span> ${mcq.question || mcq.statement}</h2>
         <div class="options">
       `;
 
-      mcq.options.forEach((option, i) => {
+      const options = mcq.options || [];
+      options.forEach((option, i) => {
         const isSelected = selectedAnswers[index] === i;
         const selectedClass = isSelected ? 'selected' : '';
         html += `
@@ -845,7 +1125,6 @@
 
       unattemptedList.classList.remove('hidden');
       
-      // Removed the "Unattempted Questions" text line as requested
       let html = '';
 
       unattemptedIndices.forEach(index => {
@@ -913,24 +1192,48 @@
       examCard.classList.add('hidden');
       resultCard.classList.remove('hidden');
       unattemptedList.classList.add('hidden');
-      document.querySelector('.bottom-banner').classList.add('hidden');
+      navigationBar.classList.add('hidden');
       showResults();
     }
 
     // Show the results
     function showResults() {
       const correctCount = selectedAnswers.filter(
-        (answer, index) => answer !== undefined && answer === mcqs[index].correctIndex
+        (answer, index) => {
+          const mcq = mcqs[index];
+          const correctIndex = mcq.correctIndex;
+          return answer !== undefined && answer === correctIndex;
+        }
       ).length;
 
       const incorrectCount = selectedAnswers.filter(
-        (answer, index) => answer !== undefined && answer !== mcqs[index].correctIndex
+        (answer, index) => {
+          const mcq = mcqs[index];
+          const correctIndex = mcq.correctIndex;
+          return answer !== undefined && answer !== correctIndex;
+        }
       ).length;
 
       const unansweredCount = selectedAnswers.filter(answer => answer === undefined).length;
 
+      // Create topics display text
+      let topicsText = '';
+      if (selectedTopics.includes('all')) {
+        topicsText = 'All Topics';
+      } else {
+        const topicNames = selectedTopics.map(topicId => {
+          const index = parseInt(topicId);
+          return allTopics[index] ? allTopics[index].topic : '';
+        }).filter(name => name !== '');
+        topicsText = topicNames.join(', ');
+      }
+
       let resultHtml = `
         <h2 class="gradient-text" style="text-align: center;">Quiz Results</h2>
+        
+        <div class="topics-summary" style="text-align: center; margin-bottom: 1rem;">
+          <span style="font-weight: 500;">Topics:</span> ${topicsText}
+        </div>
         
         <div class="score-summary">
           <p class="score-value">
@@ -955,7 +1258,8 @@
 
       mcqs.forEach((mcq, index) => {
         const userAnswer = selectedAnswers[index];
-        const isCorrect = userAnswer === mcq.correctIndex;
+        const correctIndex = mcq.correctIndex;
+        const isCorrect = userAnswer === correctIndex;
         const isUnanswered = userAnswer === undefined;
 
         let statusClass, statusIcon;
@@ -989,7 +1293,7 @@
                 <i class="fas ${statusIcon}"></i>
               </div>
               <div class="result-question">
-                ${index + 1}. ${mcq.question}
+                ${index + 1}. ${mcq.question || mcq.statement}
               </div>
             </div>
             <div class="result-details">
@@ -1000,7 +1304,7 @@
                 </div>
                 <div>
                   <div class="answer-label">Correct Answer:</div>
-                  <div class="answer-value answer-correct">${mcq.options[mcq.correctIndex]}</div>
+                  <div class="answer-value answer-correct">${mcq.options[correctIndex]}</div>
                 </div>
               </div>
               <div class="explanation">
@@ -1012,8 +1316,20 @@
         `;
       });
 
-      resultHtml += '</div>';
+      resultHtml += `
+        <div style="text-align: center; margin-top: 2rem;">
+          <button class="btn btn-primary" id="returnHomeBtn">
+            <i class="fas fa-home"></i> Return to Home
+          </button>
+        </div>
+      `;
+
       resultCard.innerHTML = resultHtml;
+
+      // Add event listener to return home button
+      document.getElementById('returnHomeBtn').addEventListener('click', () => {
+        location.href = 'index.html';
+      });
 
       // Create the chart with adjusted options for mobile
       const ctx = document.getElementById('resultChart').getContext('2d');
@@ -1081,9 +1397,6 @@
         finishDialogShown = false;
       }
     });
-
-    // Initialize the quiz
-    initQuiz();
   </script>
 </body>
 </html>

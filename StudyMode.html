@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Study Mode - MCQ Quiz</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Theme Variables */
+    :root {
+      --bg-gradient-start: #0f172a;
+      --bg-gradient-mid: #1e1b4b;
+      --bg-gradient-end: #3b0764;
+      --text-color: #ffffff;
+      --card-bg: rgba(0, 0, 0, 0.4);
+      --card-border: rgba(139, 92, 246, 0.3);
+      --banner-bg: rgba(0, 0, 0, 0.5);
+      --option-bg: rgba(0, 0, 0, 0.3);
+      --option-hover-bg: rgba(139, 92, 246, 0.2);
+      --option-selected-bg: rgba(139, 92, 246, 0.5);
+      --option-selected-border: rgba(139, 92, 246, 1);
+      --option-marker-bg: #4b5563;
+      --option-marker-selected-bg: #8b5cf6;
+      --option-correct-bg: rgba(16, 185, 129, 0.3);
+      --option-correct-border: rgba(16, 185, 129, 0.8);
+      --option-incorrect-bg: rgba(239, 68, 68, 0.3);
+      --option-incorrect-border: rgba(239, 68, 68, 0.8);
+      --option-marker-correct-bg: #10b981;
+      --option-marker-incorrect-bg: #ef4444;
+      --accent-color: #a855f7;
+      --accent-gradient-start: #22d3ee;
+      --accent-gradient-end: #a855f7;
+      --dialog-bg: #1f2937;
+      --btn-primary-bg: #7c3aed;
+      --btn-primary-border: #8b5cf6;
+      --btn-primary-hover: #8b5cf6;
+      --btn-secondary-bg: #374151;
+      --btn-secondary-border: #4b5563;
+      --btn-secondary-hover: #4b5563;
+      --scrollbar-track: rgba(0, 0, 0, 0.2);
+      --scrollbar-thumb: rgba(139, 92, 246, 0.5);
+      --scrollbar-thumb-hover: rgba(139, 92, 246, 0.8);
+      --muted-text: #9ca3af;
+      --explanation-bg: rgba(0, 0, 0, 0.3);
+      --explanation-title: #a855f7;
+      --card-header-bg: rgba(30, 41, 59, 0.8);
+      --card-header-collapsed-bg: rgba(30, 41, 59, 0.5);
+    }
+
+    /* Light Theme */
+    [data-theme="light"] {
+      --bg-gradient-start: #f0f9ff;
+      --bg-gradient-mid: #e0f2fe;
+      --bg-gradient-end: #dbeafe;
+      --text-color: #1e293b;
+      --card-bg: rgba(255, 255, 255, 0.7);
+      --card-border: rgba(139, 92, 246, 0.3);
+      --banner-bg: rgba(255, 255, 255, 0.8);
+      --option-bg: rgba(255, 255, 255, 0.7);
+      --option-hover-bg: rgba(139, 92, 246, 0.1);
+      --option-selected-bg: rgba(139, 92, 246, 0.2);
+      --option-selected-border: rgba(139, 92, 246, 0.8);
+      --option-marker-bg: #d1d5db;
+      --option-marker-selected-bg: #8b5cf6;
+      --option-correct-bg: rgba(16, 185, 129, 0.15);
+      --option-correct-border: rgba(16, 185, 129, 0.6);
+      --option-incorrect-bg: rgba(239, 68, 68, 0.15);
+      --option-incorrect-border: rgba(239, 68, 68, 0.6);
+      --option-marker-correct-bg: #10b981;
+      --option-marker-incorrect-bg: #ef4444;
+      --accent-color: #8b5cf6;
+      --accent-gradient-start: #06b6d4;
+      --accent-gradient-end: #8b5cf6;
+      --dialog-bg: #ffffff;
+      --btn-primary-bg: #8b5cf6;
+      --btn-primary-border: #7c3aed;
+      --btn-primary-hover: #7c3aed;
+      --btn-secondary-bg: #e5e7eb;
+      --btn-secondary-border: #d1d5db;
+      --btn-secondary-hover: #d1d5db;
+      --scrollbar-track: rgba(0, 0, 0, 0.05);
+      --scrollbar-thumb: rgba(139, 92, 246, 0.3);
+      --scrollbar-thumb-hover: rgba(139, 92, 246, 0.5);
+      --muted-text: #6b7280;
+      --explanation-bg: rgba(226, 232, 240, 0.7);
+      --explanation-title: #8b5cf6;
+      --card-header-bg: rgba(226, 232, 240, 0.8);
+      --card-header-collapsed-bg: rgba(226, 232, 240, 0.5);
+    }
+
+    /* Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-mid), var(--bg-gradient-end));
+      color: var(--text-color);
+      min-height: 100vh;
+      padding-bottom: 40px;
+      transition: background 0.3s ease;
+    }
+
+    /* Typography */
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Layout */
+    .container {
+      width: 95%;
+      max-width: 95vw;
+      margin: 0 auto;
+      padding: 1rem;
+      padding-top: 70px; /* Added padding to account for the fixed top banner */
+    }
+
+    /* Card Styles */
+    .card {
+      background-color: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease, border 0.3s ease;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background-color: var(--card-header-bg);
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s ease;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .card-header.collapsed {
+      background-color: var(--card-header-collapsed-bg);
+      border-bottom: none;
+    }
+
+    .card-header h2 {
+      margin: 0;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .card-header .question-number {
+      background: linear-gradient(to right, var(--accent-gradient-start), var(--accent-gradient-end));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-right: 0.5rem;
+      font-weight: bold;
+    }
+
+    .card-header .toggle-icon {
+      transition: transform 0.3s ease;
+    }
+
+    .card-header.collapsed .toggle-icon {
+      transform: rotate(-90deg);
+    }
+
+    .card-body {
+      padding: 1.5rem;
+      max-height: 1000px;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .card-body.collapsed {
+      max-height: 0;
+      padding: 0 1.5rem;
+    }
+
+    /* Banner Styles */
+    .banner {
+      position: fixed;
+      width: 100%;
+      left: 0;
+      top: 0;
+      padding: 0.75rem 1rem;
+      background-color: var(--banner-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      border-bottom: 1px solid var(--card-border);
+      transition: background-color 0.3s ease, border 0.3s ease;
+    }
+
+    /* Button Styles */
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      border: 1px solid var(--card-border);
+      background-color: transparent;
+      color: var(--text-color);
+    }
+
+    .btn:hover {
+      background-color: var(--option-hover-bg);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn i {
+      margin-right: 0.5rem;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      padding: 0.4rem;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-color);
+      transition: all 0.2s ease;
+      margin-right: 0.5rem;
+    }
+
+    .theme-toggle:hover {
+      background-color: var(--option-hover-bg);
+    }
+
+    /* Options */
+    .option {
+      padding: 1rem;
+      margin: 0.75rem 0;
+      border-radius: 8px;
+      background-color: var(--option-bg);
+      border: 1px solid var(--card-border);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .option.correct {
+      background-color: var(--option-correct-bg);
+      border-color: var(--option-correct-border);
+    }
+
+    .option-marker {
+      width: 24px;
+      height: 24px;
+      min-width: 24px; /* Prevent shrinking */
+      min-height: 24px; /* Prevent shrinking */
+      border-radius: 50%;
+      background-color: var(--option-marker-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      font-size: 0.75rem;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .option.correct .option-marker {
+      background-color: var(--option-marker-correct-bg);
+    }
+
+    /* Explanation Box */
+    .explanation-box {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: 8px;
+      background-color: var(--explanation-bg);
+      border: 1px solid var(--card-border);
+      transition: background-color 0.3s ease, border 0.3s ease;
+    }
+
+    .explanation-box h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--explanation-title);
+    }
+
+    /* Controls */
+    .controls {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 0.75rem;
+      background-color: var(--banner-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .controls-inner {
+      display: flex;
+      gap: 1rem;
+      max-width: 1000px;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    /* Utility classes */
+    .hidden {
+      display: none;
+    }
+
+    /* Gradient Text */
+    .gradient-text {
+      background: linear-gradient(to right, var(--accent-gradient-start), var(--accent-gradient-end));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+      .card-header {
+        padding: 0.75rem 1rem;
+      }
+
+      .card-body {
+        padding: 1rem;
+      }
+
+      .option {
+        padding: 0.75rem;
+      }
+
+      .btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.875rem;
+      }
+      
+      /* Ensure option markers stay circular */
+      .option-marker {
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+        min-height: 24px;
+        flex-shrink: 0;
+      }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--scrollbar-track);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--scrollbar-thumb-hover);
+    }
+
+    /* Expand/Collapse All button */
+    .expand-collapse-btn {
+      margin-left: auto;
+      margin-right: 0.5rem;
+    }
+
+    /* Add this to the style section */
+    .topic-header {
+      background: linear-gradient(to right, var(--accent-gradient-start), var(--accent-gradient-end));
+      color: white;
+      padding: 0.5rem 1rem;
+      font-weight: 500;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      margin-bottom: -1px;
+    }
+
+    /* Topic Selector Styling */
+    #topicSelector {
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      border: 1px solid var(--card-border);
+      padding: 0.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 0.5rem center;
+      background-size: 1em;
+      padding-right: 2rem;
+    }
+
+    #topicSelector option {
+      background-color: var(--dialog-bg);
+      color: var(--text-color);
+    }
+
+    /* Search Bar Styling */
+    .search-container {
+      position: relative;
+      margin-right: 0.5rem;
+    }
+
+    .search-btn {
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      border: 1px solid var(--card-border);
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .search-btn:hover {
+      background-color: var(--option-hover-bg);
+    }
+
+    .search-input {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 0;
+      height: 38px;
+      padding: 0;
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      transition: width 0.3s ease, padding 0.3s ease;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .search-input.active {
+      width: 200px;
+      padding: 0 40px 0 15px;
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .search-input::placeholder {
+      color: var(--muted-text);
+    }
+
+    .search-results {
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      display: none;
+    }
+
+    .search-results.active {
+      display: block;
+    }
+
+    .search-result-count {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--accent-color);
+    }
+
+    .highlight {
+      background-color: rgba(139, 92, 246, 0.3);
+      padding: 0 2px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <div style="font-weight: 500;">Study Mode</div>
+    <div style="display: flex; align-items: center;">
+      <select id="topicSelector" class="btn" style="margin-right: 0.5rem;">
+        <option value="all">All Topics</option>
+        <!-- Topics will be populated here -->
+      </select>
+      <div class="search-container">
+        <button class="search-btn" id="searchBtn">
+          <i class="fas fa-search"></i>
+        </button>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search questions...">
+      </div>
+      <button class="btn expand-collapse-btn" id="expandCollapseBtn">
+        <i class="fas fa-expand-alt"></i> Expand All
+      </button>
+      <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button class="btn" id="homeBtn">
+        <i class="fas fa-home"></i> Home
+      </button>
+    </div>
+  </div>
+
+  <div class="container" id="studyContainer">
+    <!-- Study content will be rendered here -->
+    <div class="loading-message">
+      <p>Loading questions...</p>
+    </div>
+    
+    <div class="search-results" id="searchResults">
+      <div class="search-result-count" id="searchResultCount"></div>
+      <div id="searchResultsList"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="controls-inner">
+      <button class="btn" id="scrollTopBtn">
+        <i class="fas fa-arrow-up"></i> Back to Top
+      </button>
+      <span id="questionCounter">0 Questions Loaded</span>
+    </div>
+  </div>
+
+  <script>
+    // DOM Elements
+    const studyContainer = document.getElementById('studyContainer');
+    const themeToggle = document.getElementById('themeToggle');
+    const homeBtn = document.getElementById('homeBtn');
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+    const questionCounter = document.getElementById('questionCounter');
+    const expandCollapseBtn = document.getElementById('expandCollapseBtn');
+    const searchBtn = document.getElementById('searchBtn');
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    const searchResultCount = document.getElementById('searchResultCount');
+    const searchResultsList = document.getElementById('searchResultsList');
+    
+    // State variables
+    let mcqs = [];
+    let allExpanded = true;
+    let allTopics = null;
+    let filteredMcqs = [];
+
+    // Theme Toggle
+    themeToggle.addEventListener('click', () => {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      html.setAttribute('data-theme', newTheme);
+      
+      // Update theme toggle icon
+      const themeIcon = themeToggle.querySelector('i');
+      if (newTheme === 'dark') {
+        themeIcon.className = 'fas fa-moon';
+      } else {
+        themeIcon.className = 'fas fa-sun';
+      }
+      
+      // Save theme preference
+      localStorage.setItem('theme', newTheme);
+    });
+
+    // Load saved theme
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        // Update theme toggle icon
+        const themeIcon = themeToggle.querySelector('i');
+        if (savedTheme === 'dark') {
+          themeIcon.className = 'fas fa-moon';
+        } else {
+          themeIcon.className = 'fas fa-sun';
+        }
+      }
+      
+      // Initialize the study mode
+      initStudyMode();
+    });
+
+    // Home button
+    homeBtn.addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+
+    // Scroll to top button
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Expand/Collapse All button
+    expandCollapseBtn.addEventListener('click', () => {
+      const cardHeaders = document.querySelectorAll('.card-header');
+      const cardBodies = document.querySelectorAll('.card-body');
+      
+      if (allExpanded) {
+        // Collapse all
+        cardHeaders.forEach(header => header.classList.add('collapsed'));
+        cardBodies.forEach(body => body.classList.add('collapsed'));
+        expandCollapseBtn.innerHTML = '<i class="fas fa-expand-alt"></i> Expand All';
+      } else {
+        // Expand all
+        cardHeaders.forEach(header => header.classList.remove('collapsed'));
+        cardBodies.forEach(body => body.classList.remove('collapsed'));
+        expandCollapseBtn.innerHTML = '<i class="fas fa-compress-alt"></i> Collapse All';
+      }
+      
+      allExpanded = !allExpanded;
+    });
+
+    // Initialize the study mode
+    function initStudyMode() {
+      fetch('Devi.json')
+        .then(res => res.json())
+        .then(data => {
+          // Check if data has topics structure
+          if (data.topics) {
+            // New JSON format with topics
+            allTopics = data.topics;
+            populateTopicSelector(data.topics);
+            
+            // Initially load all questions from all topics
+            mcqs = [];
+            data.topics.forEach(topic => {
+              mcqs = mcqs.concat(topic.mcqs);
+            });
+          } else {
+            // Old JSON format without topics
+            mcqs = data;
+            allTopics = null;
+          }
+          
+          renderStudyCards();
+          questionCounter.textContent = `${mcqs.length} Questions Loaded`;
+          
+          // Load saved state after initializing
+          loadState();
+        })
+        .catch(err => {
+          studyContainer.innerHTML = '<p>Error loading study questions.</p>';
+          console.error(err);
+        });
+    }
+
+    // Populate topic selector dropdown
+    function populateTopicSelector(topics) {
+      const topicSelector = document.getElementById('topicSelector');
+      
+      // Clear existing options except "All Topics"
+      while (topicSelector.options.length > 1) {
+        topicSelector.remove(1);
+      }
+      
+      // Add topics to selector
+      topics.forEach((topic, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = topic.topic;
+        topicSelector.appendChild(option);
+      });
+      
+      // Add event listener for topic selection
+      topicSelector.addEventListener('change', function() {
+        const selectedValue = this.value;
+        
+        if (selectedValue === 'all') {
+          // Load all questions from all topics
+          mcqs = [];
+          topics.forEach(topic => {
+            mcqs = mcqs.concat(topic.mcqs);
+          });
+        } else {
+          // Load questions from selected topic
+          const topicIndex = parseInt(selectedValue);
+          mcqs = topics[topicIndex].mcqs;
+        }
+        
+        renderStudyCards();
+        questionCounter.textContent = `${mcqs.length} Questions Loaded`;
+      });
+    }
+
+    // Render all study cards
+    function renderStudyCards() {
+      let html = '';
+      
+      mcqs.forEach((mcq, index) => {
+        html += createStudyCard(mcq, index);
+      });
+      
+      studyContainer.innerHTML = html;
+      
+      // Add event listeners to card headers for toggling
+      document.querySelectorAll('.card-header').forEach(header => {
+        header.addEventListener('click', () => {
+          header.classList.toggle('collapsed');
+          const body = header.nextElementSibling;
+          body.classList.toggle('collapsed');
+        });
+      });
+    }
+
+    // Create a single study card
+    function createStudyCard(mcq, index) {
+      // Add topic header if available
+      let topicHeader = '';
+      if (mcq.topic) {
+        topicHeader = `<div class="topic-header">${mcq.topic}</div>`;
+      }
+      
+      let cardHtml = `
+        <div class="card">
+          ${topicHeader}
+          <div class="card-header">
+            <h2><span class="question-number">${index + 1}.</span> ${mcq.question || mcq.statement}</h2>
+            <i class="fas fa-chevron-down toggle-icon"></i>
+          </div>
+          <div class="card-body">
+            <div class="options">
+      `;
+      
+      // Add options
+      const options = mcq.options || [];
+      options.forEach((option, i) => {
+        const isCorrect = i === (mcq.correctIndex || mcq.correct_option_index);
+        const optionClass = isCorrect ? 'correct' : '';
+        
+        cardHtml += `
+          <div class="option ${optionClass}">
+            <div class="option-marker">${String.fromCharCode(65 + i)}</div>
+            <div>${option}</div>
+          </div>
+        `;
+      });
+      
+      cardHtml += `
+            </div>
+            <div class="explanation-box">
+              <h3>Explanation</h3>
+              <p>${mcq.explanation}</p>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      return cardHtml;
+    }
+
+    // Save current state to localStorage
+    function saveState() {
+      const state = {
+        currentTopic: document.getElementById('topicSelector').value,
+        expandedState: allExpanded,
+        scrollPosition: window.scrollY
+      };
+      localStorage.setItem('studyModeState', JSON.stringify(state));
+    }
+
+    // Load state from localStorage
+    function loadState() {
+      const savedState = localStorage.getItem('studyModeState');
+      if (savedState) {
+        const state = JSON.parse(savedState);
+        
+        // Set topic selector to saved value
+        const topicSelector = document.getElementById('topicSelector');
+        if (topicSelector.querySelector(`option[value="${state.currentTopic}"]`)) {
+          topicSelector.value = state.currentTopic;
+          
+          // If a specific topic was selected, load that topic
+          if (state.currentTopic !== 'all' && allTopics) {
+            const topicIndex = parseInt(state.currentTopic);
+            mcqs = allTopics[topicIndex].mcqs;
+            renderStudyCards();
+            questionCounter.textContent = `${mcqs.length} Questions Loaded`;
+          }
+        }
+        
+        // Set expanded state
+        allExpanded = state.expandedState;
+        if (!allExpanded) {
+          expandCollapseBtn.innerHTML = '<i class="fas fa-expand-alt"></i> Expand All';
+        } else {
+          expandCollapseBtn.innerHTML = '<i class="fas fa-compress-alt"></i> Collapse All';
+        }
+        
+        // Restore scroll position after rendering
+        setTimeout(() => {
+          window.scrollTo(0, state.scrollPosition);
+        }, 100);
+      }
+    }
+
+    // Add event listeners for state saving
+    window.addEventListener('beforeunload', saveState);
+
+    // Modify topic selector event listener to save state
+    document.getElementById('topicSelector').addEventListener('change', function() {
+      const selectedValue = this.value;
+      
+      if (selectedValue === 'all') {
+        // Load all questions from all topics
+        mcqs = [];
+        allTopics.forEach(topic => {
+          mcqs = mcqs.concat(topic.mcqs);
+        });
+      } else {
+        // Load questions from selected topic
+        const topicIndex = parseInt(selectedValue);
+        mcqs = allTopics[topicIndex].mcqs;
+      }
+      
+      renderStudyCards();
+      questionCounter.textContent = `${mcqs.length} Questions Loaded`;
+      saveState();
+    });
+
+    // Toggle search input visibility
+    searchBtn.addEventListener('click', () => {
+      searchInput.classList.toggle('active');
+      if (searchInput.classList.contains('active')) {
+        searchInput.focus();
+      } else {
+        searchInput.value = '';
+        searchResults.classList.remove('active');
+      }
+    });
+
+    // Search functionality
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.trim().toLowerCase();
+      
+      if (query.length < 2) {
+        searchResults.classList.remove('active');
+        return;
+      }
+      
+      // Get current topic selection
+      const topicSelector = document.getElementById('topicSelector');
+      const selectedTopic = topicSelector.value;
+      
+      // Filter by selected topic
+      let searchMcqs = [];
+      if (selectedTopic === 'all') {
+        searchMcqs = mcqs;
+      } else if (allTopics) {
+        const topicIndex = parseInt(selectedTopic);
+        searchMcqs = allTopics[topicIndex].mcqs;
+      }
+      
+      // Search in questions and options
+      const results = searchMcqs.filter(mcq => {
+        const question = (mcq.question || mcq.statement || '').toLowerCase();
+        if (question.includes(query)) return true;
+        
+        // Search in options
+        const options = mcq.options || [];
+        for (const option of options) {
+          if (option.toLowerCase().includes(query)) return true;
+        }
+        
+        // Search in explanation
+        if (mcq.explanation && mcq.explanation.toLowerCase().includes(query)) return true;
+        
+        return false;
+      });
+      
+      // Display results
+      if (results.length > 0) {
+        searchResults.classList.add('active');
+        searchResultCount.textContent = `Found ${results.length} result${results.length === 1 ? '' : 's'}`;
+        
+        let resultsHtml = '';
+        results.forEach((mcq, index) => {
+          const question = mcq.question || mcq.statement || '';
+          const highlightedQuestion = highlightText(question, query);
+          const mcqIndex = searchMcqs.indexOf(mcq);
+          
+          resultsHtml += `
+            <div class="card" style="margin-bottom: 1rem;">
+              <div class="card-header" data-mcq-index="${mcqIndex}">
+                <h2>${highlightedQuestion}</h2>
+                <i class="fas fa-chevron-right"></i>
+              </div>
+            </div>
+          `;
+        });
+        
+        searchResultsList.innerHTML = resultsHtml;
+        
+        // Add event listeners to search result items
+        document.querySelectorAll('#searchResultsList .card-header').forEach(header => {
+          header.addEventListener('click', () => {
+            const mcqIndex = parseInt(header.dataset.mcqIndex);
+            
+            // Scroll to the corresponding question card
+            const allCards = document.querySelectorAll('#studyContainer > .card');
+            if (allCards[mcqIndex]) {
+              searchInput.value = '';
+              searchResults.classList.remove('active');
+              searchInput.classList.remove('active');
+              
+              // Expand the card if collapsed
+              const cardHeader = allCards[mcqIndex].querySelector('.card-header');
+              const cardBody = allCards[mcqIndex].querySelector('.card-body');
+              
+              if (cardHeader.classList.contains('collapsed')) {
+                cardHeader.classList.remove('collapsed');
+                cardBody.classList.remove('collapsed');
+              }
+              
+              // Scroll to the card
+              allCards[mcqIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
+              
+              // Highlight the card temporarily
+              allCards[mcqIndex].style.boxShadow = '0 0 0 2px var(--accent-color)';
+              setTimeout(() => {
+                allCards[mcqIndex].style.boxShadow = '';
+              }, 2000);
+            }
+          });
+        });
+      } else {
+        searchResults.classList.add('active');
+        searchResultCount.textContent = 'No results found';
+        searchResultsList.innerHTML = '';
+      }
+    });
+
+    // Highlight search text
+    function highlightText(text, query) {
+      const regex = new RegExp(`(${query})`, 'gi');
+      return text.replace(regex, '<span class="highlight">$1</span>');
+    }
+
+    // Close search when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.search-container') && !e.target.closest('#searchResults')) {
+        searchInput.classList.remove('active');
+        searchResults.classList.remove('active');
+        searchInput.value = '';
+      }
+    });
+
+    // Close search on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        searchInput.classList.remove('active');
+        searchResults.classList.remove('active');
+        searchInput.value = '';
+      }
+    });
+  </script>
+</body>
+</html>

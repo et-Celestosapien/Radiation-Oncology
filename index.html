@@ -116,12 +116,6 @@
       transition: all 0.3s ease;
     }
 
-    .mode-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px var(--card-hover-shadow);
-      border-color: var(--card-hover-border);
-    }
-
     .mode-icon {
       font-size: 3rem;
       margin-bottom: 1.5rem;
@@ -237,6 +231,82 @@
     ::-webkit-scrollbar-thumb:hover {
       background: var(--scrollbar-thumb-hover);
     }
+
+    /* Card hover and animation effects */
+    .mode-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mode-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 12px;
+      border: 2px solid transparent;
+      background: linear-gradient(45deg, var(--accent-gradient-start), var(--accent-gradient-end)) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .mode-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(139, 92, 246, 0.15);
+    }
+
+    .mode-card:hover::before {
+      opacity: 1;
+    }
+
+    .mode-card:active {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(139, 92, 246, 0.2);
+    }
+
+    /* Different accent colors for each card */
+    #examModeCard {
+      --accent-gradient-start: #f43f5e;
+      --accent-gradient-end: #ec4899;
+    }
+
+    #practiceModeCard {
+      --accent-gradient-start: #3b82f6;
+      --accent-gradient-end: #6366f1;
+    }
+
+    #studyModeCard {
+      --accent-gradient-start: #8b5cf6;
+      --accent-gradient-end: #a855f7;
+    }
+
+    #keyPointsCard {
+      --accent-gradient-start: #10b981;
+      --accent-gradient-end: #34d399;
+    }
+
+    #stagingCard {
+      --accent-gradient-start: #f59e0b;
+      --accent-gradient-end: #fbbf24;
+    }
+
+    .mode-card-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .mode-card-link:hover {
+      text-decoration: none;
+      color: inherit;
+    }
   </style>
 </head>
 <body>
@@ -250,44 +320,65 @@
   </div>
 
   <div class="mode-selection">
-    <div class="mode-card" id="examModeCard">
-      <div class="mode-icon">
-        <i class="fas fa-stopwatch"></i>
+    <a href="ExamMode.html" class="mode-card-link">
+      <div class="mode-card" id="examModeCard">
+        <div class="mode-icon">
+          <i class="fas fa-stopwatch"></i>
+        </div>
+        <div class="mode-title">Exam Mode</div>
+        <div class="btn">
+          <i class="fas fa-play"></i> Start Exam
+        </div>
       </div>
-      <div class="mode-title">Exam Mode</div>
-      <div class="mode-description">
-        Challenge yourself with a timed quiz. You'll have 5 minutes to answer 10 random questions. Test your knowledge under pressure.
-      </div>
-      <a href="ExamMode.html" class="btn">
-        <i class="fas fa-play"></i> Start Exam
-      </a>
-    </div>
+    </a>
     
-    <div class="mode-card" id="practiceModeCard">
-      <div class="mode-icon">
-        <i class="fas fa-book-open"></i>
+    <a href="PracticeMode.html" class="mode-card-link">
+      <div class="mode-card" id="practiceModeCard">
+        <div class="mode-icon">
+          <i class="fas fa-book-open"></i>
+        </div>
+        <div class="mode-title">Practice Mode</div>
+        <div class="btn">
+          <i class="fas fa-play"></i> Start Practice
+        </div>
       </div>
-      <div class="mode-title">Practice Mode</div>
-      <div class="mode-description">
-        Learn at your own pace with immediate feedback. See explanations after each answer and review all questions in the database.
-      </div>
-      <a href="PracticeMode.html" class="btn">
-        <i class="fas fa-play"></i> Start Practice
-      </a>
-    </div>
+    </a>
 
-    <div class="mode-card" id="keyPointsCard">
-      <div class="mode-icon">
-        <i class="fas fa-book"></i>
+    <a href="StudyMode.html" class="mode-card-link">
+      <div class="mode-card" id="studyModeCard">
+        <div class="mode-icon">
+          <i class="fas fa-graduation-cap"></i>
+        </div>
+        <div class="mode-title">Study Mode</div>
+        <div class="btn">
+          <i class="fas fa-play"></i> Start Studying
+        </div>
       </div>
-      <div class="mode-title">Physics Keypoints</div>
-      <div class="mode-description">
-        Review key physics concepts and formulas. A comprehensive reference guide for physics principles and equations.
+    </a>
+
+    <a href="Khan Physics Keypoints.html" class="mode-card-link">
+      <div class="mode-card" id="keyPointsCard">
+        <div class="mode-icon">
+          <i class="fas fa-book"></i>
+        </div>
+        <div class="mode-title">Physics Keypoints</div>
+        <div class="btn">
+          <i class="fas fa-play"></i> Open Keypoints
+        </div>
       </div>
-      <a href="Khan Physics Keypoints.html" class="btn">
-        <i class="fas fa-play"></i> Open Keypoints
-      </a>
-    </div>
+    </a>
+
+    <a href="Staging/cancer-staging.html" class="mode-card-link">
+      <div class="mode-card" id="stagingCard">
+        <div class="mode-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="mode-title">Cancer Staging</div>
+        <div class="btn">
+          <i class="fas fa-play"></i> View Staging
+        </div>
+      </div>
+    </a>
   </div>
 
   <div class="footer">

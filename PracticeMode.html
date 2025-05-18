@@ -108,7 +108,8 @@
 
     /* Layout */
     .container {
-      max-width: 1000px;
+      width: 95%;
+      max-width: 95vw;
       margin: 0 auto;
       padding: 1rem;
       padding-top: 70px; /* Added padding to account for the fixed top banner */
@@ -499,12 +500,57 @@
     .hidden {
       display: none;
     }
+
+    /* Add this to the style section */
+    .topic-header {
+      background: linear-gradient(to right, var(--accent-gradient-start), var(--accent-gradient-end));
+      color: white;
+      padding: 0.5rem 1rem;
+      font-weight: 500;
+      border-radius: 8px 8px 0 0;
+      margin: -1.5rem -1.5rem 1rem -1.5rem;
+    }
+
+    .question-list-topic {
+      background: linear-gradient(to right, var(--accent-gradient-start), var(--accent-gradient-end));
+      color: white;
+      padding: 0.5rem 1rem;
+      font-weight: 500;
+      border-radius: 8px;
+      margin: 1rem 0 0.5rem 0;
+    }
+
+    /* Topic Selector Styling */
+    #topicSelector {
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      border: 1px solid var(--card-border);
+      padding: 0.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 0.5rem center;
+      background-size: 1em;
+      padding-right: 2rem;
+    }
+
+    #topicSelector option {
+      background-color: var(--dialog-bg);
+      color: var(--text-color);
+    }
   </style>
 </head>
 <body>
   <div class="banner top-banner">
     <div style="font-weight: 500;">Practice Mode</div>
     <div style="display: flex; align-items: center;">
+      <select id="topicSelector" class="btn" style="margin-right: 0.5rem;">
+        <option value="all">All Topics</option>
+        <!-- Topics will be populated here -->
+      </select>
       <button class="theme-toggle" id="themeToggle">
         <i class="fas fa-moon"></i>
       </button>
@@ -572,6 +618,7 @@
     let currentIndex = 0;
     let selectedAnswers = [];
     let practiceAnswers = []; // Track answered questions
+    let allTopics = null;
 
     // DOM Elements
     const practiceCard = document.getElementById('practiceCard');
@@ -626,16 +673,38 @@
 
     // Initialize the practice mode
     function initPractice() {
-      fetch('Physics_R.json')
+      fetch('Devi.json')
         .then(res => res.json())
         .then(data => {
-          // Use all questions from the JSON file
-          mcqs = data;
+          // Check if data has topics structure
+          if (data.topics) {
+            // New JSON format with topics
+            populateTopicSelector(data.topics);
+            
+            // Store all topics data
+            allTopics = data.topics;
+            
+            // Initially load all questions from all topics
+            mcqs = [];
+            data.topics.forEach(topic => {
+              // Add topic property to each MCQ for reference
+              const topicMcqs = topic.mcqs.map(mcq => ({...mcq, topic: topic.topic}));
+              mcqs = mcqs.concat(topicMcqs);
+            });
+          } else {
+            // Old JSON format without topics
+            mcqs = data;
+            allTopics = null;
+          }
+          
           selectedAnswers = new Array(mcqs.length).fill(undefined);
           practiceAnswers = new Array(mcqs.length).fill(false);
           renderQuestion(currentIndex);
           updateQuestionCounter();
           updateQuestionList();
+          
+          // Load saved state after initializing
+          loadState();
         })
         .catch(err => {
           practiceCard.innerHTML = '<p>Error loading practice questions.</p>';
@@ -643,22 +712,77 @@
         });
     }
 
+    // Populate topic selector dropdown
+    function populateTopicSelector(topics) {
+      const topicSelector = document.getElementById('topicSelector');
+      
+      // Clear existing options except "All Topics"
+      while (topicSelector.options.length > 1) {
+        topicSelector.remove(1);
+      }
+      
+      // Add topics to selector
+      topics.forEach((topic, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = topic.topic;
+        topicSelector.appendChild(option);
+      });
+      
+      // Add event listener for topic selection
+      topicSelector.addEventListener('change', function() {
+        const selectedValue = this.value;
+        
+        if (selectedValue === 'all') {
+          // Load all questions from all topics
+          mcqs = [];
+          topics.forEach(topic => {
+            // Add topic property to each MCQ for reference
+            const topicMcqs = topic.mcqs.map(mcq => ({...mcq, topic: topic.topic}));
+            mcqs = mcqs.concat(topicMcqs);
+          });
+        } else {
+          // Load questions from selected topic
+          const topicIndex = parseInt(selectedValue);
+          // Add topic property to each MCQ for reference
+          mcqs = topics[topicIndex].mcqs.map(mcq => ({...mcq, topic: topics[topicIndex].topic}));
+        }
+        
+        // Reset practice state
+        currentIndex = 0;
+        selectedAnswers = new Array(mcqs.length).fill(undefined);
+        practiceAnswers = new Array(mcqs.length).fill(false);
+        renderQuestion(currentIndex);
+        updateQuestionCounter();
+        updateQuestionList();
+        saveState();
+      });
+    }
+
     // Render the current question
     function renderQuestion(index) {
       const mcq = mcqs[index];
       if (!mcq) return;
 
-      let html = `
-        <h2><span class="gradient-text">${index + 1}.</span> ${mcq.question}</h2>
-        <div class="options">
-      `;
+      let topicHeader = '';
+      if (mcq.topic) {
+        topicHeader = `<div class="topic-header">${mcq.topic}</div>`;
+      }
 
-      mcq.options.forEach((option, i) => {
+      let html = `
+    ${topicHeader}
+    <h2><span class="gradient-text">${index + 1}.</span> ${mcq.question || mcq.statement}</h2>
+    <div class="options">
+  `;
+
+      const options = mcq.options || [];
+      options.forEach((option, i) => {
         let optionClass = '';
+        const correctIndex = mcq.correctIndex !== undefined ? mcq.correctIndex : mcq.correctIndex;
         
         if (practiceAnswers[index]) {
           // If question has been answered, show correct/incorrect
-          if (i === mcq.correctIndex) {
+          if (i === correctIndex) {
             optionClass = 'correct';
           } else if (selectedAnswers[index] === i) {
             optionClass = 'incorrect';
@@ -669,11 +793,11 @@
         }
         
         html += `
-          <div class="option ${optionClass}" data-index="${i}">
-            <div class="option-marker">${String.fromCharCode(65 + i)}</div>
-            <div>${option}</div>
-          </div>
-        `;
+      <div class="option ${optionClass}" data-index="${i}">
+        <div class="option-marker">${String.fromCharCode(65 + i)}</div>
+        <div>${option}</div>
+      </div>
+    `;
       });
 
       html += '</div>';
@@ -681,11 +805,11 @@
       // Add explanation if question has been answered
       if (practiceAnswers[index]) {
         html += `
-          <div class="explanation-box">
-            <h3>Explanation</h3>
-            <p>${mcq.explanation}</p>
-          </div>
-        `;
+      <div class="explanation-box">
+        <h3>Explanation</h3>
+        <p>${mcq.explanation}</p>
+      </div>
+    `;
       }
       
       practiceCard.innerHTML = html;
@@ -699,6 +823,7 @@
             practiceAnswers[currentIndex] = true;
             renderQuestion(currentIndex);
             updateQuestionList();
+            saveState(); // Save state after answering
           });
         });
       }
@@ -707,25 +832,63 @@
     // Update the question list dialog
     function updateQuestionList() {
       let html = '';
-      
+  
+      // Group questions by topic if available
+      const questionsByTopic = {};
+      let hasTopic = false;
+  
       mcqs.forEach((mcq, index) => {
-        const isCurrent = index === currentIndex;
-        const isAnswered = practiceAnswers[index];
-        const currentClass = isCurrent ? 'current' : '';
-        const answeredClass = isAnswered ? 'answered' : '';
+        if (mcq.topic) {
+          hasTopic = true;
+          if (!questionsByTopic[mcq.topic]) {
+            questionsByTopic[mcq.topic] = [];
+          }
+          questionsByTopic[mcq.topic].push({mcq, index});
+        }
+      });
+  
+      if (hasTopic) {
+        // Display questions grouped by topic
+        for (const topic in questionsByTopic) {
+          html += `<div class="question-list-topic">${topic}</div>`;
+      
+          questionsByTopic[topic].forEach(({mcq, index}) => {
+            const isCurrent = index === currentIndex;
+            const isAnswered = practiceAnswers[index];
+            const currentClass = isCurrent ? 'current' : '';
+            const answeredClass = isAnswered ? 'answered' : '';
         
-        html += `
+            html += `
           <div class="question-list-item ${currentClass} ${answeredClass}" data-index="${index}">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span>${index + 1}. ${mcq.question.length > 50 ? mcq.question.substring(0, 50) + '...' : mcq.question}</span>
+              <span>${index + 1}. ${(mcq.question || mcq.statement).length > 50 ? (mcq.question || mcq.statement).substring(0, 50) + '...' : (mcq.question || mcq.statement)}</span>
               ${isAnswered ? '<i class="fas fa-check" style="color: #10b981;"></i>' : ''}
             </div>
           </div>
         `;
-      });
-      
+          });
+        }
+      } else {
+        // Display questions without topic grouping
+        mcqs.forEach((mcq, index) => {
+          const isCurrent = index === currentIndex;
+          const isAnswered = practiceAnswers[index];
+          const currentClass = isCurrent ? 'current' : '';
+          const answeredClass = isAnswered ? 'answered' : '';
+        
+          html += `
+        <div class="question-list-item ${currentClass} ${answeredClass}" data-index="${index}">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span>${index + 1}. ${(mcq.question || mcq.statement).length > 50 ? (mcq.question || mcq.statement).substring(0, 50) + '...' : (mcq.question || mcq.statement)}</span>
+            ${isAnswered ? '<i class="fas fa-check" style="color: #10b981;"></i>' : ''}
+          </div>
+        </div>
+      `;
+        });
+      }
+  
       questionListItems.innerHTML = html;
-      
+  
       // Add event listeners to question list items
       document.querySelectorAll('.question-list-item').forEach(item => {
         item.addEventListener('click', () => {
@@ -749,6 +912,7 @@
         currentIndex--;
         renderQuestion(currentIndex);
         updateQuestionCounter();
+        saveState(); // Save state after navigation
       }
     }
 
@@ -758,8 +922,84 @@
         currentIndex++;
         renderQuestion(currentIndex);
         updateQuestionCounter();
+        saveState(); // Save state after navigation
       }
     }
+
+    // Save current state to localStorage
+    function saveState() {
+      const state = {
+        currentTopic: document.getElementById('topicSelector').value,
+        currentIndex: currentIndex,
+        selectedAnswers: selectedAnswers,
+        practiceAnswers: practiceAnswers
+      };
+      localStorage.setItem('practiceModeState', JSON.stringify(state));
+    }
+
+    // Load state from localStorage
+    function loadState() {
+      const savedState = localStorage.getItem('practiceModeState');
+      if (savedState) {
+        const state = JSON.parse(savedState);
+        
+        // Set topic selector to saved value
+        const topicSelector = document.getElementById('topicSelector');
+        if (topicSelector.querySelector(`option[value="${state.currentTopic}"]`)) {
+          topicSelector.value = state.currentTopic;
+          
+          // If a specific topic was selected, load that topic
+          if (state.currentTopic !== 'all' && allTopics) {
+            const topicIndex = parseInt(state.currentTopic);
+            // Add topic property to each MCQ for reference
+            mcqs = allTopics[topicIndex].mcqs.map(mcq => ({...mcq, topic: allTopics[topicIndex].topic}));
+          }
+        }
+        
+        // Only restore answers if the question count matches
+        if (state.selectedAnswers && state.selectedAnswers.length === mcqs.length) {
+          selectedAnswers = state.selectedAnswers;
+          practiceAnswers = state.practiceAnswers;
+          currentIndex = state.currentIndex;
+          
+          renderQuestion(currentIndex);
+          updateQuestionCounter();
+          updateQuestionList();
+        }
+      }
+    }
+
+    // Add event listeners for state saving
+    window.addEventListener('beforeunload', saveState);
+
+    // Update the topic selector event listener to save state
+    document.getElementById('topicSelector').addEventListener('change', function() {
+      const selectedValue = this.value;
+      
+      if (selectedValue === 'all') {
+        // Load all questions from all topics
+        mcqs = [];
+        allTopics.forEach(topic => {
+          // Add topic property to each MCQ for reference
+          const topicMcqs = topic.mcqs.map(mcq => ({...mcq, topic: topic.topic}));
+          mcqs = mcqs.concat(topicMcqs);
+        });
+      } else {
+        // Load questions from selected topic
+        const topicIndex = parseInt(selectedValue);
+        // Add topic property to each MCQ for reference
+        mcqs = allTopics[topicIndex].mcqs.map(mcq => ({...mcq, topic: allTopics[topicIndex].topic}));
+      }
+      
+      // Reset practice state
+      currentIndex = 0;
+      selectedAnswers = new Array(mcqs.length).fill(undefined);
+      practiceAnswers = new Array(mcqs.length).fill(false);
+      renderQuestion(currentIndex);
+      updateQuestionCounter();
+      updateQuestionList();
+      saveState();
+    });
 
     // Event Listeners
     prevBtn.addEventListener('click', prevQuestion);
