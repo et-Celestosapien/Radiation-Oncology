@@ -886,13 +886,13 @@
           }
         })
         
-        localStorage.setItem("cancerStagingState", JSON.stringify(state))
+        localStorage.setItem("cancerStagingState", .stringify(state))
       }
       
       function loadState() {
         const savedState = localStorage.getItem("cancerStagingState")
         if (savedState) {
-          const state = JSON.parse(savedState)
+          const state = .parse(savedState)
           
           // Restore search term
           if (state.searchTerm) {
@@ -948,12 +948,12 @@
       }
 
       // Fetch and display cancer staging data
-      fetch("cancerX-staging.json")
+      fetch("CancerX-Staging.")
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok")
           }
-          return response.json()
+          return response.()
         })
         .then((data) => {
           displayCancerSites(data.cancer_sites)
