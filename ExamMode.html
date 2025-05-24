@@ -83,20 +83,23 @@
       min-height: 100vh;
       padding-bottom: 80px;
       transition: background 0.3s ease;
+      overflow-x: hidden;
     }
 
     /* Typography */
     h2 {
-      font-size: 1.8rem;
+      font-size: clamp(1.25rem, 4vw, 1.8rem);
       margin-bottom: 1rem;
+      line-height: 1.3;
     }
 
     /* Layout */
     .container {
-      max-width: 95vw;
+      max-width: min(95vw, 1200px);
       margin: 0 auto;
-      padding: 1rem;
-      padding-top: 70px; /* Added padding to account for the fixed top banner */
+      padding: clamp(0.5rem, 2vw, 1rem);
+      padding-top: clamp(70px, 15vw, 80px);
+      width: 100%;
     }
 
     /* Card Styles */
@@ -106,12 +109,12 @@
       -webkit-backdrop-filter: blur(10px);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 1.5rem;
+      padding: clamp(1rem, 3vw, 1.5rem);
       margin-bottom: 1.5rem;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
       transition: background-color 0.3s ease, border 0.3s ease;
-      width: 95vw;
-      max-width: 95vw;
+      width: 100%;
+      max-width: 100%;
     }
 
     /* Banner Styles */
@@ -119,7 +122,7 @@
       position: fixed;
       width: 100%;
       left: 0;
-      padding: 0.75rem 1rem;
+      padding: clamp(0.5rem, 2vw, 0.75rem) clamp(0.5rem, 2vw, 1rem);
       background-color: var(--banner-bg);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
@@ -143,7 +146,7 @@
 
     .mid-bottom-banner {
       position: fixed;
-      bottom: 60px;
+      bottom: clamp(50px, 12vw, 60px);
       width: 100%;
       background-color: var(--banner-bg);
       backdrop-filter: blur(10px);
@@ -151,17 +154,17 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      padding: 0.75rem 1rem;
+      padding: clamp(0.25rem, 1.5vw, 0.75rem) clamp(0.5rem, 2vw, 1rem);
       z-index: 999;
       border-top: 1px solid var(--card-border);
-      max-height: 120px; /* Limit height on mobile */
-      overflow-y: auto; /* Add scrolling if needed */
+      max-height: clamp(80px, 20vw, 120px);
+      overflow-y: auto;
       transition: background-color 0.3s ease, border 0.3s ease;
     }
 
     /* Button Styles */
     .btn {
-      padding: 0.5rem 1rem;
+      padding: clamp(0.4rem, 2vw, 0.5rem) clamp(0.75rem, 3vw, 1rem);
       border-radius: 8px;
       cursor: pointer;
       font-weight: 500;
@@ -172,6 +175,9 @@
       border: 1px solid var(--card-border);
       background-color: transparent;
       color: var(--text-color);
+      font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+      min-height: 44px; /* Minimum touch target size */
+      white-space: nowrap;
     }
 
     .btn:hover {
@@ -184,6 +190,7 @@
 
     .btn i {
       margin-right: 0.5rem;
+      font-size: clamp(0.75rem, 2vw, 1rem);
     }
 
     .btn-disabled {
@@ -197,7 +204,7 @@
 
     /* Theme Toggle */
     .theme-toggle {
-      padding: 0.4rem;
+      padding: clamp(0.3rem, 1.5vw, 0.4rem);
       border-radius: 50%;
       cursor: pointer;
       display: flex;
@@ -208,10 +215,16 @@
       color: var(--text-color);
       transition: all 0.2s ease;
       margin-right: 0.5rem;
+      min-width: 44px;
+      min-height: 44px;
     }
 
     .theme-toggle:hover {
       background-color: var(--option-hover-bg);
+    }
+
+    .theme-toggle i {
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
     }
 
     /* Question Navigation */
@@ -222,6 +235,7 @@
       width: 100%;
       max-width: 1000px;
       margin: 0 auto;
+      gap: clamp(0.5rem, 2vw, 1rem);
     }
 
     /* Timer */
@@ -230,7 +244,8 @@
       align-items: center;
       gap: 0.5rem;
       font-family: monospace;
-      font-size: 1.25rem;
+      font-size: clamp(1rem, 3vw, 1.25rem);
+      font-weight: 600;
     }
 
     .timer.warning {
@@ -245,15 +260,19 @@
 
     /* Options */
     .option {
-      padding: 1rem;
-      margin: 0.75rem 0;
+      padding: clamp(0.75rem, 2.5vw, 1rem);
+      margin: clamp(0.5rem, 1.5vw, 0.75rem) 0;
       border-radius: 8px;
       cursor: pointer;
       background-color: var(--option-bg);
       border: 1px solid var(--card-border);
       transition: all 0.2s ease;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
+      gap: clamp(0.75rem, 2vw, 1rem);
+      min-height: 60px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
 
     .option:hover {
@@ -271,37 +290,48 @@
     }
 
     .option-marker {
-      width: 24px;
-      height: 24px;
-      min-width: 24px; /* Prevent shrinking */
-      min-height: 24px; /* Prevent shrinking */
+      width: clamp(20px, 5vw, 24px);
+      height: clamp(20px, 5vw, 24px);
+      min-width: clamp(20px, 5vw, 24px);
+      min-height: clamp(20px, 5vw, 24px);
       border-radius: 50%;
       background-color: var(--option-marker-bg);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-right: 1rem;
-      font-size: 0.75rem;
+      margin-top: 2px;
+      font-size: clamp(0.625rem, 2vw, 0.75rem);
       font-weight: bold;
       transition: background-color 0.3s ease;
+      flex-shrink: 0;
     }
 
     .option.selected .option-marker {
       background-color: var(--option-marker-selected-bg);
     }
 
+    .option > div:last-child {
+      flex: 1;
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
+      line-height: 1.5;
+    }
+
     /* Unattempted Questions */
     .unattempted-btn {
-      min-width: 2.5rem;
-      height: 2rem;
+      min-width: clamp(2rem, 6vw, 2.5rem);
+      height: clamp(1.75rem, 5vw, 2rem);
       padding: 0;
-      margin: 0.25rem;
+      margin: clamp(0.15rem, 0.5vw, 0.25rem);
       background-color: rgba(245, 158, 11, 0.3);
       border: 1px solid rgba(245, 158, 11, 0.5);
       color: #fbbf24;
       border-radius: 4px;
-      font-size: 0.875rem;
+      font-size: clamp(0.625rem, 2vw, 0.875rem);
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
     }
 
     .unattempted-btn:hover {
@@ -319,8 +349,9 @@
     }
 
     .score-value {
-      font-size: 1.25rem;
+      font-size: clamp(1rem, 3vw, 1.25rem);
       margin-bottom: 0.5rem;
+      line-height: 1.4;
     }
 
     .score-value span {
@@ -337,17 +368,18 @@
 
     .chart-container {
       width: 100%;
-      max-width: 300px;
+      max-width: min(300px, 80vw);
       margin: 0 auto 2rem auto;
       position: relative;
-      height: 300px; /* Fixed height for chart container */
+      height: clamp(250px, 60vw, 350px);
+      padding-bottom: clamp(30px, 8vw, 50px);
     }
 
     /* Result Details */
     .result-item {
       border: 1px solid var(--card-border);
       border-radius: 8px;
-      padding: 1rem;
+      padding: clamp(0.75rem, 2.5vw, 1rem);
       margin-bottom: 1rem;
       background-color: var(--option-bg);
       transition: background-color 0.3s ease, border 0.3s ease;
@@ -357,18 +389,19 @@
     .result-header {
       display: flex;
       align-items: flex-start;
-      gap: 1rem;
+      gap: clamp(0.75rem, 2vw, 1rem);
       margin-bottom: 1rem;
     }
 
     .result-status {
-      width: 32px;
-      height: 32px;
+      width: clamp(28px, 6vw, 32px);
+      height: clamp(28px, 6vw, 32px);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      margin-top: 2px;
     }
 
     .status-correct {
@@ -384,37 +417,44 @@
     }
 
     .result-question {
-      font-size: 1.125rem;
+      font-size: clamp(1rem, 2.8vw, 1.125rem);
       font-weight: 500;
+      line-height: 1.4;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
 
     .result-details {
-      margin-left: 2.75rem;
+      margin-left: clamp(2.25rem, 6vw, 2.75rem);
     }
 
     .answer-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 1rem;
+      gap: clamp(0.75rem, 2vw, 1rem);
       margin-bottom: 1rem;
     }
 
-    @media (min-width: 768px) {
+    @media (min-width: 640px) {
       .answer-grid {
         grid-template-columns: 1fr 1fr;
       }
     }
 
     .answer-label {
-      font-size: 0.875rem;
+      font-size: clamp(0.75rem, 2vw, 0.875rem);
       color: var(--muted-text);
       margin-bottom: 0.25rem;
+      font-weight: 500;
     }
 
     .answer-value {
-      font-size: 0.875rem;
-      padding: 0.5rem;
+      font-size: clamp(0.75rem, 2vw, 0.875rem);
+      padding: clamp(0.4rem, 1.5vw, 0.5rem);
       border-radius: 4px;
+      line-height: 1.4;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
 
     .answer-correct {
@@ -437,16 +477,20 @@
     }
 
     .explanation-label {
-      font-size: 0.875rem;
+      font-size: clamp(0.75rem, 2vw, 0.875rem);
       color: var(--muted-text);
       margin-bottom: 0.25rem;
+      font-weight: 500;
     }
 
     .explanation-value {
-      font-size: 0.875rem;
+      font-size: clamp(0.75rem, 2vw, 0.875rem);
       background-color: rgba(75, 85, 99, 0.5);
-      padding: 0.75rem;
+      padding: clamp(0.5rem, 2vw, 0.75rem);
       border-radius: 4px;
+      line-height: 1.5;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
 
     /* Dialog */
@@ -461,17 +505,20 @@
       align-items: center;
       justify-content: center;
       z-index: 2000;
+      padding: clamp(1rem, 4vw, 2rem);
     }
 
     .dialog {
       background-color: var(--dialog-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 1.5rem;
-      width: 90%;
-      max-width: 500px;
+      padding: clamp(1rem, 4vw, 1.5rem);
+      width: 100%;
+      max-width: min(500px, 95vw);
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
       transition: background-color 0.3s ease, border 0.3s ease;
+      max-height: 90vh;
+      overflow-y: auto;
     }
 
     .dialog-header {
@@ -479,28 +526,38 @@
     }
 
     .dialog-title {
-      font-size: 1.25rem;
+      font-size: clamp(1.125rem, 3vw, 1.25rem);
       font-weight: 600;
       margin-bottom: 0.5rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      line-height: 1.3;
     }
 
     .dialog-title i {
       color: #fbbf24;
+      font-size: clamp(1rem, 2.5vw, 1.125rem);
     }
 
     .dialog-description {
       color: var(--muted-text);
-      font-size: 0.875rem;
+      font-size: clamp(0.75rem, 2.2vw, 0.875rem);
+      line-height: 1.5;
     }
 
     .dialog-footer {
       display: flex;
-      justify-content: flex-end;
+      flex-direction: column;
       gap: 0.75rem;
       margin-top: 1.5rem;
+    }
+
+    @media (min-width: 480px) {
+      .dialog-footer {
+        flex-direction: row;
+        justify-content: flex-end;
+      }
     }
 
     .btn-secondary {
@@ -535,7 +592,7 @@
     .setup-form {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: clamp(1rem, 3vw, 1.5rem);
     }
 
     .form-group {
@@ -546,15 +603,17 @@
 
     .form-group label {
       font-weight: 500;
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
     }
 
     .form-control {
-      padding: 0.75rem;
+      padding: clamp(0.5rem, 2vw, 0.75rem);
       border-radius: 8px;
       border: 1px solid var(--card-border);
       background-color: var(--option-bg);
       color: var(--text-color);
-      font-size: 1rem;
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
+      min-height: 44px;
     }
 
     .form-control:focus {
@@ -566,7 +625,7 @@
     .checkbox-group {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.75rem;
+      gap: clamp(0.5rem, 1.5vw, 0.75rem);
       margin-top: 0.5rem;
     }
 
@@ -574,12 +633,14 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.5rem 0.75rem;
+      padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.5rem, 2vw, 0.75rem);
       border-radius: 6px;
       background-color: var(--option-bg);
       border: 1px solid var(--card-border);
       cursor: pointer;
       transition: all 0.2s ease;
+      min-height: 44px;
+      font-size: clamp(0.75rem, 2.2vw, 0.875rem);
     }
 
     .checkbox-item:hover {
@@ -598,6 +659,8 @@
     .checkbox-item .checkbox-marker {
       width: 18px;
       height: 18px;
+      min-width: 18px;
+      min-height: 18px;
       border-radius: 4px;
       border: 1px solid var(--card-border);
       display: flex;
@@ -605,6 +668,7 @@
       justify-content: center;
       color: transparent;
       transition: all 0.2s ease;
+      flex-shrink: 0;
     }
 
     .checkbox-item.selected .checkbox-marker {
@@ -613,52 +677,20 @@
       color: white;
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 640px) {
-      .card {
-        padding: 1rem;
-      }
+    .topics-summary {
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
+      line-height: 1.4;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
 
-      .option {
-        padding: 0.75rem;
-      }
-
-      .btn {
-        padding: 0.4rem 0.75rem;
-        font-size: 0.875rem;
-      }
-
-      .timer {
-        font-size: 1rem;
-      }
-      
-      /* Fix for unattempted questions banner on mobile */
-      .mid-bottom-banner {
-        max-height: 100px;
-        padding: 0.5rem;
-      }
-      
-      .unattempted-btn {
-        min-width: 2rem;
-        height: 1.75rem;
-        margin: 0.15rem;
-        font-size: 0.75rem;
-      }
-      
-      /* Ensure option markers stay circular */
-      .option-marker {
-        width: 24px;
-        height: 24px;
-        min-width: 24px;
-        min-height: 24px;
-        flex-shrink: 0;
-      }
-      
-      /* Fix for chart legend on mobile */
-      .chart-container {
-        height: 350px; /* Increase height to accommodate legend */
-        padding-bottom: 50px; /* Add padding for legend */
-      }
+    /* Question Counter */
+    #questionCounter {
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
+      font-weight: 500;
+      text-align: center;
+      flex: 1;
+      min-width: 0;
     }
 
     /* Custom scrollbar */
@@ -684,6 +716,85 @@
     /* Utility classes */
     .hidden {
       display: none;
+    }
+
+    /* Additional mobile optimizations */
+    @media (max-width: 480px) {
+      body {
+        padding-bottom: 140px; /* More space for mobile navigation */
+      }
+      
+      .container {
+        padding-top: 80px;
+      }
+      
+      .question-nav {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      
+      #questionCounter {
+        order: -1;
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+      
+      .mid-bottom-banner {
+        bottom: 70px;
+        max-height: 80px;
+      }
+      
+      .chart-container {
+        height: 280px;
+        padding-bottom: 40px;
+      }
+    }
+
+    /* Very small screens */
+    @media (max-width: 320px) {
+      .option {
+        padding: 0.5rem;
+        gap: 0.5rem;
+      }
+      
+      .option-marker {
+        width: 18px;
+        height: 18px;
+        min-width: 18px;
+        min-height: 18px;
+        font-size: 0.625rem;
+      }
+      
+      .btn {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.75rem;
+      }
+      
+      .unattempted-btn {
+        min-width: 1.75rem;
+        height: 1.5rem;
+        font-size: 0.625rem;
+      }
+    }
+
+    /* Landscape orientation on mobile */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .container {
+        padding-top: 60px;
+      }
+      
+      .card {
+        padding: 0.75rem;
+      }
+      
+      .chart-container {
+        height: 200px;
+      }
+      
+      .mid-bottom-banner {
+        max-height: 60px;
+        bottom: 50px;
+      }
     }
   </style>
 </head>
@@ -1239,7 +1350,7 @@
           <p class="score-value">
             You scored <span class="correct">${correctCount}</span> out of <span class="total">${mcqs.length}</span>
           </p>
-          <p style="color: var(--muted-text); font-size: 0.875rem;">
+          <p style="color: var(--muted-text); font-size: clamp(0.75rem, 2.2vw, 0.875rem); line-height: 1.4;">
             ${correctCount === mcqs.length
               ? "Perfect score! Excellent work!"
               : correctCount >= mcqs.length * 0.7
@@ -1252,7 +1363,7 @@
           <canvas id="resultChart"></canvas>
         </div>
 
-        <h3 style="margin-bottom: 1rem;">Detailed Results</h3>
+        <h3 style="margin-bottom: 1rem; font-size: clamp(1.125rem, 3vw, 1.25rem);">Detailed Results</h3>
         <div class="result-details-list">
       `;
 
@@ -1346,7 +1457,7 @@
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false, // This allows the chart to fill the container
+          maintainAspectRatio: false,
           cutout: '70%',
           plugins: {
             legend: {
@@ -1354,10 +1465,10 @@
               labels: {
                 color: document.documentElement.getAttribute('data-theme') === 'dark' ? 'white' : '#1e293b',
                 font: {
-                  size: 14
+                  size: window.innerWidth < 480 ? 12 : 14
                 },
-                padding: 20,
-                boxWidth: 15 // Smaller color boxes in legend
+                padding: window.innerWidth < 480 ? 15 : 20,
+                boxWidth: window.innerWidth < 480 ? 12 : 15
               }
             }
           }

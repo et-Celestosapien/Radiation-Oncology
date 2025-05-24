@@ -202,6 +202,13 @@
       transition: background-color 0.3s ease, border 0.3s ease;
     }
 
+    .banner-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
     /* Button Styles */
     .btn {
       padding: 0.5rem 1rem;
@@ -215,6 +222,7 @@
       border: 1px solid var(--card-border);
       background-color: transparent;
       color: var(--text-color);
+      white-space: nowrap;
     }
 
     .btn:hover {
@@ -241,7 +249,9 @@
       border: 1px solid var(--card-border);
       color: var(--text-color);
       transition: all 0.2s ease;
-      margin-right: 0.5rem;
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
     }
 
     .theme-toggle:hover {
@@ -324,6 +334,7 @@
       max-width: 1000px;
       width: 100%;
       justify-content: space-between;
+      align-items: center;
     }
 
     /* Utility classes */
@@ -337,35 +348,6 @@
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 640px) {
-      .card-header {
-        padding: 0.75rem 1rem;
-      }
-
-      .card-body {
-        padding: 1rem;
-      }
-
-      .option {
-        padding: 0.75rem;
-      }
-
-      .btn {
-        padding: 0.4rem 0.75rem;
-        font-size: 0.875rem;
-      }
-      
-      /* Ensure option markers stay circular */
-      .option-marker {
-        width: 24px;
-        height: 24px;
-        min-width: 24px;
-        min-height: 24px;
-        flex-shrink: 0;
-      }
     }
 
     /* Custom scrollbar */
@@ -420,6 +402,7 @@
       background-position: right 0.5rem center;
       background-size: 1em;
       padding-right: 2rem;
+      min-width: 120px;
     }
 
     #topicSelector option {
@@ -427,106 +410,342 @@
       color: var(--text-color);
     }
 
-    /* Search Bar Styling */
-    .search-container {
-      position: relative;
-      margin-right: 0.5rem;
+    /* MCQ Navigator Modal */
+    .mcq-navigator {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: none;
+      z-index: 2000;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
     }
 
-    .search-btn {
-      background-color: var(--card-bg);
-      color: var(--text-color);
-      border: 1px solid var(--card-border);
-      border-radius: 50%;
-      width: 38px;
-      height: 38px;
+    .mcq-navigator.active {
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
     }
 
-    .search-btn:hover {
+    .mcq-navigator-content {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      max-width: 90vw;
+      max-height: 80vh;
+      overflow-y: auto;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .mcq-navigator-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .mcq-navigator-close {
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: 50%;
+      transition: background-color 0.2s ease;
+    }
+
+    .mcq-navigator-close:hover {
       background-color: var(--option-hover-bg);
     }
 
-    .search-input {
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 0;
-      height: 38px;
-      padding: 0;
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      background-color: var(--card-bg);
-      color: var(--text-color);
-      transition: width 0.3s ease, padding 0.3s ease;
-      opacity: 0;
-      visibility: hidden;
+    .mcq-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
     }
 
-    .search-input.active {
-      width: 200px;
-      padding: 0 40px 0 15px;
+    .mcq-item {
+      background-color: var(--option-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mcq-item:hover {
+      background-color: var(--option-hover-bg);
+      border-color: var(--accent-color);
+    }
+
+    .mcq-item-number {
+      font-weight: bold;
+      color: var(--accent-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .mcq-item-preview {
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: var(--muted-text);
+    }
+
+    /* Scroll Position Indicator */
+    .scroll-indicator {
+      position: fixed;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 0.5rem;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      max-width: 200px;
+    }
+
+    .scroll-indicator.visible {
       opacity: 1;
       visibility: visible;
     }
 
-    .search-input::placeholder {
-      color: var(--muted-text);
+    .scroll-indicator-content {
+      font-size: 0.8rem;
+      text-align: center;
     }
 
-    .search-results {
-      margin-top: 1rem;
-      padding: 1rem;
-      background-color: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      display: none;
-    }
-
-    .search-results.active {
-      display: block;
-    }
-
-    .search-result-count {
-      margin-bottom: 0.5rem;
-      font-weight: 500;
+    .scroll-indicator-number {
+      font-weight: bold;
       color: var(--accent-color);
+      margin-bottom: 0.25rem;
     }
 
-    .highlight {
-      background-color: rgba(139, 92, 246, 0.3);
-      padding: 0 2px;
-      border-radius: 3px;
+    .scroll-indicator-preview {
+      color: var(--muted-text);
+      line-height: 1.3;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
+      .banner {
+        padding: 0.5rem;
+        flex-direction: column;
+        gap: 0.5rem;
+        height: auto;
+        min-height: 60px;
+      }
+
+      .banner-controls {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 0.25rem;
+      }
+
+      .container {
+        padding-top: 80px; /* Increased for mobile banner height */
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+
+      .card-header {
+        padding: 0.75rem 1rem;
+      }
+
+      .card-body {
+        padding: 1rem;
+      }
+
+      .option {
+        padding: 0.75rem;
+      }
+
+      .btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.875rem;
+      }
+
+      .btn i {
+        margin-right: 0.25rem;
+      }
+
+      /* Hide text on small buttons for mobile */
+      .expand-collapse-btn .btn-text,
+      .home-btn .btn-text,
+      .mcq-nav-btn .btn-text {
+        display: none;
+      }
+
+      .expand-collapse-btn,
+      .home-btn,
+      .mcq-nav-btn {
+        margin: 0;
+      }
+
+      .btn i {
+        margin-right: 0;
+      }
+
+      #topicSelector {
+        min-width: 100px;
+        font-size: 0.875rem;
+        padding: 0.4rem 1.5rem 0.4rem 0.5rem;
+      }
+
+      .controls-inner {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+      }
+
+      /* Ensure option markers stay circular */
+      .option-marker {
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+        min-height: 24px;
+        flex-shrink: 0;
+      }
+
+      h2 {
+        font-size: 1.25rem;
+      }
+
+      .card-header h2 {
+        font-size: 1.1rem;
+        line-height: 1.3;
+      }
+
+      .mcq-list {
+        grid-template-columns: 1fr;
+      }
+
+      .scroll-indicator {
+        right: 0.5rem;
+        max-width: 150px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .banner {
+        padding: 0.25rem;
+      }
+
+      .banner-controls {
+        gap: 0.125rem;
+      }
+
+      .container {
+        padding-top: 90px;
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+      }
+
+      .btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.8rem;
+      }
+
+      .theme-toggle {
+        width: 32px;
+        height: 32px;
+        padding: 0.3rem;
+      }
+
+      #topicSelector {
+        min-width: 80px;
+        font-size: 0.8rem;
+        padding: 0.3rem 1.2rem 0.3rem 0.4rem;
+      }
+
+      .card-header h2 {
+        font-size: 1rem;
+      }
+
+      .option {
+        padding: 0.5rem;
+      }
+
+      .option-marker {
+        width: 20px;
+        height: 20px;
+        min-width: 20px;
+        min-height: 20px;
+        font-size: 0.7rem;
+        margin-right: 0.75rem;
+      }
+
+      .mcq-navigator-content {
+        padding: 1rem;
+        max-width: 95vw;
+      }
+
+      .scroll-indicator {
+        right: 0.25rem;
+        max-width: 120px;
+        font-size: 0.7rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="banner">
     <div style="font-weight: 500;">Study Mode</div>
-    <div style="display: flex; align-items: center;">
-      <select id="topicSelector" class="btn" style="margin-right: 0.5rem;">
+    <div class="banner-controls">
+      <select id="topicSelector" class="btn">
         <option value="all">All Topics</option>
         <!-- Topics will be populated here -->
       </select>
-      <div class="search-container">
-        <button class="search-btn" id="searchBtn">
-          <i class="fas fa-search"></i>
-        </button>
-        <input type="text" class="search-input" id="searchInput" placeholder="Search questions...">
-      </div>
+      <button class="btn mcq-nav-btn" id="mcqNavBtn">
+        <i class="fas fa-list"></i> <span class="btn-text">MCQ List</span>
+      </button>
       <button class="btn expand-collapse-btn" id="expandCollapseBtn">
-        <i class="fas fa-expand-alt"></i> Expand All
+        <i class="fas fa-expand-alt"></i> <span class="btn-text">Expand All</span>
       </button>
       <button class="theme-toggle" id="themeToggle">
         <i class="fas fa-moon"></i>
       </button>
-      <button class="btn" id="homeBtn">
-        <i class="fas fa-home"></i> Home
+      <button class="btn home-btn" id="homeBtn">
+        <i class="fas fa-home"></i> <span class="btn-text">Home</span>
       </button>
+    </div>
+  </div>
+
+  <!-- MCQ Navigator Modal -->
+  <div class="mcq-navigator" id="mcqNavigator">
+    <div class="mcq-navigator-content">
+      <div class="mcq-navigator-header">
+        <h3>MCQ Navigator</h3>
+        <button class="mcq-navigator-close" id="mcqNavigatorClose">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="mcq-list" id="mcqList">
+        <!-- MCQ list items will be populated here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll Position Indicator -->
+  <div class="scroll-indicator" id="scrollIndicator">
+    <div class="scroll-indicator-content">
+      <div class="scroll-indicator-number" id="scrollIndicatorNumber">Q1</div>
+      <div class="scroll-indicator-preview" id="scrollIndicatorPreview">Loading...</div>
     </div>
   </div>
 
@@ -534,11 +753,6 @@
     <!-- Study content will be rendered here -->
     <div class="loading-message">
       <p>Loading questions...</p>
-    </div>
-    
-    <div class="search-results" id="searchResults">
-      <div class="search-result-count" id="searchResultCount"></div>
-      <div id="searchResultsList"></div>
     </div>
   </div>
 
@@ -548,6 +762,9 @@
         <i class="fas fa-arrow-up"></i> Back to Top
       </button>
       <span id="questionCounter">0 Questions Loaded</span>
+      <button class="btn" id="scrollBottomBtn">
+        <i class="fas fa-arrow-down"></i> Go to Bottom
+      </button>
     </div>
   </div>
 
@@ -557,19 +774,23 @@
     const themeToggle = document.getElementById('themeToggle');
     const homeBtn = document.getElementById('homeBtn');
     const scrollTopBtn = document.getElementById('scrollTopBtn');
+    const scrollBottomBtn = document.getElementById('scrollBottomBtn');
     const questionCounter = document.getElementById('questionCounter');
     const expandCollapseBtn = document.getElementById('expandCollapseBtn');
-    const searchBtn = document.getElementById('searchBtn');
-    const searchInput = document.getElementById('searchInput');
-    const searchResults = document.getElementById('searchResults');
-    const searchResultCount = document.getElementById('searchResultCount');
-    const searchResultsList = document.getElementById('searchResultsList');
-    
+    const mcqNavBtn = document.getElementById('mcqNavBtn');
+    const mcqNavigator = document.getElementById('mcqNavigator');
+    const mcqNavigatorClose = document.getElementById('mcqNavigatorClose');
+    const mcqList = document.getElementById('mcqList');
+    const scrollIndicator = document.getElementById('scrollIndicator');
+    const scrollIndicatorNumber = document.getElementById('scrollIndicatorNumber');
+    const scrollIndicatorPreview = document.getElementById('scrollIndicatorPreview');
+
     // State variables
     let mcqs = [];
     let allExpanded = true;
     let allTopics = null;
     let filteredMcqs = [];
+    let scrollTimeout;
 
     // Theme Toggle
     themeToggle.addEventListener('click', () => {
@@ -620,6 +841,28 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
+    // Scroll to bottom button
+    scrollBottomBtn.addEventListener('click', () => {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    });
+
+    // MCQ Navigator
+    mcqNavBtn.addEventListener('click', () => {
+      populateMcqNavigator();
+      mcqNavigator.classList.add('active');
+    });
+
+    mcqNavigatorClose.addEventListener('click', () => {
+      mcqNavigator.classList.remove('active');
+    });
+
+    // Close navigator when clicking outside
+    mcqNavigator.addEventListener('click', (e) => {
+      if (e.target === mcqNavigator) {
+        mcqNavigator.classList.remove('active');
+      }
+    });
+
     // Expand/Collapse All button
     expandCollapseBtn.addEventListener('click', () => {
       const cardHeaders = document.querySelectorAll('.card-header');
@@ -629,15 +872,31 @@
         // Collapse all
         cardHeaders.forEach(header => header.classList.add('collapsed'));
         cardBodies.forEach(body => body.classList.add('collapsed'));
-        expandCollapseBtn.innerHTML = '<i class="fas fa-expand-alt"></i> Expand All';
+        expandCollapseBtn.innerHTML = '<i class="fas fa-expand-alt"></i> <span class="btn-text">Expand All</span>';
       } else {
         // Expand all
         cardHeaders.forEach(header => header.classList.remove('collapsed'));
         cardBodies.forEach(body => body.classList.remove('collapsed'));
-        expandCollapseBtn.innerHTML = '<i class="fas fa-compress-alt"></i> Collapse All';
+        expandCollapseBtn.innerHTML = '<i class="fas fa-compress-alt"></i> <span class="btn-text">Collapse All</span>';
       }
       
       allExpanded = !allExpanded;
+    });
+
+    // Scroll position tracking
+    window.addEventListener('scroll', () => {
+      clearTimeout(scrollTimeout);
+      
+      // Show scroll indicator
+      scrollIndicator.classList.add('visible');
+      
+      // Update current MCQ in view
+      updateScrollIndicator();
+      
+      // Hide scroll indicator after scrolling stops
+      scrollTimeout = setTimeout(() => {
+        scrollIndicator.classList.remove('visible');
+      }, 2000);
     });
 
     // Initialize the study mode
@@ -712,6 +971,89 @@
       });
     }
 
+    // Populate MCQ Navigator
+    function populateMcqNavigator() {
+      let html = '';
+      
+      mcqs.forEach((mcq, index) => {
+        const question = mcq.question || mcq.statement || '';
+        const preview = question.length > 80 ? question.substring(0, 80) + '...' : question;
+        
+        html += `
+          <div class="mcq-item" data-mcq-index="${index}">
+            <div class="mcq-item-number">Question ${index + 1}</div>
+            <div class="mcq-item-preview">${preview}</div>
+          </div>
+        `;
+      });
+      
+      mcqList.innerHTML = html;
+      
+      // Add click listeners to MCQ items
+      document.querySelectorAll('.mcq-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const mcqIndex = parseInt(item.dataset.mcqIndex);
+          navigateToMcq(mcqIndex);
+          mcqNavigator.classList.remove('active');
+        });
+      });
+    }
+
+    // Navigate to specific MCQ
+    function navigateToMcq(index) {
+      const cards = document.querySelectorAll('#studyContainer > .card');
+      if (cards[index]) {
+        // Expand the card if collapsed
+        const cardHeader = cards[index].querySelector('.card-header');
+        const cardBody = cards[index].querySelector('.card-body');
+        
+        if (cardHeader && cardHeader.classList.contains('collapsed')) {
+          cardHeader.classList.remove('collapsed');
+          cardBody.classList.remove('collapsed');
+        }
+        
+        // Scroll to the card
+        const cardTop = cards[index].offsetTop - 100;
+        window.scrollTo({ top: cardTop, behavior: 'smooth' });
+        
+        // Highlight the card temporarily
+        cards[index].style.boxShadow = '0 0 0 3px var(--accent-color)';
+        cards[index].style.transform = 'scale(1.02)';
+        cards[index].style.transition = 'all 0.3s ease';
+        
+        setTimeout(() => {
+          cards[index].style.boxShadow = '';
+          cards[index].style.transform = '';
+        }, 2000);
+      }
+    }
+
+    // Update scroll indicator
+    function updateScrollIndicator() {
+      const cards = document.querySelectorAll('#studyContainer > .card');
+      const scrollPosition = window.scrollY + window.innerHeight / 2;
+      
+      let currentMcqIndex = 0;
+      
+      cards.forEach((card, index) => {
+        const cardTop = card.offsetTop;
+        const cardBottom = cardTop + card.offsetHeight;
+        
+        if (scrollPosition >= cardTop && scrollPosition <= cardBottom) {
+          currentMcqIndex = index;
+        }
+      });
+      
+      if (mcqs[currentMcqIndex]) {
+        const mcq = mcqs[currentMcqIndex];
+        const question = mcq.question || mcq.statement || '';
+        const preview = question.length > 50 ? question.substring(0, 50) + '...' : question;
+        
+        scrollIndicatorNumber.textContent = `Q${currentMcqIndex + 1}`;
+        scrollIndicatorPreview.textContent = preview;
+      }
+    }
+
     // Render all study cards
     function renderStudyCards() {
       let html = '';
@@ -754,7 +1096,7 @@
       // Add options
       const options = mcq.options || [];
       options.forEach((option, i) => {
-        const isCorrect = i === (mcq.correctIndex || mcq.correct_option_index);
+        const isCorrect = i === mcq.correctIndex || i === mcq.correct_option_index;
         const optionClass = isCorrect ? 'correct' : '';
         
         cardHtml += `
@@ -811,9 +1153,9 @@
         // Set expanded state
         allExpanded = state.expandedState;
         if (!allExpanded) {
-          expandCollapseBtn.innerHTML = '<i class="fas fa-expand-alt"></i> Expand All';
+          expandCollapseBtn.innerHTML = '<i class="fas fa-expand-alt"></i> <span class="btn-text">Expand All</span>';
         } else {
-          expandCollapseBtn.innerHTML = '<i class="fas fa-compress-alt"></i> Collapse All';
+          expandCollapseBtn.innerHTML = '<i class="fas fa-compress-alt"></i> <span class="btn-text">Collapse All</span>';
         }
         
         // Restore scroll position after rendering
@@ -845,142 +1187,6 @@
       renderStudyCards();
       questionCounter.textContent = `${mcqs.length} Questions Loaded`;
       saveState();
-    });
-
-    // Toggle search input visibility
-    searchBtn.addEventListener('click', () => {
-      searchInput.classList.toggle('active');
-      if (searchInput.classList.contains('active')) {
-        searchInput.focus();
-      } else {
-        searchInput.value = '';
-        searchResults.classList.remove('active');
-      }
-    });
-
-    // Search functionality
-    searchInput.addEventListener('input', () => {
-      const query = searchInput.value.trim().toLowerCase();
-      
-      if (query.length < 2) {
-        searchResults.classList.remove('active');
-        return;
-      }
-      
-      // Get current topic selection
-      const topicSelector = document.getElementById('topicSelector');
-      const selectedTopic = topicSelector.value;
-      
-      // Filter by selected topic
-      let searchMcqs = [];
-      if (selectedTopic === 'all') {
-        searchMcqs = mcqs;
-      } else if (allTopics) {
-        const topicIndex = parseInt(selectedTopic);
-        searchMcqs = allTopics[topicIndex].mcqs;
-      }
-      
-      // Search in questions and options
-      const results = searchMcqs.filter(mcq => {
-        const question = (mcq.question || mcq.statement || '').toLowerCase();
-        if (question.includes(query)) return true;
-        
-        // Search in options
-        const options = mcq.options || [];
-        for (const option of options) {
-          if (option.toLowerCase().includes(query)) return true;
-        }
-        
-        // Search in explanation
-        if (mcq.explanation && mcq.explanation.toLowerCase().includes(query)) return true;
-        
-        return false;
-      });
-      
-      // Display results
-      if (results.length > 0) {
-        searchResults.classList.add('active');
-        searchResultCount.textContent = `Found ${results.length} result${results.length === 1 ? '' : 's'}`;
-        
-        let resultsHtml = '';
-        results.forEach((mcq, index) => {
-          const question = mcq.question || mcq.statement || '';
-          const highlightedQuestion = highlightText(question, query);
-          const mcqIndex = searchMcqs.indexOf(mcq);
-          
-          resultsHtml += `
-            <div class="card" style="margin-bottom: 1rem;">
-              <div class="card-header" data-mcq-index="${mcqIndex}">
-                <h2>${highlightedQuestion}</h2>
-                <i class="fas fa-chevron-right"></i>
-              </div>
-            </div>
-          `;
-        });
-        
-        searchResultsList.innerHTML = resultsHtml;
-        
-        // Add event listeners to search result items
-        document.querySelectorAll('#searchResultsList .card-header').forEach(header => {
-          header.addEventListener('click', () => {
-            const mcqIndex = parseInt(header.dataset.mcqIndex);
-            
-            // Scroll to the corresponding question card
-            const allCards = document.querySelectorAll('#studyContainer > .card');
-            if (allCards[mcqIndex]) {
-              searchInput.value = '';
-              searchResults.classList.remove('active');
-              searchInput.classList.remove('active');
-              
-              // Expand the card if collapsed
-              const cardHeader = allCards[mcqIndex].querySelector('.card-header');
-              const cardBody = allCards[mcqIndex].querySelector('.card-body');
-              
-              if (cardHeader.classList.contains('collapsed')) {
-                cardHeader.classList.remove('collapsed');
-                cardBody.classList.remove('collapsed');
-              }
-              
-              // Scroll to the card
-              allCards[mcqIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
-              
-              // Highlight the card temporarily
-              allCards[mcqIndex].style.boxShadow = '0 0 0 2px var(--accent-color)';
-              setTimeout(() => {
-                allCards[mcqIndex].style.boxShadow = '';
-              }, 2000);
-            }
-          });
-        });
-      } else {
-        searchResults.classList.add('active');
-        searchResultCount.textContent = 'No results found';
-        searchResultsList.innerHTML = '';
-      }
-    });
-
-    // Highlight search text
-    function highlightText(text, query) {
-      const regex = new RegExp(`(${query})`, 'gi');
-      return text.replace(regex, '<span class="highlight">$1</span>');
-    }
-
-    // Close search when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.search-container') && !e.target.closest('#searchResults')) {
-        searchInput.classList.remove('active');
-        searchResults.classList.remove('active');
-        searchInput.value = '';
-      }
-    });
-
-    // Close search on escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        searchInput.classList.remove('active');
-        searchResults.classList.remove('active');
-        searchInput.value = '';
-      }
     });
   </script>
 </body>
