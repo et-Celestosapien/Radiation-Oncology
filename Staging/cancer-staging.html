@@ -886,13 +886,13 @@
           }
         })
         
-        localStorage.setItem("cancerStagingState", .stringify(state))
+        localStorage.setItem("cancerStagingState", JSON.stringify(state))
       }
       
       function loadState() {
         const savedState = localStorage.getItem("cancerStagingState")
         if (savedState) {
-          const state = .parse(savedState)
+          const state = JSON.parse(savedState)
           
           // Restore search term
           if (state.searchTerm) {
@@ -947,32 +947,1198 @@
         }
       }
 
-      // Fetch and display cancer staging data
-      fetch("CancerX-Staging.")
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok")
+      const cancerData = {"cancer_sites": [
+      {
+      "name": "Breast Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition), as referenced in NCCN guidelines. Includes clinical and pathological nodal staging.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "Tis": "Carcinoma in situ",
+            "Tis (DCIS)": "Ductal carcinoma in situ",
+            "Tis (Paget)": "Paget disease of the nipple NOT associated with invasive carcinoma and/or DCIS",
+            "T1": "Tumor ≤ 20 mm in greatest dimension",
+            "T1mi": "Tumor ≤ 1 mm in greatest dimension",
+            "T1a": "Tumor > 1 mm but ≤ 5 mm in greatest dimension",
+            "T1b": "Tumor > 5 mm but ≤ 10 mm in greatest dimension",
+            "T1c": "Tumor > 10 mm but ≤ 20 mm in greatest dimension",
+            "T2": "Tumor > 20 mm but ≤ 50 mm in greatest dimension",
+            "T3": "Tumor > 50 mm in greatest dimension",
+            "T4": "Tumor of any size with direct extension to chest wall and/or skin",
+            "T4a": "Extension to chest wall",
+            "T4b": "Ulceration and/or ipsilateral satellite nodules and/or edema",
+            "T4c": "Both T4a and T4b",
+            "T4d": "Inflammatory carcinoma"
+          },
+          "N": {
+            "cNX": "Regional lymph nodes cannot be assessed",
+            "cN0": "No regional lymph node metastasis",
+            "cN1": "Metastasis to movable ipsilateral level I, II axillary lymph node(s)",
+            "cN1mi": "Micrometastases",
+            "cN2": "Metastases in ipsilateral level I, II axillary lymph nodes fixed or matted; or in ipsilateral internal mammary nodes",
+            "cN2a": "Metastases in ipsilateral level I, II axillary lymph nodes fixed to one another or other structures",
+            "cN2b": "Metastases only in ipsilateral internal mammary nodes",
+            "cN3": "Metastases in ipsilateral infraclavicular (level III axillary) lymph node(s), with or without level I, II axillary or internal mammary involvement; or in ipsilateral supraclavicular lymph node(s)",
+            "cN3a": "Metastasis in ipsilateral infraclavicular lymph node(s)",
+            "cN3b": "Metastasis in ipsilateral internal mammary lymph node(s) and axillary lymph node(s)",
+            "cN3c": "Metastasis in ipsilateral supraclavicular lymph node(s)",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN0(i)": "No regional lymph node metastases histologically, negative IHC",
+              "pN0(i+)": "Isolated tumor cell clusters (ITCs) only",
+              "pN0(mol-)": "No regional lymph node metastases histologically, negative molecular findings",
+              "pN0(mol+)": "Positive molecular findings by RT-PCR",
+              "pN1": "Micrometastases; or metastases in 1-3 axillary lymph nodes and/or internal mammary nodes",
+              "pN1mi": "Micrometastases",
+              "pN1a": "Metastases in 1-3 axillary lymph nodes",
+              "pN1b": "Metastases in ipsilateral internal mammary lymph nodes",
+              "pN1c": "Metastases in 1-3 axillary lymph nodes and in internal mammary sentinel nodes",
+              "pN2": "Metastases in 4-9 axillary lymph nodes; or positive ipsilateral internal mammary lymph nodes by imaging",
+              "pN2a": "Metastases in 4-9 axillary lymph nodes",
+              "pN2b": "Clinically detected metastases in internal mammary lymph nodes",
+              "pN3": "Metastases in ≥ 10 axillary lymph nodes; or in infraclavicular lymph nodes; or positive ipsilateral internal mammary lymph nodes by imaging with axillary metastases",
+              "pN3a": "Metastases in ≥ 10 axillary lymph nodes; or metastases to the infraclavicular lymph nodes",
+              "pN3b": "pN1a or pN2a in the presence of cN2b or pN1b",
+              "pN3c": "Metastases in ipsilateral supraclavicular lymph nodes"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "cM0(i+)": "No clinical or radiographic evidence of distant metastases in presence of tumor cells or deposits ≤ 0.2 mm",
+            "cM1": "Distant metastases detected by clinical and radiographic means",
+            "pM1": "Any histologically proven metastases in distant organs"
+          },
+          "G": {
+            "GX": "Grade cannot be assessed",
+            "G1": "Low combined histologic grade",
+            "G2": "Intermediate combined histologic grade",
+            "G3": "High combined histologic grade",
+            "G4": "Undifferentiated"
+          },
+          "stage_groups": {
+            "0": {"T": "Tis", "N": "N0", "M": "M0"},
+            "IA": {"T": "T1", "N": "N0", "M": "M0"},
+            "IB": {"T": ["T0", "T1"], "N": "N1mi", "M": "M0"},
+            "IIA": {"T": ["T0", "T1", "T2"], "N": ["N1", "N0"], "M": "M0"},
+            "IIB": {"T": ["T2", "T3"], "N": ["N1", "N0"], "M": "M0"},
+            "IIIA": {"T": ["T0", "T1", "T2", "T3"], "N": ["N2", "N1", "N2"], "M": "M0"},
+            "IIIB": {"T": "T4", "N": ["N0", "N1", "N2"], "M": "M0"},
+            "IIIC": {"T": "Any T", "N": "N3", "M": "M0"},
+            "IV": {"T": "Any T", "N": "Any N", "M": "M1"}
           }
-          return response.()
-        })
-        .then((data) => {
-          displayCancerSites(data.cancer_sites)
-          populateSiteDropdown(data.cancer_sites)
-          
-          // Load saved state after content is loaded
-          setTimeout(loadState, 100)
-        })
-        .catch((error) => {
-          console.error("Error fetching cancer staging data:", error)
-          document.getElementById("cancer-sites-container").innerHTML = `
-            <div class="error-message">
-              <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: #dc3545; margin-bottom: 15px;"></i>
-              <h3>Error Loading Data</h3>
-              <p>There was a problem loading the cancer staging data. Please try again later.</p>
-              <p class="error-details">${error.message}</p>
-            </div>
-          `
-        })
+        },
+        "FIGO": null
+      }
+    },
+      {
+      "name": "Lung Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition), as referenced in NCCN guidelines. Includes clinical and pathological nodal staging.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "Tis": "Carcinoma in situ",
+            "T1": "Tumor ≤ 3 cm in greatest dimension, surrounded by lung or visceral pleura",
+            "T1a": "Tumor ≤ 1 cm in greatest dimension",
+            "T1b": "Tumor > 1 cm but ≤ 2 cm in greatest dimension",
+            "T1c": "Tumor > 2 cm but ≤ 3 cm in greatest dimension",
+            "T2": "Tumor > 3 cm but ≤ 5 cm or involves main bronchus, visceral pleura",
+            "T2a": "Tumor > 3 cm but ≤ 4 cm in greatest dimension",
+            "T2b": "Tumor > 4 cm but ≤ 5 cm in greatest dimension",
+            "T3": "Tumor > 5 cm but ≤ 7 cm or invades parietal pleura, chest wall, phrenic nerve, or separate tumor nodule in same lobe",
+            "T4": "Tumor > 7 cm or invades diaphragm, mediastinum, heart, great vessels, trachea, or separate tumor nodule in different ipsilateral lobe"
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N1": "Metastasis in ipsilateral peribronchial and/or hilar lymph nodes",
+            "N2": "Metastasis in ipsilateral mediastinal and/or subcarinal lymph nodes",
+            "N3": "Metastasis in contralateral mediastinal, hilar, or supraclavicular lymph nodes",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN1": "Metastasis in ipsilateral peribronchial and/or hilar lymph nodes",
+              "pN2": "Metastasis in ipsilateral mediastinal and/or subcarinal lymph nodes",
+              "pN3": "Metastasis in contralateral mediastinal, hilar, or supraclavicular lymph nodes"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis",
+            "M1a": "Separate tumor nodule in contralateral lung; tumor with pleural nodules or malignant pleural effusion",
+            "M1b": "Single extrathoracic metastasis",
+            "M1c": "Multiple extrathoracic metastases"
+          },
+          "stage_groups": {
+            "0": {"T": "Tis", "N": "N0", "M": "M0"},
+            "IA1": {"T": "T1a", "N": "N0", "M": "M0"},
+            "IA2": {"T": "T1b", "N": "N0", "M": "M0"},
+            "IA3": {"T": "T1c", "N": "N0", "M": "M0"},
+            "IB": {"T": "T2a", "N": "N0", "M": "M0"},
+            "IIA": {"T": "T2b", "N": "N0", "M": "M0"},
+            "IIB": {"T": ["T1", "T2", "T3"], "N": ["N1", "N0"], "M": "M0"},
+            "IIIA": {"T": ["T1", "T2", "T3", "T4"], "N": ["N2", "N1"], "M": "M0"},
+            "IIIB": {"T": ["T1", "T2", "T4"], "N": ["N3", "N2"], "M": "M0"},
+            "IIIC": {"T": ["T3", "T4"], "N": "N3", "M": "M0"},
+            "IVA": {"T": "Any T", "N": "Any N", "M": "M1a, M1b"},
+            "IVB": {"T": "Any T", "N": "Any N", "M": "M1c"}
+          }
+        },
+        "FIGO": null
+      }
+    },
+    {
+      "name": "Colorectal Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition), as referenced in NCCN guidelines. Includes clinical and pathological nodal staging.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "Tis": "Carcinoma in situ",
+            "T1": "Tumor invades submucosa",
+            "T2": "Tumor invades muscularis propria",
+            "T3": "Tumor invades through muscularis propria into pericolorectal tissues",
+            "T4": "Tumor penetrates to surface of visceral peritoneum or invades other organs",
+            "T4a": "Tumor penetrates to surface of visceral peritoneum",
+            "T4b": "Tumor directly invades or adheres to other organs or structures"
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N1": "Metastasis in 1-3 regional lymph nodes",
+            "N1a": "Metastasis in 1 regional lymph node",
+            "N1b": "Metastasis in 2-3 regional lymph nodes",
+            "N1c": "Tumor deposit(s) in subserosa, mesentery, or nonperitonealized pericolic tissues without regional nodal metastasis",
+            "N2": "Metastasis in ≥ 4 regional lymph nodes",
+            "N2a": "Metastasis in 4-6 regional lymph nodes",
+            "N2b": "Metastasis in ≥ 7 regional lymph nodes",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN1": "Metastasis in 1-3 regional lymph nodes",
+              "pN1a": "Metastasis in 1 regional lymph node",
+              "pN1b": "Metastasis in 2-3 regional lymph nodes",
+              "pN1c": "Tumor deposit(s) in subserosa, mesentery, or nonperitonealized pericolic tissues without regional nodal metastasis",
+              "pN2": "Metastasis in ≥ 4 regional lymph nodes",
+              "pN2a": "Metastasis in 4-6 regional lymph nodes",
+              "pN2b": "Metastasis in ≥ 7 regional lymph nodes"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis",
+            "M1a": "Metastasis to one site or organ",
+            "M1b": "Metastasis to multiple sites or organs",
+            "M1c": "Metastasis to peritoneal surface"
+          },
+          "stage_groups": {
+            "0": {"T": "Tis", "N": "N0", "M": "M0"},
+            "I": {"T": ["T1", "T2"], "N": "N0", "M": "M0"},
+            "IIA": {"T": "T3", "N": "N0", "M": "M0"},
+            "IIB": {"T": "T4a", "N": "N0", "M": "M0"},
+            "IIC": {"T": "T4b", "N": "N0", "M": "M0"},
+            "IIIA": {"T": ["T1", "T2"], "N": "N1", "M": "M0"},
+            "IIIB": {"T": ["T3", "T4a"], "N": "N1", "M": "M0"},
+            "IIIC": {"T": ["T4b"], "N": ["N1", "N2"], "M": "M0"},
+            "IVA": {"T": "Any T", "N": "Any N", "M": "M1a"},
+            "IVB": {"T": "Any T", "N": "Any N", "M": "M1b"},
+            "IVC": {"T": "Any T", "N": "Any N", "M": "M1c"}
+          }
+        },
+        "FIGO": null
+      }
+    },
+    {
+      "name": "Prostate Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition), as referenced in NCCN guidelines. Includes clinical and pathological nodal staging.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "T1": "Tumor not clinically apparent",
+            "T1a": "Tumor incidental in ≤ 5% of tissue resected",
+            "T1b": "Tumor incidental in > 5% of tissue resected",
+            "T1c": "Tumor identified by needle biopsy",
+            "T2": "Tumor confined within prostate",
+            "T2a": "Tumor involves ≤ half of one lobe",
+            "T2b": "Tumor involves > half of one lobe but not both lobes",
+            "T2c": "Tumor involves both lobes",
+            "T3": "Tumor extends through prostatic capsule",
+            "T3a": "Extracapsular extension",
+            "T3b": "Tumor invades seminal vesicle(s)",
+            "T4": "Tumor invades adjacent structures other than seminal vesicles"
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N1": "Metastasis in regional lymph node(s)",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN1": "Metastasis in regional lymph node(s)"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis",
+            "M1a": "Nonregional lymph node(s)",
+            "M1b": "Bone(s)",
+            "M1c": "Other site(s) with or without bone disease"
+          },
+          "G": {
+            "Grade Group 1": "Gleason score ≤ 6",
+            "Grade Group 2": "Gleason score 3+4=7",
+            "Grade Group 3": "Gleason score 4+3=7",
+            "Grade Group 4": "Gleason score 8",
+            "Grade Group 5": "Gleason score 9-10"
+          },
+          "stage_groups": {
+            "I": {"T": ["T1", "T2a"], "N": "N0", "M": "M0", "Grade": "Grade Group 1"},
+            "IIA": {"T": ["T1", "T2a", "T2b"], "N": "N0", "M": "M0", "Grade": ["Grade Group 1", "Grade Group 2"]},
+            "IIB": {"T": ["T1", "T2"], "N": "N0", "M": "M0", "Grade": "Grade Group 3"},
+            "IIC": {"T": ["T1", "T2"], "N": "N0", "M": "M0", "Grade": "Grade Group 4"},
+            "IIIA": {"T": ["T1", "T2"], "N": "N0", "M": "M0", "Grade": "Grade Group 5"},
+            "IIIB": {"T": ["T3", "T4"], "N": "N0", "M": "M0", "Grade": "Any Grade"},
+            "IIIC": {"T": "Any T", "N": "N0", "M": "M0", "Grade": "Grade Group 5"},
+            "IVA": {"T": "Any T", "N": "N1", "M": "M0", "Grade": "Any Grade"},
+            "IVB": {"T": "Any T", "N": "Any N", "M": "M1", "Grade": "Any Grade"}
+          }
+        },
+        "FIGO": null
+      }
+    },
+    {
+      "name": "Ovarian Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition) and FIGO system, as referenced in NCCN guidelines. Includes pathological nodal staging.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "T1": "Tumor limited to the ovaries (one or both)",
+            "T1a": "Tumor limited to one ovary; capsule intact, no tumor on ovarian surface; no malignant cells in ascites or peritoneal washings",
+            "T1b": "Tumor limited to both ovaries; capsules intact, no tumor on ovarian surface; no malignant cells in ascites or peritoneal washings",
+            "T1c": "Tumor limited to one or both ovaries with any of the subcategories below",
+            "T1c1": "Surgical spill",
+            "T1c2": "Capsule ruptured before surgery or tumor on ovarian or fallopian tube surface",
+            "T1c3": "Malignant cells in ascites or peritoneal washings",
+            "T2": "Tumor involves one or both ovaries with pelvic extension below pelvic brim",
+            "T2a": "Extension and/or implants on the uterus and/or tube(s)",
+            "T2b": "Extension to and/or implants in other pelvic tissues",
+            "T3": "Tumor involves one or both ovaries with microscopically confirmed peritoneal metastasis outside the pelvis and/or retroperitoneal lymph node involvement",
+            "T3a": "Microscopic peritoneal metastasis beyond the pelvis with or without positive retroperitoneal lymph nodes",
+            "T3b": "Macroscopic peritoneal metastasis beyond the pelvis ≤2 cm in greatest dimension with or without positive retroperitoneal lymph nodes",
+            "T3c": "Macroscopic peritoneal metastasis beyond the pelvis >2 cm in greatest dimension including extension to liver capsule or spleen without parenchymal involvement"
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N0(i+)": "Isolated tumor cells in regional lymph node(s) ≤0.2 mm",
+            "N1": "Positive (histologically confirmed) retroperitoneal lymph nodes",
+            "N1a": "Metastasis ≤10 mm in greatest dimension",
+            "N1b": "Metastasis >10 mm in greatest dimension",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN0(i+)": "Isolated tumor cells in regional lymph node(s) ≤0.2 mm",
+              "pN1": "Positive retroperitoneal lymph nodes",
+              "pN1a": "Metastasis ≤10 mm in greatest dimension",
+              "pN1b": "Metastasis >10 mm in greatest dimension"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis including cytology-positive pleural effusion; liver or splenic parenchymal involvement; extra-abdominal organ involvement",
+            "M1a": "Pleural effusion with positive cytology",
+            "M1b": "Liver or splenic parenchymal metastases; metastases to extra-abdominal organs"
+          },
+          "stage_groups": {
+            "I": {"T": ["T1", "T1a", "T1b", "T1c"], "N": "N0", "M": "M0"},
+            "II": {"T": ["T2", "T2a", "T2b"], "N": "N0", "M": "M0"},
+            "III": {"T": ["T3", "T3a", "T3b", "T3c"], "N": ["N0", "N1"], "M": "M0"},
+            "IV": {"T": "Any T", "N": "Any N", "M": "M1"}
+          }
+        },
+        "FIGO": {
+          "IA": "Tumor limited to one ovary; capsule intact, no tumor on ovarian surface; no malignant cells in ascites or peritoneal washings",
+          "IB": "Tumor limited to both ovaries; capsules intact, no tumor on ovarian surface; no malignant cells in ascites or peritoneal washings",
+          "IC": "Tumor limited to one or both ovaries with any of the subcategories below",
+          "IC1": "Surgical spill",
+          "IC2": "Capsule ruptured before surgery or tumor on ovarian or fallopian tube surface",
+          "IC3": "Malignant cells in ascites or peritoneal washings",
+          "IIA": "Extension and/or implants on the uterus and/or tube(s)",
+          "IIB": "Extension to and/or implants in other pelvic tissues",
+          "IIIA1": "Positive retroperitoneal lymph nodes",
+          "IIIA1i": "Metastasis ≤10 mm in greatest dimension",
+          "IIIA1ii": "Metastasis >10 mm in greatest dimension",
+          "IIIA2": "Microscopic peritoneal metastasis beyond the pelvis",
+          "IIIB": "Macroscopic peritoneal metastasis beyond the pelvis ≤2 cm",
+          "IIIC": "Macroscopic peritoneal metastasis beyond the pelvis >2 cm",
+          "IVA": "Pleural effusion with positive cytology",
+          "IVB": "Liver or splenic parenchymal metastases; metastases to extra-abdominal organs"
+        }
+      }
+    },
+    {
+      "name": "Cervical Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition) and FIGO system, as referenced in NCCN guidelines. Includes pathological nodal staging.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "T1": "Cervical carcinoma confined to uterus",
+            "T1a": "Invasive carcinoma diagnosed only by microscopy",
+            "T1a1": "Stromal invasion ≤ 3 mm in depth",
+            "T1a2": "Stromal invasion > 3 mm but ≤ 5 mm in depth",
+            "T1b": "Clinically visible lesion confined to cervix or microscopic lesion > T1a",
+            "T1b1": "Clinically visible lesion ≤ 4 cm in greatest dimension",
+            "T1b2": "Clinically visible lesion > 4 cm in greatest dimension",
+            "T2": "Tumor invades beyond uterus but not to pelvic wall or lower third of vagina",
+            "T2a": "Tumor without parametrial invasion",
+            "T2a1": "Lesion ≤ 4 cm in greatest dimension",
+            "T2a2": "Lesion > 4 cm in greatest dimension",
+            "T2b": "Tumor with parametrial invasion",
+            "T3": "Tumor extends to pelvic wall, involves lower third of vagina, or causes hydronephrosis",
+            "T3a": "Tumor involves lower third of vagina",
+            "T3b": "Tumor extends to pelvic wall or causes hydronephrosis",
+            "T4": "Tumor invades mucosa of bladder or rectum or extends beyond true pelvis"
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N0(i+)": "Isolated tumor cells in regional lymph node(s) ≤ 0.2 mm",
+            "N1": "Regional lymph node metastasis",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN0(i+)": "Isolated tumor cells in regional lymph node(s) ≤ 0.2 mm",
+              "pN1": "Regional lymph node metastasis"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis"
+          },
+          "stage_groups": {
+            "I": {"T": ["T1", "T1a", "T1b"], "N": "N0", "M": "M0"},
+            "II": {"T": ["T2", "T2a", "T2b"], "N": "N0", "M": "M0"},
+            "III": {"T": ["T3", "T3a", "T3b"], "N": ["N0", "N1"], "M": "M0"},
+            "IVA": {"T": "T4", "N": "Any N", "M": "M0"},
+            "IVB": {"T": "Any T", "N": "Any N", "M": "M1"}
+          }
+        },
+        "FIGO": {
+          "IA": "Invasive carcinoma diagnosed only by microscopy",
+          "IA1": "Stromal invasion ≤ 3 mm in depth",
+          "IA2": "Stromal invasion > 3 mm but ≤ 5 mm in depth",
+          "IB": "Clinically visible lesion confined to cervix or microscopic lesion > IA",
+          "IB1": "Clinically visible lesion ≤ 4 cm in greatest dimension",
+          "IB2": "Clinically visible lesion > 4 cm in greatest dimension",
+          "IIA": "Tumor without parametrial invasion",
+          "IIA1": "Lesion ≤ 4 cm in greatest dimension",
+          "IIA2": "Lesion > 4 cm in greatest dimension",
+          "IIB": "Tumor with parametrial invasion",
+          "IIIA": "Tumor involves lower third of vagina",
+          "IIIB": "Tumor extends to pelvic wall or causes hydronephrosis",
+          "IVA": "Tumor invades mucosa of bladder or rectum or extends beyond true pelvis",
+          "IVB": "Distant metastasis"
+        }
+      }
+    },
+    {
+      "name": "Endometrial Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition) and FIGO system, as referenced in NCCN guidelines. Includes pathological nodal staging.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "T1": "Tumor confined to corpus uteri",
+            "T1a": "Tumor limited to endometrium or invades less than half of myometrium",
+            "T1b": "Tumor invades half or more of myometrium",
+            "T2": "Tumor invades cervical stroma but does not extend beyond uterus",
+            "T3": "Local and/or regional spread",
+            "T3a": "Tumor invades serosa and/or adnexa",
+            "T3b": "Vaginal and/or parametrial involvement",
+            "T4": "Tumor invades bladder and/or bowel mucosa"
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N0(i+)": "Isolated tumor cells in regional lymph node(s) ≤ 0.2 mm",
+            "N1": "Regional lymph node metastasis to pelvic lymph nodes",
+            "N1mi": "Micrometastases to pelvic lymph nodes",
+            "N1a": "Metastasis to pelvic lymph nodes",
+            "N2": "Regional lymph node metastasis to para-aortic lymph nodes",
+            "N2mi": "Micrometastases to para-aortic lymph nodes",
+            "N2a": "Metastasis to para-aortic lymph nodes",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN0(i+)": "Isolated tumor cells in regional lymph node(s) ≤ 0.2 mm",
+              "pN1": "Regional lymph node metastasis to pelvic lymph nodes",
+              "pN1mi": "Micrometastases to pelvic lymph nodes",
+              "pN1a": "Metastasis to pelvic lymph nodes",
+              "pN2": "Regional lymph node metastasis to para-aortic lymph nodes",
+              "pN2mi": "Micrometastases to para-aortic lymph nodes",
+              "pN2a": "Metastasis to para-aortic lymph nodes"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis"
+          },
+          "stage_groups": {
+            "IA": {"T": "T1a", "N": "N0", "M": "M0"},
+            "IB": {"T": "T1b", "N": "N0", "M": "M0"},
+            "II": {"T": "T2", "N": "N0", "M": "M0"},
+            "IIIA": {"T": "T3a", "N": "N0", "M": "M0"},
+            "IIIB": {"T": "T3b", "N": "N0", "M": "M0"},
+            "IIIC1": {"T": ["T1", "T2", "T3"], "N": "N1", "M": "M0"},
+            "IIIC2": {"T": ["T1", "T2", "T3"], "N": "N2", "M": "M0"},
+            "IVA": {"T": "T4", "N": "Any N", "M": "M0"},
+            "IVB": {"T": "Any T", "N": "Any N", "M": "M1"}
+          }
+        },
+        "FIGO": {
+          "IA": "Tumor limited to endometrium or invades less than half of myometrium",
+          "IB": "Tumor invades half or more of myometrium",
+          "II": "Tumor invades cervical stroma but does not extend beyond uterus",
+          "IIIA": "Tumor invades serosa and/or adnexa",
+          "IIIB": "Vaginal and/or parametrial involvement",
+          "IIIC1": "Regional lymph node metastasis to pelvic lymph nodes",
+          "IIIC2": "Regional lymph node metastasis to para-aortic lymph nodes",
+          "IVA": "Tumor invades bladder and/or bowel mucosa",
+          "IVB": "Distant metastasis"
+        }
+      }
+    },
+    {
+      "name": "Pancreatic Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition), as referenced in NCCN guidelines. Includes pathological nodal staging.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "Tis": "Carcinoma in situ",
+            "T1": "Tumor ≤ 2 cm in greatest dimension",
+            "T1a": "Tumor ≤ 0.5 cm in greatest dimension",
+            "T1b": "Tumor > 0.5 cm and ≤ 1 cm in greatest dimension",
+            "T1c": "Tumor > 1 cm but ≤ 2 cm in greatest dimension",
+            "T2": "Tumor > 2 cm but ≤ 4 cm in greatest dimension",
+            "T3": "Tumor > 4 cm in greatest dimension",
+            "T4": "Tumor involves celiac axis, superior mesenteric artery, or common hepatic artery"
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N1": "Metastasis in 1-3 regional lymph nodes",
+            "N2": "Metastasis in ≥ 4 regional lymph nodes",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN1": "Metastasis in 1-3 regional lymph nodes",
+              "pN2": "Metastasis in ≥ 4 regional lymph nodes"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis"
+          },
+          "stage_groups": {
+            "0": {"T": "Tis", "N": "N0", "M": "M0"},
+            "IA": {"T": "T1", "N": "N0", "M": "M0"},
+            "IB": {"T": "T2", "N": "N0", "M": "M0"},
+            "IIA": {"T": "T3", "N": "N0", "M": "M0"},
+            "IIB": {"T": ["T1", "T2", "T3"], "N": "N1", "M": "M0"},
+            "III": {"T": ["T1", "T2", "T3", "T4"], "N": ["N2", "Any N"], "M": "M0"},
+            "IV": {"T": "Any T", "N": "Any N", "M": "M1"}
+          }
+        },
+        "FIGO": null
+      }
+    },
+    {
+      "name": "Melanoma",
+      "description": "Staging based on AJCC TNM system (8th edition), as referenced in NCCN guidelines. Includes pathological nodal staging.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "Tis": "Melanoma in situ",
+            "T1": "Tumor ≤ 1 mm in thickness",
+            "T1a": "Tumor < 0.8 mm without ulceration",
+            "T1b": "Tumor < 0.8 mm with ulceration or 0.8-1 mm",
+            "T2": "Tumor > 1 mm but ≤ 2 mm in thickness",
+            "T2a": "Tumor > 1 mm but ≤ 2 mm without ulceration",
+            "T2b": "Tumor > 1 mm but ≤ 2 mm with ulceration",
+            "T3": "Tumor > 2 mm but ≤ 4 mm in thickness",
+            "T3a": "Tumor > 2 mm but ≤ 4 mm without ulceration",
+            "T3b": "Tumor > 2 mm but ≤ 4 mm with ulceration",
+            "T4": "Tumor > 4 mm in thickness",
+            "T4a": "Tumor > 4 mm without ulceration",
+            "T4b": "Tumor一提したように > 4 mm with ulceration"
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N1": "Metastasis in one regional lymph node or intralymphatic regional metastasis without nodal metastasis",
+            "N1a": "Clinically occult metastasis in one regional lymph node",
+            "N1b": "Clinically detected metastasis in one regional lymph node",
+            "N1c": "No regional lymph node metastasis but with in-transit, satellite, or microsatellite metastases",
+            "N2": "Metastasis in 2-3 regional lymph nodes or intralymphatic regional metastasis with one nodal metastasis",
+            "N2a": "Clinically occult metastases in 2-3 regional lymph nodes",
+            "N2b": "Clinically detected metastases in 2-3 regional lymph nodes",
+            "N2c": "One clinically occult or detected lymph node with in-transit, satellite, or microsatellite metastases",
+            "N3": "Metastasis in ≥ 4 regional lymph nodes or matted nodes with intralymphatic metastases",
+            "N3a": "Clinically occult metastases in ≥ 4 regional lymph nodes",
+            "N3b": "Clinically detected metastases in ≥ 4 regional lymph nodes",
+            "N3c": "≥ 2 clinically occult or detected lymph nodes and/or matted nodes with in-transit, satellite, or microsatellite metastases",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN1": "Metastasis in one regional lymph node",
+              "pN1a": "Clinically occult metastasis in one regional lymph node",
+              "pN1b": "Clinically detected metastasis in one regional lymph node",
+              "pN1c": "No regional lymph node metastasis but with in-transit, satellite, or microsatellite metastases",
+              "pN2": "Metastasis in 2-3 regional lymph nodes",
+              "pN2a": "Clinically occult metastases in 2-3 regional lymph nodes",
+              "pN2b": "Clinically detected metastases in 2-3 regional lymph nodes",
+              "pN2c": "One clinically occult or detected lymph node with in-transit, satellite, or microsatellite metastases",
+              "pN3": "Metastasis in ≥ 4 regional lymph nodes or matted nodes",
+              "pN3a": "Clinically occult metastases in ≥ 4 regional lymph nodes",
+              "pN3b": "Clinically detected metastases in ≥ 4 regional lymph nodes",
+              "pN3c": "≥ 2 clinically occult or detected lymph nodes and/or matted nodes with in-transit, satellite, or microsatellite metastases"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis",
+            "M1a": "Metastasis to skin, subcutaneous tissue, or nonregional lymph nodes",
+            "M1b": "Metastasis to lung",
+            "M1c": "Metastasis to non-CNS visceral sites",
+            "M1d": "Metastasis to CNS"
+          },
+          "stage_groups": {
+            "0": {"T": "Tis", "N": "N0", "M": "M0"},
+            "IA": {"T": "T1a", "N": "N0", "M": "M0"},
+            "IB": {"T": ["T1b", "T2a"], "N": "N0", "M": "M0"},
+            "IIA": {"T": ["T2b", "T3a"], "N": "N0", "M": "M0"},
+            "IIB": {"T": ["T3b", "T4a"], "N": "N0", "M": "M0"},
+            "IIC": {"T": "T4b", "N": "N0", "M": "M0"},
+            "IIIA": {"T": ["T1", "T2", "T3", "T4"], "N": ["N1a", "N2a"], "M": "M0"},
+            "IIIB": {"T": ["T1", "T2", "T3", "T4"], "N": ["N1b", "N1c", "N2b"], "M": "M0"},
+            "IIIC": {"T": ["T1", "T2", "T3", "T4"], "N": ["N2c", "N3"], "M": "M0"},
+            "IIID": {"T": "T4b", "N": ["N3"], "M": "M0"},
+            "IV": {"T": "Any T", "N": "Any N", "M": "M1"}
+          }
+        },
+        "FIGO": null
+      }
+    },
+    {
+      "name": "Head and Neck Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition), as referenced in NCCN guidelines. Includes pathological nodal staging. Excludes HPV-mediated oropharyngeal cancer.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "Oral Cavity": {
+              "TX": "Primary tumor cannot be assessed",
+              "T0": "No evidence of primary tumor",
+              "Tis": "Carcinoma in situ",
+              "T1": "Tumor ≤ 2 cm in greatest dimension",
+              "T2": "Tumor > 2 cm but ≤ 4 cm in greatest dimension",
+              "T3": "Tumor > 4 cm in greatest dimension or extension to lingual surface of epiglottis",
+              "T4a": "Tumor invades adjacent structures (e.g., cortical bone, deep muscle of tongue, maxillary sinus, skin)",
+              "T4b": "Tumor invades masticator space, pterygoid plates, or skull base, or encases internal carotid artery"
+            }
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N1": "Metastasis in a single ipsilateral lymph node, ≤ 3 cm, no extranodal extension",
+            "N2": "Metastasis in a single ipsilateral lymph node, > 3 cm but ≤ 6 cm, or multiple ipsilateral, contralateral, or bilateral lymph nodes, none > 6 cm",
+            "N2a": "Metastasis in a single ipsilateral lymph node, > 3 cm but ≤ 6 cm, no extranodal extension",
+            "N2b": "Metastasis in multiple ipsilateral lymph nodes, none > 6 cm, no extranodal extension",
+            "N2c": "Metastasis in contralateral or bilateral lymph nodes, none > 6 cm, no extranodal extension",
+            "N3": "Metastasis in a lymph node > 6 cm or with extranodal extension",
+            "N3a": "Metastasis in a lymph node > 6 cm, no extranodal extension",
+            "N3b": "Metastasis with extranodal extension",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN1": "Metastasis in a single ipsilateral lymph node, ≤ 3 cm, no extranodal extension",
+              "pN2": "Metastasis in a single ipsilateral lymph node, > 3 cm but ≤ 6 cm, or multiple ipsilateral, contralateral, or bilateral lymph nodes, none > 6 cm",
+              "pN2a": "Metastasis in a single ipsilateral lymph node, > 3 cm but ≤ 6 cm, no extranodal extension",
+              "pN2b": "Metastasis in multiple ipsilateral lymph nodes, none > 6 cm, no extranodal extension",
+              "pN2c": "Metastasis in contralateral or bilateral lymph nodes, none > 6 cm, no extranodal extension",
+              "pN3": "Metastasis in a lymph node > 6 cm or with extranodal extension",
+              "pN3a": "Metastasis in a lymph node > 6 cm, no extranodal extension",
+              "pN3b": "Metastasis with extranodal extension"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis"
+          },
+          "stage_groups": {
+            "0": {"T": "Tis", "N": "N0", "M": "M0"},
+            "I": {"T": "T1", "N": "N0", "M": "M0"},
+            "II": {"T": "T2", "N": "N0", "M": "M0"},
+            "III": {"T": ["T3", "T1", "T2"], "N": ["N0", "N1"], "M": "M0"},
+            "IVA": {"T": ["T4a", "T1", "T2", "T3"], "N": ["N0", "N1", "N2"], "M": "M0"},
+            "IVB": {"T": ["T4b"], "N": ["Any N"], "M": "M0"},
+            "IVC": {"T": "Any T", "N": "Any N", "M": "M1"}
+          }
+        },
+        "FIGO": null
+      }
+    },
+    {
+      "name": "Bladder Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition), as referenced in NCCN guidelines. Includes pathological nodal staging.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "Ta": "Noninvasive papillary carcinoma",
+            "Tis": "Carcinoma in situ",
+            "T1": "Tumor invades subepithelial connective tissue",
+            "T2": "Tumor invades muscularis propria",
+            "T2a": "Tumor invades superficial muscularis propria",
+            "T2b": "Tumor invades deep muscularis propria",
+            "T3": "Tumor invades perivesical tissue",
+            "T3a": "Tumor invades perivesical tissue microscopically",
+            "T3b": "Tumor invades perivesical tissue macroscopically",
+            "T4": "Tumor invades adjacent structures",
+            "T4a": "Tumor invades prostate, uterus, or vagina",
+            "T4b": "Tumor invades pelvic wall or abdominal wall"
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N1": "Metastasis in a single lymph node in true pelvis",
+            "N2": "Metastasis in multiple lymph nodes in true pelvis",
+            "N3": "Metastasis in common iliac lymph node(s)",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN1": "Metastasis in a single lymph node in true pelvis",
+              "pN2": "Metastasis in multiple lymph nodes in true pelvis",
+              "pN3": "Metastasis in common iliac lymph node(s)"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis",
+            "M1a": "Metastasis to nonregional lymph nodes",
+            "M1b": "Metastasis to other distant sites"
+          },
+          "stage_groups": {
+            "0a": {"T": "Ta", "N": "N0", "M": "M0"},
+            "0is": {"T": "Tis", "N": "N0", "M": "M0"},
+            "I": {"T": "T1", "N": "N0", "M": "M0"},
+            "II": {"T": ["T2a", "T2b"], "N": "N0", "M": "M0"},
+            "IIIA": {"T": ["T3a", "T3b", "T4a"], "N": "N0", "M": "M0"},
+            "IIIB": {"T": ["T1", "T2", "T3", "T4a"], "N": ["N1", "N2", "N3"], "M": "M0"},
+            "IVA": {"T": "T4b", "N": "Any N", "M": "M0"},
+            "IVB": {"T": "Any T", "N": "Any N", "M": "M1"}
+          }
+        },
+        "FIGO": null
+      }
+    },
+    {
+      "name": "Kidney Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition), as referenced in NCCN guidelines. Includes pathological nodal staging.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "T1": "Tumor ≤ 7 cm in greatest dimension, confined to kidney",
+            "T1a": "Tumor ≤ 4 cm in greatest dimension",
+            "T1b": "Tumor > 4 cm but ≤ 7 cm in greatest dimension",
+            "T2": "Tumor > 7 cm in greatest dimension, confined to kidney",
+            "T2a": "Tumor > 7 cm but ≤ 10 cm in greatest dimension",
+            "T2b": "Tumor > 10 cm in greatest dimension",
+            "T3": "Tumor extends into major veins or perinephric tissues",
+            "T3a": "Tumor extends into renal vein or perinephric tissues",
+            "T3b": "Tumor extends into vena cava below diaphragm",
+            "T3c": "Tumor extends into vena cava above diaphragm or invades vena cava wall",
+            "T4": "Tumor invades beyond Gerota fascia or ipsilateral adrenal gland"
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N1": "Metastasis in regional lymph node(s)",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN1": "Metastasis in regional lymph node(s)"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis"
+          },
+          "stage_groups": {
+            "I": {"T": "T1", "N": "N0", "M": "M0"},
+            "II": {"T": "T2", "N": "N0", "M": "M0"},
+            "III": {"T": ["T1", "T2", "T3"], "N": ["N1", "N0"], "M": "M0"},
+            "IV": {"T": ["T4", "Any T"], "N": ["Any N"], "M": ["M0", "M1"]}
+          }
+        },
+        "FIGO": null
+      }
+    },
+    {
+      "name": "Liver Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition), as referenced in NCCN guidelines. Includes pathological nodal staging.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "T1": "Solitary tumor ≤ 2 cm or > 2 cm without vascular invasion",
+            "T1a": "Solitary tumor ≤ 2 cm",
+            "T1b": "Solitary tumor > 2 cm without vascular invasion",
+            "T2": "Solitary tumor > 2 cm with vascular invasion or multiple tumors, none > 5 cm",
+            "T3": "Multiple tumors, at least one > 5 cm",
+            "T4": "Tumor(s) involving major branch of portal or hepatic vein or direct invasion of adjacent organs"
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N1": "Regional lymph node metastasis",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN1": "Regional lymph node metastasis"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis"
+          },
+          "stage_groups": {
+            "IA": {"T": "T1a", "N": "N0", "M": "M0"},
+            "IB": {"T": "T1b", "N": "N0", "M": "M0"},
+            "II": {"T": "T2", "N": "N0", "M": "M0"},
+            "IIIA": {"T": "T3", "N": "N0", "M": "M0"},
+            "IIIB": {"T": "T4", "N": "N0", "M": "M0"},
+            "IVA": {"T": "Any T", "N": "N1", "M": "M0"},
+            "IVB": {"T": "Any T", "N": "Any N", "M": "M1"}
+          }
+        },
+        "FIGO": null
+      }
+    },
+    {
+      "name": "Stomach Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition), as referenced in NCCN guidelines. Includes pathological nodal staging.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "Tis": "Carcinoma in situ",
+            "T1": "Tumor invades lamina propria or submucosa",
+            "T1a": "Tumor invades lamina propria",
+            "T1b": "Tumor invades submucosa",
+            "T2": "Tumor invades muscularis propria",
+            "T3": "Tumor penetrates subserosal connective tissue",
+            "T4": "Tumor invades serosa or adjacent structures",
+            "T4a": "Tumor invades serosa",
+            "T4b": "Tumor invades adjacent structures"
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N1": "Metastasis in 1-2 regional lymph nodes",
+            "N2": "Metastasis in 3-6 regional lymph nodes",
+            "N3": "Metastasis in ≥ 7 regional lymph nodes",
+            "N3a": "Metastasis in 7-15 regional lymph nodes",
+            "N3b": "Metastasis in ≥ 16 regional lymph nodes",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN1": "Metastasis in 1-2 regional lymph nodes",
+              "pN2": "Metastasis in 3-6 regional lymph nodes",
+              "pN3": "Metastasis in ≥ 7 regional lymph nodes",
+              "pN3a": "Metastasis in 7-15 regional lymph nodes",
+              "pN3b": "Metastasis in ≥ 16 regional lymph nodes"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis"
+          },
+          "stage_groups": {
+            "0": {"T": "Tis", "N": "N0", "M": "M0"},
+            "IA": {"T": "T1", "N": "N0", "M": "M0"},
+            "IB": {"T": ["T1", "T2"], "N": ["N1", "N0"], "M": "M0"},
+            "IIA": {"T": ["T1", "T2", "T3"], "N": ["N2", "N1", "N0"], "M": "M0"},
+            "IIB": {"T": ["T1", "T2", "T3", "T4a"], "N": ["N3", "N2", "N1", "N0"], "M": "M0"},
+            "III": {"T": ["T3", "T4a", "T4b"], "N": ["N2", "N3", "N1"], "M": "M0"},
+            "IV": {"T": "Any T", "N": "Any N", "M": "M1"}
+          }
+        },
+        "FIGO": null
+      }
+    },
+    {
+      "name": "Esophageal Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition), as referenced in NCCN guidelines. Includes pathological nodal staging.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "Tis": "High-grade dysplasia",
+            "T1": "Tumor invades lamina propria or submucosa",
+            "T1a": "Tumor invades mucosa or lamina propria",
+            "T1b": "Tumor invades submucosa",
+            "T2": "Tumor invades muscularis propria",
+            "T3": "Tumor invades adventitia",
+            "T4": "Tumor invades adjacent structures",
+            "T4a": "Tumor invades pleura, pericardium, or diaphragm",
+            "T4b": "Tumor invades other adjacent structures"
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N1": "Metastasis in 1-2 regional lymph nodes",
+            "N2": "Metastasis in 3-6 regional lymph nodes",
+            "N3": "Metastasis in ≥ 7 regional lymph nodes",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN1": "Metastasis in 1-2 regional lymph nodes",
+              "pN2": "Metastasis in 3-6 regional lymph nodes",
+              "pN3": "Metastasis in ≥ 7 regional lymph nodes"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis"
+          },
+          "G": {
+            "GX": "Grade cannot be assessed",
+            "G1": "Well differentiated",
+            "G2": "Moderately differentiated",
+            "G3": "Poorly differentiated"
+          },
+          "stage_groups": {
+            "0": {"T": "Tis", "N": "N0", "M": "M0"},
+            "IA": {"T": "T1a", "N": "N0", "M": "M0", "G": "G1"},
+            "IB": {"T": ["T1a", "T1b"], "N": "N0", "M": "M0", "G": ["G2", "G3"]},
+            "IIA": {"T": "T2", "N": "N0", "M": "M0", "G": "G1"},
+            "IIB": {"T": ["T2", "T3"], "N": ["N0", "N1"], "M": "M0", "G": ["G2", "G3"]},
+            "IIIA": {"T": ["T1", "T2"], "N": "N2", "M": "M0"},
+            "IIIB": {"T": ["T3"], "N": ["N1", "N2"], "M": "M0"},
+            "IVA": {"T": ["T4a", "T4b"], "N": "Any N", "M": "M0"},
+            "IVB": {"T": "Any T", "N": "Any N", "M": "M1"}
+          }
+        },
+        "FIGO": null
+      }
+    },
+    {
+      "name": "Thyroid Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition), as referenced in NCCN guidelines. Includes pathological nodal staging.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "T1": "Tumor ≤ 2 cm in greatest dimension, limited to thyroid",
+            "T1a": "Tumor ≤ 1 cm in greatest dimension",
+            "T1b": "Tumor > 1 cm but ≤ 2 cm in greatest dimension",
+            "T2": "Tumor > 2 cm but ≤ 4 cm in greatest dimension, limited to thyroid",
+            "T3": "Tumor > 4 cm or with minimal extrathyroidal extension",
+            "T3a": "Tumor > 4 cm, limited to thyroid",
+            "T3b": "Tumor with gross extrathyroidal extension invading only strap muscles",
+            "T4": "Tumor with gross extrathyroidal extension",
+            "T4a": "Tumor invades skin, larynx, trachea, esophagus, or recurrent laryngeal nerve",
+            "T4b": "Tumor invades prevertebral fascia, carotid artery, or mediastinal vessels"
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N0a": "One or more cytologically or histologically confirmed benign lymph nodes",
+            "N0b": "No radiologic or clinical evidence of locoregional lymph node metastasis",
+            "N1": "Metastasis to regional lymph nodes",
+            "N1a": "Metastasis to level VI or VII lymph nodes",
+            "N1b": "Metastasis to unilateral, bilateral, or contralateral lateral neck lymph nodes",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN0a": "One or more cytologically or histologically confirmed benign lymph nodes",
+              "pN0b": "No histologic evidence of locoregional lymph node metastasis",
+              "pN1": "Metastasis to regional lymph nodes",
+              "pN1a": "Metastasis to level VI or VII lymph nodes",
+              "pN1b": "Metastasis to unilateral, bilateral, or contralateral lateral neck lymph nodes"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis"
+          },
+          "stage_groups": {
+            "I": {"T": ["T1", "T2"], "N": ["N0", "N1"], "M": "M0", "Age": "<55 years"},
+            "II": {"T": ["T3", "Any T"], "N": ["N0", "N1", "Any N"], "M": ["M0", "M1"], "Age": "<55 years"},
+            "I (≥55 years)": {"T": "T1", "N": "N0", "M": "M0"},
+            "II (≥55 years)": {"T": "T2", "N": "N0", "M": "M0"},
+            "III (≥55 years)": {"T": "T3", "N": "N0", "M": "M0"},
+            "IVA (≥55 years)": {"T": ["T4a", "T1", "T2", "T3"], "N": ["N1", "N0"], "M": "M0"},
+            "IVB (≥55 years)": {"T": "T4b", "N": "Any N", "M": "M0"},
+            "IVC (≥55 years)": {"T": "Any T", "N": "Any N", "M": "M1"}
+          }
+        },
+        "FIGO": null
+      }
+    },
+    {
+      "name": "Testicular Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition), as referenced in NCCN guidelines. Includes pathological nodal staging and serum markers.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "Tis": "Germ cell neoplasia in situ",
+            "T1": "Tumor limited to testis and epididymis without vascular/lymphatic invasion",
+            "T2": "Tumor limited to testis and epididymis with vascular/lymphatic invasion or extending through tunica albuginea",
+            "T3": "Tumor invades spermatic cord",
+            "T4": "Tumor invades scrotum"
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N1": "Metastasis with lymph node mass ≤ 2 cm or multiple lymph nodes, none > 2 cm",
+            "N2": "Metastasis with lymph node mass > 2 cm but ≤ 5 cm or multiple lymph nodes, any one mass > 2 cm but ≤ 5 cm",
+            "N3": "Metastasis with lymph node mass > 5 cm",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN1": "Metastasis with lymph node mass ≤ 2 cm or multiple lymph nodes, none > 2 cm",
+              "pN2": "Metastasis with lymph node mass > 2 cm but ≤ 5 cm or multiple lymph nodes, any one mass > 2 cm but ≤ 5 cm",
+              "pN3": "Metastasis with lymph node mass > 5 cm"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis",
+            "M1a": "Nonregional nodal or pulmonary metastasis",
+            "M1b": "Nonpulmonary visceral metastasis"
+          },
+          "S": {
+            "SX": "Serum markers not available",
+            "S0": "Serum marker levels within normal limits",
+            "S1": "LDH < 1.5 × upper limit, hCG < 5,000 IU/L, AFP < 1,000 ng/mL",
+            "S2": "LDH 1.5-10 × upper limit, hCG 5,000-50,000 IU/L, AFP 1,000-10,000 ng/mL",
+            "S3": "LDH > 10 × upper limit, hCG > 50,000 IU/L, AFP > 10,000 ng/mL"
+          },
+          "stage_groups": {
+            "0": {"T": "Tis", "N": "N0", "M": "M0", "S": "S0"},
+            "IA": {"T": "T1", "N": "N0", "M": "M0", "S": "S0"},
+            "IB": {"T": ["T2", "T3", "T4"], "N": "N0", "M": "M0", "S": "S0"},
+            "IS": {"T": "Any T", "N": "N0", "M": "M0", "S": ["S1", "S2", "S3"]},
+            "IIA": {"T": "Any T", "N": "N1", "M": "M0", "S": ["S0", "S1"]},
+            "IIB": {"T": "Any T", "N": "N2", "M": "M0", "S": ["S0", "S1"]},
+            "IIC": {"T": "Any T", "N": "N3", "M": "M0", "S": ["S0", "S1"]},
+            "IIIA": {"T": "Any T", "N": "Any N", "M": "M1a", "S": ["S0", "S1"]},
+            "IIIB": {"T": "Any T", "N": ["N1", "N2", "N3"], "M": "M0", "S": "S2"},
+            "IIIC": {"T": "Any T", "N": ["N1", "N2", "N3"], "M": ["M0", "M1a"], "S": "S3"},
+            "IIIC": {"T": "Any T", "N": "Any N", "M": "M1b", "S": "Any S"}
+          }
+        },
+        "FIGO": null
+      }
+    },
+    {
+      "name": "Penile Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition), as referenced in NCCN guidelines. Includes pathological nodal staging.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "Tis": "Carcinoma in situ",
+            "Ta": "Noninvasive verrucous carcinoma",
+            "T1": "Tumor invades subepithelial connective tissue",
+            "T1a": "Tumor invades subepithelial connective tissue without lymphovascular invasion or perineural invasion, not poorly differentiated",
+            "T1b": "Tumor invades subepithelial connective tissue with lymphovascular invasion or perineural invasion, or is poorly differentiated",
+            "T2": "Tumor invades corpus spongiosum with or without urethral invasion",
+            "T3": "Tumor invades corpus cavernosum with or without urethral invasion",
+            "T4": "Tumor invades other adjacent structures"
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N1": "Metastasis in one or two inguinal lymph nodes",
+            "N2": "Metastasis in more than two unilateral inguinal nodes or bilateral inguinal nodes",
+            "N3": "Metastasis in pelvic lymph node(s) or extranodal extension of regional lymph node metastasis",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN1": "Metastasis in one or two inguinal lymph nodes without extranodal extension",
+              "pN2": "Metastasis in more than two unilateral inguinal nodes or bilateral inguinal nodes without extranodal extension",
+              "pN3": "Metastasis in pelvic lymph node(s) or extranodal extension of regional lymph node metastasis"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis"
+          },
+          "stage_groups": {
+            "0is": {"T": "Tis", "N": "N0", "M": "M0"},
+            "0a": {"T": "Ta", "N": "N0", "M": "M0"},
+            "I": {"T": "T1a", "N": "N0", "M": "M0"},
+            "IIA": {"T": ["T1b", "T2"], "N": "N0", "M": "M0"},
+            "IIB": {"T": "T3", "N": "N0", "M": "M0"},
+            "IIIA": {"T": ["T1", "T2", "T3"], "N": "N1", "M": "M0"},
+            "IIIB": {"T": ["T1", "T2", "T3"], "N": "N2", "M": "M0"},
+            "IV": {"T": ["T4", "Any T"], "N": ["N3", "Any N"], "M": ["M0", "M1"]}
+          }
+        },
+        "FIGO": null
+      }
+    },
+    {
+      "name": "Vulvar Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition) and FIGO system, as referenced in NCCN guidelines. Includes pathological nodal staging.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "Tis": "Carcinoma in situ",
+            "T1": "Tumor confined to vulva or perineum",
+            "T1a": "Tumor ≤ 2 cm with stromal invasion ≤ 1 mm",
+            "T1b": "Tumor > 2 cm or with stromal invasion > 1 mm",
+            "T2": "Tumor of any size with extension to adjacent perineal structures (lower/distal third of urethra, lower/distal third of vagina, anus)",
+            "T3": "Tumor of any size with extension to upper/proximal two-thirds of urethra, vagina, bladder mucosa, rectal mucosa, or fixed to pelvic bone"
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N0(i+)": "Isolated tumor cells in regional lymph node(s) ≤ 0.2 mm",
+            "N1": "Regional lymph node metastasis with one or two lymph node metastases each < 5 mm or one lymph node metastasis ≥ 5 mm",
+            "N1a": "One or two lymph node metastases each < 5 mm",
+            "N1b": "One lymph node metastasis ≥ 5 mm",
+            "N2": "Regional lymph node metastasis with three or more lymph node metastases each < 5 mm, or two or more ≥ 5 mm, or with extranodal extension",
+            "N2a": "Three or more lymph node metastases each < 5 mm",
+            "N2b": "Two or more lymph node metastases ≥ 5 mm",
+            "N2c": "Lymph node metastasis with extranodal extension",
+            "N3": "Fixed or ulcerated regional lymph node metastasis",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN0(i+)": "Isolated tumor cells in regional lymph node(s) ≤ 0.2 mm",
+              "pN1": "Regional lymph node metastasis with one or two lymph node metastases each < 5 mm or one lymph node metastasis ≥ 5 mm",
+              "pN1a": "One or two lymph node metastases each < 5 mm",
+              "pN1b": "One lymph node metastasis ≥ 5 mm",
+              "pN2": "Regional lymph node metastasis with three or more lymph node metastases each < 5 mm, or two or more ≥ 5 mm, or with extranodal extension",
+              "pN2a": "Three or more lymph node metastases each < 5 mm",
+              "pN2b": "Two or more lymph node metastases ≥ 5 mm",
+              "pN2c": "Lymph node metastasis with extranodal extension",
+              "pN3": "Fixed or ulcerated regional lymph node metastasis"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis"
+          },
+          "stage_groups": {
+            "0": {"T": "Tis", "N": "N0", "M": "M0"},
+            "IA": {"T": "T1a", "N": "N0", "M": "M0"},
+            "IB": {"T": "T1b", "N": "N0", "M": "M0"},
+            "II": {"T": "T2", "N": "N0", "M": "M0"},
+            "IIIA": {"T": ["T1", "T2"], "N": ["N1a", "N1b"], "M": "M0"},
+            "IIIB": {"T": ["T1", "T2"], "N": ["N2a", "N2b"], "M": "M0"},
+            "IIIC": {"T": ["T1", "T2"], "N": "N2c", "M": "M0"},
+            "IVA": {"T": ["T3", "Any T"], "N": ["N3", "Any N"], "M": "M0"},
+            "IVB": {"T": "Any T", "N": "Any N", "M": "M1"}
+          }
+        },
+        "FIGO": {
+          "IA": "Tumor ≤ 2 cm with stromal invasion ≤ 1 mm, confined to vulva or perineum",
+          "IB": "Tumor > 2 cm or with stromal invasion > 1 mm, confined to vulva or perineum",
+          "II": "Tumor of any size with extension to adjacent perineal structures",
+          "IIIA": "Tumor of any size with one or two lymph node metastases each < 5 mm or one lymph node metastasis ≥ 5 mm",
+          "IIIB": "Tumor of any size with three or more lymph node metastases each < 5 mm or two or more ≥ 5 mm",
+          "IIIC": "Tumor of any size with lymph node metastasis with extranodal extension",
+          "IVA": "Tumor invades upper/proximal two-thirds of urethra, vagina, bladder mucosa, rectal mucosa, or fixed to pelvic bone, or fixed/ulcerated lymph node metastasis",
+          "IVB": "Distant metastasis"
+        }
+      }
+    },
+    {
+      "name": "Vaginal Cancer",
+      "description": "Staging based on AJCC TNM system (8th edition) and FIGO system, as referenced in NCCN guidelines. Includes pathological nodal staging.",
+      "staging": {
+        "TNM": {
+          "T": {
+            "TX": "Primary tumor cannot be assessed",
+            "T0": "No evidence of primary tumor",
+            "Tis": "Carcinoma in situ",
+            "T1": "Tumor confined to vagina",
+            "T2": "Tumor invades paravaginal tissues but not to pelvic wall",
+            "T3": "Tumor extends to pelvic wall",
+            "T4": "Tumor invades mucosa of bladder or rectum or extends beyond true pelvis"
+          },
+          "N": {
+            "NX": "Regional lymph nodes cannot be assessed",
+            "N0": "No regional lymph node metastasis",
+            "N0(i+)": "Isolated tumor cells in regional lymph node(s) ≤ 0.2 mm",
+            "N1": "Regional lymph node metastasis",
+            "Niclas": {
+              "pNX": "Regional lymph nodes cannot be assessed",
+              "pN0": "No regional lymph node metastasis",
+              "pN0(i+)": "Isolated tumor cells in regional lymph node(s) ≤ 0.2 mm",
+              "pN1": "Regional lymph node metastasis"
+            }
+          },
+          "M": {
+            "M0": "No distant metastasis",
+            "M1": "Distant metastasis"
+          },
+          "stage_groups": {
+            "0": {"T": "Tis", "N": "N0", "M": "M0"},
+            "I": {"T": "T1", "N": "N0", "M": "M0"},
+            "II": {"T": "T2", "N": "N0", "M": "M0"},
+            "III": {"T": ["T1", "T2", "T3"], "N": "N1", "M": "M0"},
+            "IVA": {"T": "T4", "N": "Any N", "M": "M0"},
+            "IVB": {"T": "Any T", "N": "Any N", "M": "M1"}
+          }
+        },
+        "FIGO": {
+          "I": "Tumor confined to vagina",
+          "II": "Tumor invades paravaginal tissues but not to pelvic wall",
+          "III": "Tumor extends to pelvic wall or regional lymph node metastasis",
+          "IVA": "Tumor invades mucosa of bladder or rectum or extends beyond true pelvis",
+          "IVB": "Distant metastasis"
+        }
+      }
+    }
+  ]
+};
+
+      displayCancerSites(cancerData.cancer_sites);
+      populateSiteDropdown(cancerData.cancer_sites);
+      setTimeout(loadState, 100);
 
       function populateSiteDropdown(cancerSites) {
         // Clear existing options except the first one
