@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Exam Mode - MCQ Quiz</title>
+  <title>Exam Mode</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -622,6 +622,53 @@
       box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
     }
 
+    /* Number Input with Buttons */
+    .number-input-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .number-input-container .form-control {
+      flex: 1;
+      text-align: center;
+    }
+
+    .number-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      background-color: var(--option-bg);
+      color: var(--text-color);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(1rem, 2.5vw, 1.125rem);
+      font-weight: 600;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .number-btn:hover {
+      background-color: var(--option-hover-bg);
+    }
+
+    .number-btn:active {
+      transform: scale(0.95);
+    }
+
+    .number-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .number-btn:disabled:hover {
+      background-color: var(--option-bg);
+      transform: none;
+    }
+
     .checkbox-group {
       display: flex;
       flex-wrap: wrap;
@@ -820,7 +867,11 @@
       <div class="setup-form">
         <div class="form-group">
           <label for="numQuestions">Number of Questions:</label>
-          <input type="number" id="numQuestions" class="form-control" min="5" max="50" value="10">
+          <div class="number-input-container">
+            <button type="button" class="number-btn" id="decreaseBtn">−</button>
+            <input type="number" id="numQuestions" class="form-control" min="5" max="50" value="10" inputmode="numeric">
+            <button type="button" class="number-btn" id="increaseBtn">+</button>
+          </div>
         </div>
         
         <div class="form-group">
@@ -942,6 +993,8 @@
     const timeDisplay = document.getElementById('timeDisplay');
     const topicsContainer = document.getElementById('topicsContainer');
     const startExamBtn = document.getElementById('startExamBtn');
+    const decreaseBtn = document.getElementById('decreaseBtn');
+    const increaseBtn = document.getElementById('increaseBtn');
 
     // Theme Toggle
     themeToggle.addEventListener('click', () => {
@@ -1012,8 +1065,37 @@
       // Update time display when number of questions changes
       numQuestionsInput.addEventListener('input', updateTimeDisplay);
       
+      // Number input buttons
+      decreaseBtn.addEventListener('click', () => {
+        const currentValue = parseInt(numQuestionsInput.value);
+        if (currentValue > 5) {
+          numQuestionsInput.value = currentValue - 1;
+          updateTimeDisplay();
+          updateNumberButtons();
+        }
+      });
+      
+      increaseBtn.addEventListener('click', () => {
+        const currentValue = parseInt(numQuestionsInput.value);
+        if (currentValue < 50) {
+          numQuestionsInput.value = currentValue + 1;
+          updateTimeDisplay();
+          updateNumberButtons();
+        }
+      });
+      
+      // Update button states initially
+      updateNumberButtons();
+      
       // Start exam button
       startExamBtn.addEventListener('click', startExam);
+    }
+
+    // Update number input button states
+    function updateNumberButtons() {
+      const currentValue = parseInt(numQuestionsInput.value);
+      decreaseBtn.disabled = currentValue <= 5;
+      increaseBtn.disabled = currentValue >= 50;
     }
 
     // Populate topics in the setup form
@@ -1094,6 +1176,9 @@
       // Calculate time (2 minutes per question)
       const timeInMinutes = numQuestions * 2;
       timeDisplay.textContent = `${timeInMinutes} minutes`;
+      
+      // Update button states
+      updateNumberButtons();
     }
 
     // Start the exam
