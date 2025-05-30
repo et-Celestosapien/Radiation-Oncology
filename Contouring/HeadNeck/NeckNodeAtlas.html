@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neck Node Atlas</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+            --accent-color: #007bff;
+            --card-bg: #2d2d2d;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --legend-bg: rgba(40, 40, 40, 0.9);
+            --legend-text: #ffffff;
+        }
+        [data-theme="light"] {
+            --bg-color: #f5f5f5;
+            --text-color: #333333;
+            --accent-color: #0056b3;
+            --card-bg: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --legend-bg: rgba(255, 255, 255, 0.9);
+            --legend-text: #333333;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        h1 {
+            margin: 10px 0;
+            font-size: 24px;
+        }
+        .header {
+            padding: 10px;
+            text-align: center;
+        }
+        .button-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            z-index: 1001;
+        }
+        .home-button, .theme-toggle, .legend-icon, .hint-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--accent-color);
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.3s, border-color 0.3s, color 0.3s, opacity 0.3s;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            text-decoration: none;
+            color: var(--text-color);
+        }
+        .home-button:hover, .theme-toggle:hover, .legend-icon:hover, .hint-button:hover {
+            transform: scale(1.1);
+            opacity: 0.9;
+            background-color: var(--accent-color);
+            color: var(--card-bg);
+        }
+        .legend-icon {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            z-index: 1002;
+        }
+        @media (max-width: 768px) {
+            .legend-icon {
+                bottom: 50px;
+                right: 20px;
+            }
+        }
+        .hint-button {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            z-index: 1002;
+        }
+        @media (max-width: 768px) {
+            .hint-button {
+                bottom: 50px;
+                left: 20px;
+            }
+        }
+        #legend {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 15px;
+            border-radius: 5px;
+            background: var(--legend-bg);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 15px var(--shadow-color);
+            max-width: 90vw;
+            max-height: 70vh;
+            overflow-y: auto;
+            z-index: 1000;
+            color: var(--legend-text);
+        }
+        #hint {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            border-radius: 5px;
+            background: var(--legend-bg);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 15px var(--shadow-color);
+            max-width: 90vw;
+            max-height: 70vh;
+            overflow-y: auto;
+            z-index: 1000;
+            color: var(--legend-text);
+            font-size: 16px;
+        }
+        .legend-table, .hint-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .legend-table th, .legend-table td, .hint-table th, .hint-table td {
+            padding: 8px;
+            text-align: left;
+            font-size: 14px;
+        }
+        .legend-table th, .hint-table th {
+            background-color: var(--card-bg);
+        }
+        .color-box {
+            width: 15px;
+            height: 15px;
+            margin-right: 5px;
+            border: 1px solid var(--text-color);
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .ct-viewer {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            background: var(--card-bg);
+            box-shadow: 0 2px 4px var(--shadow-color), 0 0 0 3px rgba(255, 255, 255, 0.5), 0 0 5px 5px var(--shadow-color);
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ct-image-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ct-image {
+            position: relative;
+            top: auto;
+            left: auto;
+            transform: translate(0, 0) scale(1);
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: calc(100vh - 90px);
+            object-fit: contain;
+            cursor: grab;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        .ct-image:active {
+            cursor: grabbing;
+        }
+        footer {
+            padding: 10px;
+            font-size: 12px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Neck Node Atlas</h1>
+    </div>
+    <div class="button-container">
+        <a href="..\Contouring.html" class="home-button" title="Home">🏠</a>
+        <div class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">🌙</div>
+    </div>
+    <div class="ct-viewer">
+        <div class="ct-image-container" id="imageContainer">
+            <img id="ctImage" class="ct-image" src="ct-slice-1.jpg" alt="CT Slice">
+        </div>
+    </div>
+    <div class="legend-icon" onclick="debouncedToggleLegend()" title="Toggle Legend">
+        <p>📖</p>
+    </div>
+    <div class="hint-button" onclick="toggleHint()" title="Show Controls">❓</div>
+    <div id="legend">
+        <table class="legend-table">
+            <tr>
+                <th>Level</th>
+                <th>Color</th>
+            </tr>
+            <tr>
+                <td>patient</td>
+                <td><div class="color-box" style="background-color: #333333;"></div></td>
+            </tr>
+            <tr>
+                <td>Level Ia</td>
+                <td><div class="color-box" style="background-color: #D2B48C;"></div></td>
+            </tr>
+            <tr>
+                <td>Level Ib</td>
+                <td><div class="color-box" style="background-color: #FF0000;"></div></td>
+            </tr>
+            <tr>
+                <td>Level II</td>
+                <td><div class="color-box" style="background-color: #008000;"></div></td>
+            </tr>
+            <tr>
+                <td>Level III</td>
+                <td><div class="color-box" style="background-color: #0000FF;"></div></td>
+            </tr>
+            <tr>
+                <td>Level IVa</td>
+                <td><div class="color-box" style="background-color: #FFC1CC;"></div></td>
+            </tr>
+            <tr>
+                <td>Level IVb</td>
+                <td><div class="color-box" style="background-color: #FFA500;"></div></td>
+            </tr>
+            <tr>
+                <td>Level VIa</td>
+                <td><div class="color-box" style="background-color: #800080;"></div></td>
+            </tr>
+            <tr>
+                <td>Level VIb</td>
+                <td><div class="color-box" style="background-color: #8B0000;"></div></td>
+            </tr>
+            <tr>
+                <td>Level VIIa</td>
+                <td><div class="color-box" style="background-color: #90EE90;"></div></td>
+            </tr>
+            <tr>
+                <td>Level VIIb</td>
+                <td><div class="color-box" style="background-color: #00008B;"></div></td>
+            </tr>
+            <tr>
+                <td>Level IXb</td>
+                <td><div class="color-box" style="background-color: #008080;"></div></td>
+            </tr>
+            <tr>
+                <td>Level IX</td>
+                <td><div class="color-box" style="background-color: #808000;"></div></td>
+            </tr>
+            <tr>
+                <td>Level Xb</td>
+                <td><div class="color-box" style="background-color: #A52A2A;"></div></td>
+            </tr>
+            <tr>
+                <td>Level Xc</td>
+                <td><div class="color-box" style="background-color: #FFB6C1;"></div></td>
+            </tr>
+            <tr>
+                <td>Level Xa</td>
+                <td><div class="color-box" style="background-color: #4B0082;"></div></td>
+            </tr>
+        </table>
+    </div>
+    <div id="hint">
+        <table class="hint-table">
+            <tr>
+                <th>Action</th>
+                <th>Control</th>
+            </tr>
+            <tr>
+                <td>Scroll Slices</td>
+                <td>Click/Drag Up/Down (Desktop) or Swipe Up/Down (Mobile)</td>
+            </tr>
+            <tr>
+                <td>Zoom</td>
+                <td>Scroll Wheel (Desktop) or Pinch (Mobile)</td>
+            </tr>
+            <tr>
+                <td>Navigate Slices (Desktop)</td>
+                <td>Arrow Up/Down Keys</td>
+            </tr>
+            <tr>
+                <td>Toggle Theme</td>
+                <td>Click 🌙 Button</td>
+            </tr>
+            <tr>
+                <td>Show Legend</td>
+                <td>Click 📖 Button</td>
+            </tr>
+            <tr>
+                <td>Show Hints</td>
+                <td>Click ❓ Button</td>
+            </tr>
+        </table>
+    </div>
+    <footer>
+        © 2025 et Celestosapien. All rights reserved.
+    </footer>
+
+    <script>
+        const images = ['.\\NNA\\CT_Page_004_Image_0001.jpg', '.\\NNA\\CT_Page_005_Image_0001.jpg', '.\\NNA\\CT_Page_006_Image_0001.jpg', '.\\NNA\\CT_Page_007_Image_0001.jpg', '.\\NNA\\CT_Page_008_Image_0001.jpg', '.\\NNA\\CT_Page_009_Image_0001.jpg', '.\\NNA\\CT_Page_010_Image_0001.jpg', '.\\NNA\\CT_Page_011_Image_0001.jpg', '.\\NNA\\CT_Page_012_Image_0001.jpg', '.\\NNA\\CT_Page_013_Image_0001.jpg', '.\\NNA\\CT_Page_014_Image_0001.jpg', '.\\NNA\\CT_Page_015_Image_0001.jpg', '.\\NNA\\CT_Page_016_Image_0001.jpg', '.\\NNA\\CT_Page_017_Image_0001.jpg', '.\\NNA\\CT_Page_018_Image_0001.jpg', '.\\NNA\\CT_Page_019_Image_0001.jpg', '.\\NNA\\CT_Page_020_Image_0001.jpg', '.\\NNA\\CT_Page_021_Image_0001.jpg', '.\\NNA\\CT_Page_022_Image_0001.jpg', '.\\NNA\\CT_Page_023_Image_0001.jpg', '.\\NNA\\CT_Page_024_Image_0001.jpg', '.\\NNA\\CT_Page_025_Image_0001.jpg', '.\\NNA\\CT_Page_026_Image_0001.jpg', '.\\NNA\\CT_Page_027_Image_0001.jpg', '.\\NNA\\CT_Page_028_Image_0001.jpg', '.\\NNA\\CT_Page_029_Image_0001.jpg', '.\\NNA\\CT_Page_030_Image_0001.jpg', '.\\NNA\\CT_Page_031_Image_0001.jpg', '.\\NNA\\CT_Page_032_Image_0001.jpg', '.\\NNA\\CT_Page_033_Image_0001.jpg', '.\\NNA\\CT_Page_034_Image_0001.jpg', '.\\NNA\\CT_Page_035_Image_0001.jpg', '.\\NNA\\CT_Page_036_Image_0001.jpg', '.\\NNA\\CT_Page_037_Image_0001.jpg', '.\\NNA\\CT_Page_038_Image_0001.jpg', '.\\NNA\\CT_Page_039_Image_0001.jpg', '.\\NNA\\CT_Page_040_Image_0001.jpg', '.\\NNA\\CT_Page_041_Image_0001.jpg', '.\\NNA\\CT_Page_042_Image_0001.jpg', '.\\NNA\\CT_Page_043_Image_0001.jpg', '.\\NNA\\CT_Page_044_Image_0001.jpg', '.\\NNA\\CT_Page_045_Image_0001.jpg', '.\\NNA\\CT_Page_046_Image_0001.jpg', '.\\NNA\\CT_Page_047_Image_0001.jpg', '.\\NNA\\CT_Page_048_Image_0001.jpg', '.\\NNA\\CT_Page_049_Image_0001.jpg', '.\\NNA\\CT_Page_050_Image_0001.jpg', '.\\NNA\\CT_Page_051_Image_0001.jpg', '.\\NNA\\CT_Page_052_Image_0001.jpg', '.\\NNA\\CT_Page_053_Image_0001.jpg', '.\\NNA\\CT_Page_054_Image_0001.jpg', '.\\NNA\\CT_Page_055_Image_0001.jpg', '.\\NNA\\CT_Page_056_Image_0001.jpg', '.\\NNA\\CT_Page_057_Image_0001.jpg', '.\\NNA\\CT_Page_058_Image_0001.jpg', '.\\NNA\\CT_Page_059_Image_0001.jpg', '.\\NNA\\CT_Page_060_Image_0001.jpg', '.\\NNA\\CT_Page_061_Image_0001.jpg', '.\\NNA\\CT_Page_062_Image_0001.jpg', '.\\NNA\\CT_Page_063_Image_0001.jpg', '.\\NNA\\CT_Page_064_Image_0001.jpg', '.\\NNA\\CT_Page_065_Image_0001.jpg', '.\\NNA\\CT_Page_066_Image_0001.jpg', '.\\NNA\\CT_Page_067_Image_0001.jpg', '.\\NNA\\CT_Page_068_Image_0001.jpg', '.\\NNA\\CT_Page_069_Image_0001.jpg', '.\\NNA\\CT_Page_070_Image_0001.jpg', '.\\NNA\\CT_Page_071_Image_0001.jpg', '.\\NNA\\CT_Page_072_Image_0001.jpg', '.\\NNA\\CT_Page_073_Image_0001.jpg', '.\\NNA\\CT_Page_074_Image_0001.jpg', '.\\NNA\\CT_Page_075_Image_0001.jpg', '.\\NNA\\CT_Page_076_Image_0001.jpg', '.\\NNA\\CT_Page_077_Image_0001.jpg', '.\\NNA\\CT_Page_078_Image_0001.jpg', '.\\NNA\\CT_Page_079_Image_0001.jpg', '.\\NNA\\CT_Page_080_Image_0001.jpg', '.\\NNA\\CT_Page_081_Image_0001.jpg', '.\\NNA\\CT_Page_082_Image_0001.jpg', '.\\NNA\\CT_Page_083_Image_0001.jpg', '.\\NNA\\CT_Page_084_Image_0001.jpg', '.\\NNA\\CT_Page_085_Image_0001.jpg', '.\\NNA\\CT_Page_086_Image_0001.jpg', '.\\NNA\\CT_Page_087_Image_0001.jpg', '.\\NNA\\CT_Page_088_Image_0001.jpg', '.\\NNA\\CT_Page_089_Image_0001.jpg', '.\\NNA\\CT_Page_090_Image_0001.jpg', '.\\NNA\\CT_Page_091_Image_0001.jpg', '.\\NNA\\CT_Page_092_Image_0001.jpg', '.\\NNA\\CT_Page_093_Image_0001.jpg', '.\\NNA\\CT_Page_094_Image_0001.jpg', '.\\NNA\\CT_Page_095_Image_0001.jpg', '.\\NNA\\CT_Page_096_Image_0001.jpg', '.\\NNA\\CT_Page_097_Image_0001.jpg', '.\\NNA\\CT_Page_098_Image_0001.jpg', '.\\NNA\\CT_Page_099_Image_0001.jpg', '.\\NNA\\CT_Page_100_Image_0001.jpg', '.\\NNA\\CT_Page_101_Image_0001.jpg', '.\\NNA\\CT_Page_102_Image_0001.jpg', '.\\NNA\\CT_Page_103_Image_0001.jpg', '.\\NNA\\CT_Page_104_Image_0001.jpg', '.\\NNA\\CT_Page_105_Image_0001.jpg', '.\\NNA\\CT_Page_106_Image_0001.jpg', '.\\NNA\\CT_Page_107_Image_0001.jpg', '.\\NNA\\CT_Page_108_Image_0001.jpg', '.\\NNA\\CT_Page_109_Image_0001.jpg', '.\\NNA\\CT_Page_110_Image_0001.jpg', '.\\NNA\\CT_Page_111_Image_0001.jpg', '.\\NNA\\CT_Page_112_Image_0001.jpg', '.\\NNA\\CT_Page_113_Image_0001.jpg'];
+
+        let currentSlice = 0;
+        const totalSlices = images.length;
+        let zoomLevel = 1;
+        let panX = 0;
+        let panY = 0;
+        let isDragging = false;
+        let startY, lastY;
+        let lastPanTime = 0;
+
+        // Initialize slice
+        document.getElementById("ctImage").src = images[currentSlice];
+
+        // Preload images for faster slice switching
+        function preloadImages() {
+            images.forEach((src) => {
+                const img = new Image();
+                img.src = src;
+            });
+        }
+
+        function updateImage() {
+            document.getElementById("ctImage").src = images[currentSlice];
+        }
+
+        function updateTransform() {
+            const image = document.getElementById("ctImage");
+            image.style.transform = `scale(${zoomLevel}) translate(${panX}px, ${panY}px)`;
+        }
+
+        const imageContainer = document.getElementById("ctImage");
+        let lastTouchDistance = null;
+
+        // Single click for navigation
+        imageContainer.addEventListener("click", (e) => {
+            const rect = imageContainer.parentElement.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            if (clickX < rect.width / 2 && currentSlice > 0) {
+                currentSlice--;
+            } else if (clickX >= rect.width / 2 && currentSlice < totalSlices - 1) {
+                currentSlice++;
+            }
+            updateImage();
+        });
+
+        // Left click and drag for vertical slice scrolling
+        imageContainer.addEventListener("mousedown", (e) => {
+            if (e.button === 0) {
+                isDragging = true;
+                startY = e.clientY;
+                lastY = startY;
+                imageContainer.style.cursor = "grabbing";
+                e.preventDefault();
+            }
+        });
+
+        imageContainer.addEventListener("mousemove", (e) => {
+            if (isDragging) {
+                const deltaY = e.clientY - lastY;
+                if (deltaY > 5 && currentSlice < totalSlices - 1) {
+                    currentSlice++;
+                    lastY = e.clientY;
+                    updateImage();
+                } else if (deltaY < -5 && currentSlice > 0) {
+                    currentSlice--;
+                    lastY = e.clientY;
+                    updateImage();
+                }
+            }
+        });
+
+        imageContainer.addEventListener("mouseup", () => {
+            isDragging = false;
+            imageContainer.style.cursor = "grab";
+        });
+
+        imageContainer.addEventListener("mouseleave", () => {
+            isDragging = false;
+            imageContainer.style.cursor = "grab";
+        });
+
+        // Desktop: Scroll for zoom
+        imageContainer.addEventListener("wheel", (e) => {
+            e.preventDefault();
+            const delta = e.deltaY * -0.001;
+            zoomLevel = Math.max(0.5, Math.min(zoomLevel + delta, 5));
+            updateTransform();
+        });
+
+        // Desktop: Arrow keys for navigation
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowUp" && currentSlice > 0) {
+                currentSlice--;
+                updateImage();
+            } else if (e.key === "ArrowDown" && currentSlice < totalSlices - 1) {
+                currentSlice++;
+                updateImage();
+            }
+        });
+
+        // Touch/Trackpad: Single-finger for scrolling, two-finger for pan/zoom
+        imageContainer.addEventListener("touchstart", (e) => {
+            if (e.touches.length === 1) {
+                isDragging = true;
+                startY = e.touches[0].clientY;
+                lastY = startY;
+            } else if (e.touches.length === 2) {
+                isDragging = true;
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                startX = (touch1.clientX + touch2.clientX) / 2 - panX;
+                startY = (touch1.clientY + touch2.clientY) / 2 - panY;
+                startDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+                lastTouchDistance = startDistance;
+            }
+        });
+
+        imageContainer.addEventListener("touchmove", (e) => {
+            e.preventDefault();
+            const now = performance.now();
+            if (now - lastPanTime < 16) return;
+            lastPanTime = now;
+
+            if (e.touches.length === 1 && isDragging) {
+                const deltaY = e.touches[0].clientY - lastY;
+                if (deltaY > 5 && currentSlice < totalSlices - 1) {
+                    currentSlice++;
+                    lastY = e.touches[0].clientY;
+                    updateImage();
+                } else if (deltaY < -5 && currentSlice > 0) {
+                    currentSlice--;
+                    lastY = e.touches[0].clientY;
+                    updateImage();
+                }
+            } else if (e.touches.length === 2) {
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                const currentDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+                if (lastTouchDistance) {
+                    const delta = currentDistance - lastTouchDistance;
+                    zoomLevel = Math.max(0.5, Math.min(zoomLevel + delta * 0.001, 5));
+                }
+                lastTouchDistance = currentDistance;
+
+                if (isDragging) {
+                    panX = (touch1.clientX + touch2.clientX) / 2 - startX;
+                    panY = (touch1.clientY + touch2.clientY) / 2 - startY;
+                    requestAnimationFrame(updateTransform);
+                }
+            }
+        });
+
+        imageContainer.addEventListener("touchend", () => {
+            isDragging = false;
+            lastTouchDistance = null;
+        });
+
+        // Mobile: Scroll for navigation
+        imageContainer.addEventListener("wheel", (e) => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? 1 : -1;
+            currentSlice = Math.min(totalSlices - 1, Math.max(0, currentSlice + delta));
+            updateImage();
+        });
+
+        // Debounce function for legend toggle
+        function debounce(func, wait) {
+            let timeout;
+            return function (...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        function toggleLegend() {
+            const legend = document.getElementById("legend");
+            legend.style.display = (legend.style.display === "none" || legend.style.display === "") ? "block" : "none";
+        }
+
+        const debouncedToggleLegend = debounce(toggleLegend, 200);
+
+        function toggleTheme() {
+            const body = document.body;
+            if (body.getAttribute("data-theme") === "light") {
+                body.removeAttribute("data-theme");
+                localStorage.setItem("theme", "dark");
+            } else {
+                body.setAttribute("data-theme", "light");
+                localStorage.setItem("theme", "light");
+            }
+        }
+
+        function toggleHint() {
+            const hint = document.getElementById("hint");
+            hint.style.display = (hint.style.display === "none" || hint.style.display === "") ? "block" : "none";
+        }
+
+        // Load saved theme and preload images on page load
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme === "light") {
+                document.body.setAttribute("data-theme", "light");
+            }
+            preloadImages();
+        });
+
+        document.addEventListener("click", function(event) {
+            const legend = document.getElementById("legend");
+            const hint = document.getElementById("hint");
+            const legendButton = document.querySelector(".legend-icon");
+            const hintButton = document.querySelector(".hint-button");
+            if (!legend.contains(event.target) && event.target !== legendButton) {
+                legend.style.display = "none";
+            }
+            if (!hint.contains(event.target) && event.target !== hintButton) {
+                hint.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>

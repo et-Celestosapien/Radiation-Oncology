@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Contouring - Radiation Oncology</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Theme Variables - Inherited and adapted from index.html */
+    :root {
+      --bg-gradient-start: #0f172a;
+      --bg-gradient-mid: #1e1b4b;
+      --bg-gradient-end: #3b0764;
+      --text-color: #ffffff;
+      --card-bg: rgba(0, 0, 0, 0.4);
+      --card-border: rgba(139, 92, 246, 0.3);
+      --card-hover-border: rgba(139, 92, 246, 0.8);
+      --card-hover-shadow: rgba(139, 92, 246, 0.2);
+      --accent-color: #a855f7;
+      --accent-gradient-start: #22d3ee;
+      --accent-gradient-end: #a855f7;
+      --btn-primary-bg: #7c3aed;
+      --btn-primary-border: #8b5cf6;
+      --btn-primary-hover: #8b5cf6;
+      --muted-text: #9ca3af;
+      --scrollbar-track: rgba(0, 0, 0, 0.2);
+      --scrollbar-thumb: rgba(139, 92, 246, 0.5);
+      --scrollbar-thumb-hover: rgba(139, 92, 246, 0.8);
+      --sub-card-bg: rgba(255, 255, 255, 0.1); /* Lighter background for sub-cards */
+      --sub-card-border: rgba(255, 255, 255, 0.2);
+      --sub-card-text: #ffffff;
+    }
+
+    [data-theme="light"] {
+      --bg-gradient-start: #f0f9ff;
+      --bg-gradient-mid: #e0f2fe;
+      --bg-gradient-end: #dbeafe;
+      --text-color: #1e293b;
+      --card-bg: rgba(255, 255, 255, 0.7);
+      --card-border: rgba(139, 92, 246, 0.3);
+      --card-hover-border: rgba(139, 92, 246, 0.8);
+      --card-hover-shadow: rgba(139, 92, 246, 0.2);
+      --accent-color: #8b5cf6;
+      --accent-gradient-start: #06b6d4;
+      --accent-gradient-end: #8b5cf6;
+      --btn-primary-bg: #8b5cf6;
+      --btn-primary-border: #7c3aed;
+      --btn-primary-hover: #7c3aed;
+      --muted-text: #6b7280;
+      --scrollbar-track: rgba(0, 0, 0, 0.05);
+      --scrollbar-thumb: rgba(139, 92, 246, 0.3);
+      --scrollbar-thumb-hover: rgba(139, 92, 246, 0.5);
+      --sub-card-bg: rgba(0, 0, 0, 0.05); /* Darker background for sub-cards in light mode */
+      --sub-card-border: rgba(0, 0, 0, 0.1);
+      --sub-card-text: #1e293b;
+    }
+
+    /* Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-mid), var(--bg-gradient-end));
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start; /* Align to top for better content flow */
+      padding: 2rem 1rem;
+      transition: background 0.3s ease;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+      margin-top: 2rem; /* Add some top margin */
+    }
+
+    .title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, var(--accent-gradient-start), var(--accent-gradient-end));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: var(--muted-text);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Mode Selection (renamed to content-grid for general use) */
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Use grid for layout */
+      gap: 2rem;
+      margin-bottom: 3rem;
+      width: 100%;
+      max-width: 1200px; /* Limit max width */
+    }
+
+    /* Card Styles - adapted from index.html */
+    .main-card {
+      background-color: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      /* Removed cursor: pointer; as it's no longer the primary click target for toggle */
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .main-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 12px;
+      border: 2px solid transparent;
+      background: linear-gradient(45deg, var(--accent-gradient-start), var(--accent-gradient-end)) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+
+    .main-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(139, 92, 246, 0.15);
+    }
+
+    .main-card:hover::before {
+      opacity: 1;
+    }
+
+    .main-card:active {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(139, 92, 246, 0.2);
+    }
+
+    .main-card-icon {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      color: var(--accent-color);
+    }
+
+    .main-card-title {
+      font-size: 1.8rem; /* Slightly larger for main cards */
+      font-weight: 600;
+      margin-bottom: 1rem;
+      z-index: 1; /* Ensure text is above the border animation */
+    }
+
+    .main-card-description {
+      color: var(--muted-text);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+      z-index: 1;
+    }
+
+    /* Sub-card styles for expanded content */
+    .sub-cards-container {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-out, opacity 0.3s ease-out;
+      opacity: 0;
+      width: 100%;
+      margin-top: 1.5rem;
+      text-align: left;
+      padding: 0 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .main-card.expanded .sub-cards-container {
+      max-height: 500px;
+      opacity: 1;
+    }
+
+    .sub-card {
+      background-color: var(--sub-card-bg);
+      border: 1px solid var(--sub-card-border);
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--sub-card-text);
+      transition: background-color 0.2s ease, transform 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+    }
+
+    .sub-card:hover {
+      background-color: rgba(139, 92, 246, 0.1);
+      transform: translateX(5px);
+    }
+
+    .sub-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .sub-card-icon {
+      color: var(--accent-color);
+      font-size: 1.2rem;
+    }
+
+    .sub-card-text {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    /* Toggle Button Styles */
+    .toggle-card-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: var(--accent-color);
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 2;
+      transition: transform 0.2s ease, color 0.2s ease;
+      padding: 0.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .toggle-card-btn:hover {
+      color: var(--card-hover-border);
+      transform: scale(1.1);
+    }
+
+  /* Home Button */
+  .home-button {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    color: #ffffff;
+    transition: all 0.2s ease;
+    z-index: 1000;
+    text-decoration: none;
+    font-size: 1.2rem;
+  }
+
+  .home-button:hover {
+    transform: scale(1.1);
+    border-color: rgba(139, 92, 246, 0.8);
+  }
+
+    /* Theme Toggle - adapted from index.html */
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-color);
+      transition: all 0.2s ease;
+      z-index: 1000;
+    }
+
+    .theme-toggle:hover {
+      transform: rotate(15deg);
+      border-color: var(--card-hover-border);
+    }
+
+    /* Footer - adapted from index.html */
+    .footer {
+      margin-top: 2rem;
+      text-align: center;
+      color: var(--muted-text);
+      font-size: 0.875rem;
+    }
+
+    /* Responsive adjustments - adapted from index.html */
+    @media (max-width: 768px) {
+      .title {
+        font-size: 2rem;
+      }
+      
+      .subtitle {
+        font-size: 1rem;
+      }
+      
+      .content-grid {
+        grid-template-columns: 1fr; /* Stack cards on small screens */
+        gap: 1.5rem;
+      }
+      
+      .main-card {
+        padding: 1.5rem;
+      }
+      .home-button, .theme-toggle {
+        padding: 0.4rem;
+        font-size: 1rem;
+      }
+    }
+
+    /* Custom scrollbar - adapted from index.html */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--scrollbar-track);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--scrollbar-thumb-hover);
+    }
+
+    /* Specific accent color for Head and Neck card */
+    #headNeckCard {
+      --accent-gradient-start: #f43f5e; /* Using a vibrant red-pink */
+      --accent-gradient-end: #ec4899;
+    }
+  </style>
+</head>
+<body>
+  <a href="..\index.html" class="home-button" title="Go to Home"><i class="fas fa-home"></i> 
+  </a>
+
+  <button class="theme-toggle" id="themeToggle">
+    <i class="fas fa-moon"></i>
+  </button>
+
+  <div class="header">
+    <h1 class="title">Contouring Guidelines</h1>
+    <p class="subtitle">Select a cancer site to view specific contouring information and atlases.</p>
+  </div>
+
+  <div class="content-grid">
+    <div class="main-card" id="headNeckCard">
+      <div class="main-card-icon">
+        <i class="fas fa-head-side-mask"></i>
+      </div>
+      <div class="main-card-title">Head and Neck</div>
+      <p class="main-card-description">Detailed guidelines and atlases for head and neck cancer contouring.</p>
+      <button class="toggle-card-btn" aria-label="Toggle card expansion">
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="sub-cards-container">
+        <a href="./HeadNeck/NeckNodesTable.html" class="sub-card">
+          <div class="sub-card-icon"><i class="fas fa-ruler-combined"></i></div>
+          <div class="sub-card-text">Neck Node Boundaries</div>
+        </a>
+        <a href="./HeadNeck/NeckNodeAtlas.html" class="sub-card" target="_blank">
+          <div class="sub-card-icon"><i class="fas fa-atlas"></i></div>
+          <div class="sub-card-text">Neck Node Atlas</div>
+        </a>
+        <a href="./HeadNeck/OARBoundaries.html" class="sub-card" target="_blank">
+          <div class="sub-card-icon"><i class="fas fa-ruler"></i></div>
+          <div class="sub-card-text">OAR Boundaries</div>
+        </a>
+        <a href="./HeadNeck/OARAtlas.html" class="sub-card" target="_blank">
+          <div class="sub-card-icon"><i class="fas fa-map"></i></div>
+          <div class="sub-card-text">OAR Atlas</div>
+        </a>
+      </div>
+    </div>
+
+    </div>
+
+  <div class="footer">
+    &copy; 2025 et Celestosapien. All rights reserved.
+  </div>
+
+  <script>
+    // Theme Toggle Logic
+    const themeToggle = document.getElementById('themeToggle');
+    
+    themeToggle.addEventListener('click', () => {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      html.setAttribute('data-theme', newTheme);
+      
+      const themeIcon = themeToggle.querySelector('i');
+      if (newTheme === 'dark') {
+        themeIcon.className = 'fas fa-moon';
+      } else {
+        themeIcon.className = 'fas fa-sun';
+      }
+      
+      localStorage.setItem('theme', newTheme);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        const themeIcon = themeToggle.querySelector('i');
+        if (savedTheme === 'dark') {
+          themeIcon.className = 'fas fa-moon';
+        } else {
+          themeIcon.className = 'fas fa-sun';
+        }
+      }
+
+      // Card Expansion Logic
+      const mainCards = document.querySelectorAll('.main-card');
+
+      mainCards.forEach(card => {
+        const toggleButton = card.querySelector('.toggle-card-btn');
+        let isHovered = false;
+
+        // Function to update the toggle button icon
+        const updateToggleButtonIcon = () => {
+          if (toggleButton) {
+            toggleButton.querySelector('i').className = card.classList.contains('expanded') 
+              ? 'fas fa-chevron-up' 
+              : 'fas fa-chevron-down';
+          }
+        };
+
+        // Initial icon update
+        updateToggleButtonIcon();
+
+        // Hover for desktop
+        card.addEventListener('mouseenter', () => {
+          if (!('ontouchstart' in window || navigator.maxTouchPoints)) {
+            isHovered = true;
+            card.classList.add('expanded');
+            updateToggleButtonIcon();
+          }
+        });
+
+        card.addEventListener('mouseleave', () => {
+          if (!('ontouchstart' in window || navigator.maxTouchPoints)) {
+            isHovered = false;
+            card.classList.remove('expanded');
+            updateToggleButtonIcon();
+          }
+        });
+
+        // Toggle button click
+        if (toggleButton) {
+          toggleButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            card.classList.toggle('expanded');
+            updateToggleButtonIcon();
+          });
+        }
+
+        // Handle sub-card clicks
+        const subCards = card.querySelectorAll('.sub-card');
+        subCards.forEach(subCard => {
+          subCard.addEventListener('click', (event) => {
+            event.stopPropagation();
+            // Let the link work normally
+            const href = subCard.getAttribute('href');
+            if (href) {
+              window.location.href = href;
+            }
+          });
+        });
+      });
+
+      // Close cards when clicking outside
+      document.addEventListener('click', (event) => {
+        mainCards.forEach(card => {
+          const toggleButton = card.querySelector('.toggle-card-btn');
+          if (card.classList.contains('expanded') && 
+              !card.contains(event.target) && 
+              !toggleButton?.contains(event.target)) {
+            card.classList.remove('expanded');
+            if (toggleButton) {
+              toggleButton.querySelector('i').className = 'fas fa-chevron-down';
+            }
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

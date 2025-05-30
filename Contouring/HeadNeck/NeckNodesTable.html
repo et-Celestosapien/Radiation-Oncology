@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Neck Node Levels - Anatomical Boundaries</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+/* Theme Variables from index.html */
+:root {
+    --bg-gradient-start: #0f172a;
+    --bg-gradient-mid: #1e1b4b;
+    --bg-gradient-end: #3b0764;
+    --text-color: #ffffff;
+    --card-bg: rgba(0, 0, 0, 0.4);
+    --card-border: rgba(139, 92, 246, 0.3);
+    --card-hover-border: rgba(139, 92, 246, 0.8);
+    --card-hover-shadow: rgba(139, 92, 246, 0.2);
+    --accent-color: #a855f7;
+    --accent-gradient-start: #22d3ee;
+    --accent-gradient-end: #a855f7;
+    --btn-primary-bg: #7c3aed;
+    --btn-primary-border: #8b5cf6;
+    --btn-primary-hover: #8b5cf6;
+    --muted-text: #9ca3af;
+    --scrollbar-track: rgba(0, 0, 0, 0.2);
+    --scrollbar-thumb: rgba(139, 92, 246, 0.5);
+    --scrollbar-thumb-hover: rgba(139, 92, 246, 0.8);
+
+    /* Table specific colors */
+    --table-header-bg: #007bff;
+    --table-header-color: #fff;
+    --table-border-color: #ddd;
+    --table-row-even-bg: #f2f2f2;
+    --table-row-hover-bg: #e0e0e0;
+    --table-text-color: #222;
+}
+
+/* Light Theme from index.html */
+[data-theme="light"] {
+    --bg-gradient-start: #f0f9ff;
+    --bg-gradient-mid: #e0f2fe;
+    --bg-gradient-end: #dbeafe;
+    --text-color: #1e293b;
+    --card-bg: rgba(255, 255, 255, 0.7);
+    --card-border: rgba(139, 92, 246, 0.3);
+    --card-hover-border: rgba(139, 92, 246, 0.8);
+    --card-hover-shadow: rgba(139, 92, 246, 0.2);
+    --accent-color: #8b5cf6;
+    --accent-gradient-start: #06b6d4;
+    --accent-gradient-end: #8b5cf6;
+    --btn-primary-bg: #8b5cf6;
+    --btn-primary-border: #7c3aed;
+    --btn-primary-hover: #7c3aed;
+    --muted-text: #6b7280;
+    --scrollbar-track: rgba(0, 0, 0, 0.05);
+    --scrollbar-thumb: rgba(139, 92, 246, 0.3);
+    --scrollbar-thumb-hover: rgba(139, 92, 246, 0.5);
+
+    /* Table specific colors for light mode */
+    --table-header-bg: #007bff;
+    --table-header-color: #fff;
+    --table-border-color: #ddd;
+    --table-row-even-bg: #f2f2f2;
+    --table-row-hover-bg: #e0e0e0;
+    --table-text-color: #222;
+}
+
+/* Dark Theme overrides for table specific colors */
+[data-theme="dark"] {
+    --table-header-bg: #222e50; /* Darker blue for header */
+    --table-header-color: #fff;
+    --table-border-color: #4a90e2; /* Lighter border for contrast */
+    --table-row-even-bg: #2d2d2d; /* Darker even rows */
+    --table-row-hover-bg: #444; /* Darker hover for rows */
+    --table-text-color: #fff; /* White text for dark mode table content */
+    --table-cell-odd-bg: transparent; /* Default for odd rows in dark mode */
+    --table-cell-even-bg: #223366; /* Even cells in dark mode */
+    --table-cell-hover-bg: #2d4a7a; /* Hover cells in dark mode */
+    --mobile-label-color: #4a90e2; /* Label color in dark mode mobile */
+    --mobile-first-cell-bg: #2d2d2d; /* First cell background in dark mode mobile */
+    --mobile-first-cell-color: #fff; /* First cell text in dark mode mobile */
+}
+
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-mid), var(--bg-gradient-end));
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    transition: background 0.3s ease, color 0.3s ease;
+    position: relative; /* For popup-blur-overlay */
+}
+
+/* Controls and Card */
+.controls {
+    display: flex;
+    justify-content: space-between; /* Distributes items to the ends of the container */
+    align-items: center; /* Vertically centers items in the flex container */
+    margin-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 10px; /* Add some horizontal padding to the controls container */
+}
+.controls-title {
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: inherit;
+    letter-spacing: 0.01em;
+    /* On desktop, allow space-between to handle the distribution,
+       no flex-grow or auto margins needed here */
+    flex-grow: 0; /* Ensures it doesn't try to take all available space */
+    margin: 0; /* Reset any auto margins that might interfere */
+}
+.card {
+    background-color: var(--card-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 95vw;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    color: var(--text-color); /* Ensure card text color is themed */
+}
+@keyframes shadowPulse {
+    0% { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+    50% { box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); }
+    100% { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+}
+
+/* Buttons */
+.btn, button { /* Apply to all buttons now */
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--btn-primary-bg);
+    color: white;
+    font-size: 1.2em;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    outline: none;
+    border: 1px solid var(--btn-primary-border); /* Consistent border */
+}
+.btn:hover, button:hover {
+    background-color: var(--btn-primary-hover);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    transform: scale(1.07);
+}
+.btn:active, button:active {
+    background-color: var(--btn-primary-hover); /* Keep consistent active state */
+    transform: scale(0.97);
+}
+/* Theme Toggle Button specific styles */
+.theme-toggle, .home-button { /* Apply similar styles to home button */
+    padding: 0.5rem;
+    border-radius: 50%;
+    width: 40px; /* Make it a perfect circle */
+    height: 40px; /* Make it a perfect circle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    background-color: var(--card-bg); /* Use card background for toggle */
+    border: 1px solid var(--card-border);
+    color: var(--text-color);
+    /* Remove auto margins here so space-between works on desktop */
+    margin-right: 0;
+    margin-left: 0;
+}
+.theme-toggle:hover, .home-button:hover { /* Apply similar hover styles */
+    transform: rotate(15deg) scale(1.07); /* Add rotation on hover */
+    border-color: var(--card-hover-border);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+.theme-toggle i, .home-button i { /* Ensure consistent icon styling */
+    margin-right: 0; /* No margin for icon in circle button */
+}
+
+
+/* View Details Button */
+.view-details-btn {
+    padding: 6px 10px;
+    font-size: 0.9em;
+    border-radius: 4px;
+    background-color: var(--accent-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 100%; /* Make button fill the cell */
+}
+.view-details-btn i {
+    margin-right: 0; /* No extra margin for icon */
+}
+.view-details-btn:hover {
+    background-color: var(--btn-primary-hover); /* Use primary hover for consistency */
+    transform: scale(1.02);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.view-details-btn:active {
+    transform: scale(0.98);
+}
+
+/* Table styles */
+.table-container {
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+}
+table {
+    width: 100%;
+    min-width: 700px;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid var(--table-border-color);
+    padding: 10px;
+    text-align: left;
+    word-break: break-word;
+    color: var(--table-text-color);
+}
+th {
+    background-color: var(--table-header-bg);
+    color: var(--table-header-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+tr:nth-child(even) {
+    background-color: var(--table-row-even-bg);
+}
+tr:hover {
+    background-color: var(--table-row-hover-bg);
+    cursor: pointer; /* Keep cursor pointer for row expansion on mobile */
+}
+
+/* Popup styles */
+.popup-blur-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.18);
+    backdrop-filter: blur(3px);
+    z-index: 999;
+    display: none;
+}
+.popup-blur-overlay.active {
+    display: block;
+}
+.popup-card {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: none;
+    pointer-events: auto;
+    z-index: 1000;
+    background-color: var(--card-bg); /* Use card background for popup */
+    border-radius: 8px;
+    padding: 15px;
+    max-width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 0.9em;
+    color: var(--text-color); /* Use text color for popup content */
+    min-width: 200px;
+    max-width: 80vw;
+    box-sizing: border-box;
+    border: 1px solid var(--card-border); /* Add border to popup */
+}
+.popup-card.active {
+    display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .card {
+        max-width: 100%;
+        padding: 10px;
+    }
+    .controls-title {
+        font-size: 1.1em;
+    }
+    table {
+        min-width: 500px;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 5px;
+    }
+    .card {
+        padding: 5px;
+    }
+    .controls {
+        flex-direction: row; /* Keep as row on mobile */
+        justify-content: space-between; /* Distribute items to the ends */
+        align-items: center;
+        gap: 0; /* Remove gap */
+        padding: 0 5px; /* Adjust padding for smaller screens */
+    }
+    .controls-title {
+        order: 2; /* Set order to 2 to place it in the middle */
+        margin: 0 auto; /* Center title by setting auto margins */
+        flex-grow: 1; /* Allow title to grow and take available space between buttons */
+    }
+    /* Ensure buttons don't stretch */
+    .theme-toggle {
+        order: 1; /* Set order to 1 to place it first (left) */
+        width: 40px;
+        height: 40px;
+        align-self: center; /* Center vertically within the row */
+        margin-right: 10px; /* Add some space between toggle and title */
+    }
+    .home-button {
+        order: 3; /* Set order to 3 to place it last (right) */
+        width: 40px;
+        height: 40px;
+        align-self: center; /* Center vertically within the row */
+        margin-left: 10px; /* Add some space between home button and title */
+    }
+
+    button {
+        padding: 8px;
+        font-size: 1em;
+    }
+    /* Popup specific centering for mobile */
+    .popup-card {
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%);
+        max-width: 90vw;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-sizing: border-box;
+        padding: 15px;
+    }
+
+    /* Table layout for mobile */
+    table {
+        border: none;
+        width: 100%;
+        min-width: unset;
+    }
+    thead {
+        display: none;
+    }
+    tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid var(--table-border-color);
+        border-radius: 8px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        cursor: pointer;
+    }
+    [data-theme="dark"] tr {
+        border-color: var(--table-border-color); /* Apply dark theme border */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    tr:hover {
+        background-color: transparent;
+    }
+    [data-theme="dark"] tr:hover {
+        background-color: transparent;
+    }
+
+    td {
+        display: block;
+        text-align: left; /* Align text to left */
+        /* --- KEY CHANGE FOR MOBILE TD --- */
+        padding-left: 30%; /* Reduced padding to give more space to content */
+        position: relative;
+        border: none;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        background-color: var(--table-cell-odd-bg); /* Default for odd rows in mobile */
+    }
+    [data-theme="dark"] td {
+        background-color: transparent !important;
+        color: var(--table-text-color);
+    }
+    [data-theme="dark"] tr:nth-child(even) td {
+        background-color: var(--table-cell-even-bg) !important;
+    }
+    [data-theme="dark"] tr:hover td {
+        background-color: var(--table-cell-hover-bg) !important;
+    }
+    /* Apply themed text color to all tds */
+    td {
+        color: var(--table-text-color);
+    }
+
+    /* Add top border to boundary details for separation */
+    tr.expanded td:not(:first-child):not(.popup-button-cell) {
+        border-top: 1px solid var(--table-border-color);
+    }
+    [data-theme="dark"] tr.expanded td:not(:first-child):not(.popup-button-cell) {
+        border-top: 1px solid rgba(139, 92, 246, 0.3); /* Softer border for dark theme */
+    }
+
+
+    td::before {
+        content: attr(data-label) ": ";
+        position: absolute;
+        left: 10px;
+        /* --- KEY CHANGE FOR MOBILE ::BEFORE --- */
+        width: 30%; /* Reduced width to match the new padding-left */
+        text-align: left;
+        font-weight: bold;
+        color: var(--table-header-bg); /* Use table header color for label */
+    }
+    [data-theme="dark"] td::before {
+        color: var(--mobile-label-color); /* Specific label color for dark mode */
+    }
+
+    /* Initially hide all cells except the first one (Level) and the popup button cell when not expanded */
+    tr:not(.expanded) td:not(:first-child):not(.popup-button-cell) {
+        display: none;
+    }
+
+    /* Explicitly show cells when the row IS expanded */
+    tr.expanded td:not(:first-child) { /* Apply to all except first, including popup button */
+        display: block !important;
+    }
+    /* Ensure popup button cell is always block on mobile even if not expanded */
+    .popup-button-cell {
+        display: block !important;
+        text-align: center; /* Center the button */
+        padding-left: 10px; /* Reset padding for button cell */
+        margin-top: 10px; /* Add some space above button */
+        border-top: 1px solid var(--table-border-color); /* Separator */
+    }
+    .popup-button-cell::before {
+        content: none; /* No label for the button cell */
+    }
+
+    /* Style for the first cell (Level) */
+    tr td:first-child {
+        background-color: var(--table-row-hover-bg); /* Use hover color for first cell background */
+        font-weight: bold;
+        text-align: center;
+        padding-left: 10px;
+        color: var(--table-text-color);
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-size: 1.1em;
+        position: relative;
+    }
+    [data-theme="dark"] tr td:first-child {
+        background-color: var(--mobile-first-cell-bg);
+        color: var(--mobile-first-cell-color);
+    }
+
+    /* Hint to click */
+    tr td:first-child::after {
+        content: "Tap to expand";
+        font-size: 0.8em;
+        color: var(--muted-text); /* Use muted text color for hint */
+        display: block;
+        margin-top: 5px;
+    }
+    /* Add a subtle arrow icon */
+    tr::after {
+        content: '▼';
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 1.2em;
+        color: var(--muted-text);
+        transition: transform 0.3s ease;
+    }
+    tr.expanded::after {
+        content: '▲';
+        transform: rotate(0deg);
+    }
+
+    /* Remove text hint when expanded */
+    tr.expanded td:first-child::after {
+        content: "";
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="controls">
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+            <div class="controls-title">Neck Node Levels - Anatomical Boundaries</div>
+            <button class="home-button" onclick="goHome()">
+                <i class="fas fa-home"></i> 
+            </button>
+
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>Cranial</th>
+                        <th>Caudal</th>
+                        <th>Anterior</th>
+                        <th>Posterior</th>
+                        <th>Lateral</th>
+                        <th>Medial</th>
+                        <th>Details</th> </tr>
+                </thead>
+                <tbody>
+                    <tr data-level="Ia (Submental)">
+                        <td data-label="Level">Ia (Submental)</td>
+                        <td data-label="Cranial">Mylo-hyoid muscle</td>
+                        <td data-label="Caudal">Platysma muscle (caudal edge of anterior belly of digastric muscles)</td>
+                        <td data-label="Anterior">Symphysis menti</td>
+                        <td data-label="Posterior">Body of hyoid bone/mylo-hyoid muscle</td>
+                        <td data-label="Lateral">Medial edge of anterior belly of digastric muscle</td>
+                        <td data-label="Medial">N/A</td>
+                        <td data-label="Details" class="popup-button-cell">
+                            <button class="view-details-btn"><i class="fas fa-info-circle"></i> View Details</button>
+                        </td>
+                        <td class="details-cell" style="display: none;" data-details="Drains skin of chin, mid-lower lip, tip of tongue, anterior floor of mouth. At risk for metastases from floor of mouth, anterior oral tongue, anterior mandibular alveolar ridge, lower lip."></td>
+                    </tr>
+                    <tr data-level="Ib (Submandibular)">
+                        <td data-label="Level">Ib (Submandibular)</td>
+                        <td data-label="Cranial">Cranial edge of submandibular gland; anteriorly, mylo-hyoid muscle</td>
+                        <td data-label="Caudal">Plane through caudal edge of hyoid bone and mandible; alternatively caudal edge of submandibular gland</td>
+                        <td data-label="Anterior">Symphysis menti</td>
+                        <td data-label="Posterior">Posterior edge of submandibular gland (caudally); posterior belly of digastric muscle (cranially)</td>
+                        <td data-label="Lateral">Medial aspect of mandible down to caudal edge; platysma muscle; medial pterygoid muscle (posteriorly)</td>
+                        <td data-label="Medial">Lateral edge of anterior/posterior belly of digastric muscle</td>
+                        <td data-label="Details" class="popup-button-cell">
+                            <button class="view-details-btn"><i class="fas fa-info-circle"></i> View Details</button>
+                        </td>
+                        <td class="details-cell" style="display: none;" data-details="Receives lymphatics from level Ia, lower nasal cavity, hard/soft palate, alveolar ridges, cheek, lips, anterior tongue. At risk for metastases from oral cavity, anterior nasal cavity, mid-face soft tissues, submandibular gland."></td>
+                    </tr>
+                    <tr data-level="II (Upper Jugular)">
+                        <td data-label="Level">II (Upper Jugular)</td>
+                        <td data-label="Cranial">Caudal edge of lateral process of C1</td>
+                        <td data-label="Caudal">Caudal edge of body of hyoid bone</td>
+                        <td data-label="Anterior">Posterior edge of submandibular gland; posterior belly of digastric muscle</td>
+                        <td data-label="Posterior">Posterior edge of sternocleidomastoid muscle</td>
+                        <td data-label="Lateral">Deep surface of sternocleidomastoid muscle; platysma muscle; parotid gland; posterior belly of digastric muscle</td>
+                        <td data-label="Medial">Medial edge of internal carotid artery; scalenius muscle</td>
+                        <td data-label="Details" class="popup-button-cell">
+                            <button class="view-details-btn"><i class="fas fa-info-circle"></i> View Details</button>
+                        </td>
+                        <td class="details-cell" style="display: none;" data-details="Contains upper jugular nodes around upper third of internal jugular vein and spinal accessory nerve. At risk for metastases from oral cavity, nasopharynx, oropharynx, hypopharynx, larynx."></td>
+                    </tr>
+                    <tr data-level="III (Middle Jugular)">
+                        <td data-label="Level">III (Middle Jugular)</td>
+                        <td data-label="Cranial">Caudal edge of body of hyoid bone</td>
+                        <td data-label="Caudal">Caudal edge of cricoid cartilage</td>
+                        <td data-label="Anterior">Anterior edge of sternocleidomastoid muscle or posterior third of thyro-hyoid muscle</td>
+                        <td data-label="Posterior">Posterior edge of sternocleidomastoid muscle</td>
+                        <td data-label="Lateral">Deep surface of sternocleidomastoid muscle</td>
+                        <td data-label="Medial">Medial edge of common carotid artery; scalenius muscles</td>
+                        <td data-label="Details" class="popup-button-cell">
+                            <button class="view-details-btn"><i class="fas fa-info-circle"></i> View Details</button>
+                        </td>
+                        <td class="details-cell" style="display: none;" data-details="Receives lymphatics from levels II, V, retropharyngeal, pretracheal, recurrent laryngeal nodes. At risk for metastases from oral cavity, nasopharynx, oropharynx, hypopharynx, larynx."></td>
+                    </tr>
+                    <tr data-level="IVa (Lower Jugular)">
+                        <td data-label="Level">IVa (Lower Jugular)</td>
+                        <td data-label="Cranial">Caudal limit of level III</td>
+                        <td data-label="Caudal">2 cm cranial to sternoclavicular joint</td>
+                        <td data-label="Anterior">Anterior edge of sternocleidomastoid muscle (cranially); body of sternocleidomastoid muscle (caudally)</td>
+                        <td data-label="Posterior">Posterior edge of sternocleidomastoid muscle (cranially); scalenius muscles (caudally)</td>
+                        <td data-label="Lateral">Deep surface of sternocleidomastoid muscle (cranially); lateral edge of sternocleidomastoid muscle (caudally)</td>
+                        <td data-label="Medial">Medial edge of common carotid artery; scalenius muscle (cranially); medial edge of sternocleidomastoid muscle (caudally)</td>
+                        <td data-label="Details" class="popup-button-cell">
+                            <button class="view-details-btn"><i class="fas fa-info-circle"></i> View Details</button>
+                        </td>
+                        <td class="details-cell" style="display: none;" data-details="Receives lymphatics from levels III, V, retropharyngeal, pretracheal, recurrent laryngeal nodes. At high risk for metastases from hypopharynx, larynx, thyroid, cervical esophagus."></td>
+                    </tr>
+                    <tr data-level="IVb (Medial Supraclavicular)">
+                        <td data-label="Level">IVb (Medial Supraclavicular)</td>
+                        <td data-label="Cranial">Caudal limit of level IVa</td>
+                        <td data-label="Caudal">Cranial edge of sternal manubrium</td>
+                        <td data-label="Anterior">Deep surface of sternocleidomastoid muscle</td>
+                        <td data-label="Posterior">Anterior edge of scalenius muscle (cranially); apex of lung, brachiocephalic vein/artery, common carotid/subclavian artery (caudally)</td>
+                        <label data-label="Lateral">Lateral edge of scalenius muscle</label>
+                        <td data-label="Medial">Level VI; medial edge of common carotid artery</td>
+                        <td data-label="Details" class="popup-button-cell">
+                            <button class="view-details-btn"><i class="fas fa-info-circle"></i> View Details</button>
+                        </td>
+                        <td class="details-cell" style="display: none;" data-details="Receives lymphatics from levels IVa, Vc, pretracheal, recurrent laryngeal nodes. At high risk for metastases from hypopharynx, sub-glottic larynx, trachea, thyroid, cervical esophagus."></td>
+                    </tr>
+                    <tr data-level="Va & Vb (Posterior Triangle)">
+                        <td data-label="Level">Va & Vb (Posterior Triangle)</td>
+                        <td data-label="Cranial">Plane crossing cranial edge of hyoid bone</td>
+                        <td data-label="Caudal">Plane crossing cervical transverse vessels</td>
+                        <td data-label="Anterior">Anterior border of trapezius muscles</td>
+                        <td data-label="Posterior">Anterior border of trapezius muscles</td>
+                        <td data-label="Lateral">Platysma muscle; skin</td>
+                        <td data-label="Medial">Levator scapulae (cranially); posterior scalenius (caudally)</td>
+                        <td data-label="Details" class="popup-button-cell">
+                            <button class="view-details-btn"><i class="fas fa-info-circle"></i> View Details</button>
+                        </td>
+                        <td class="details-cell" style="display: none;" data-details="Contains nodes around lower spinal accessory nerve and transverse cervical vessels. Subdivided at caudal edge of cricoid cartilage. Receives lymphatics from occipital, retroauricular nodes. At risk for metastases from nasopharynx, oropharynx, cutaneous structures."></td>
+                    </tr>
+                    <tr data-level="VI (Anterior Compartment)">
+                        <td data-label="Level">VI (Anterior Compartment)</td>
+                        <td data-label="Cranial">Body of hyoid bone</td>
+                        <td data-label="Caudal">Cranial edge of sternal manubrium</td>
+                        <td data-label="Anterior">Skin; platysma muscle</td>
+                        <td data-label="Posterior">Common carotid artery; anterior edge of thyroid gland</td>
+                        <td data-label="Lateral">Medial edge of sternocleidomastoid muscle; medial edge of strap muscles</td>
+                        <td data-label="Medial">Medial edge of common carotid artery; trachea; esophagus</td>
+                        <td data-label="Details" class="popup-button-cell">
+                            <button class="view-details-btn"><i class="fas fa-info-circle"></i> View Details</button>
+                        </td>
+                        <td class="details-cell" style="display: none;" data-details="Includes anterior jugular, prelaryngeal, pretracheal, paratracheal nodes. At risk for metastases from thyroid, glottic/subglottic larynx, apex of pyriform sinus, cervical esophagus."></td>
+                    </tr>
+                    <tr data-level="VII (Prevertebral)">
+                        <td data-label="Level">VII (Prevertebral)</td>
+                        <td data-label="Cranial">Upper edge of body of C1</td>
+                        <td data-label="Caudal">Caudal edge of body of C7</td>
+                        <td data-label="Anterior">Pharyngeal wall</td>
+                        <td data-label="Posterior">Anterior surface of vertebral bodies</td>
+                        <td data-label="Lateral">Medial edge of internal carotid artery; medial edge of scalenius anterior muscle</td>
+                        <td data-label="Medial">Longus colli muscle</td>
+                        <td data-label="Details" class="popup-button-cell">
+                            <button class="view-details-btn"><i class="fas fa-info-circle"></i> View Details</button>
+                        </td>
+                        <td class="details-cell" style="display: none;" data-details="Subdivided into VIIa (retropharyngeal) and VIIb (retro-styloid). At risk for metastases from nasopharynx, pharyngeal wall, oropharynx."></td>
+                    </tr>
+                    <tr data-level="VIII (Parotid)">
+                        <td data-label="Level">VIII (Parotid)</td>
+                        <td data-label="Cranial">Zygomatic arch; external auditory canal</td>
+                        <td data-label="Caudal">Angle of mandible</td>
+                        <td data-label="Anterior">Posterior edge of mandibular ramus; posterior edge of masseter muscle (laterally); medial pterygoid muscle (medially)</td>
+                        <td data-label="Posterior">Anterior edge of sternocleidomastoid muscle; posterior belly of digastric muscle</td>
+                        <td data-label="Lateral">SMAS layer in subcutaneous tissue</td>
+                        <td data-label="Medial">Styloid process; styloid muscle</td>
+                        <td data-label="Details" class="popup-button-cell">
+                            <button class="view-details-btn"><i class="fas fa-info-circle"></i> View Details</button>
+                        </td>
+                        <td class="details-cell" style="display: none;" data-details="Includes pre-auricular, superficial/deep intraparotid, subparotid nodes. Receives lymphatics from frontal/temporal skin, eyelids, conjunctiva, auricle, nasal cavities, nasopharynx. At risk for metastases from frontal/temporal skin, orbit, external auditory canal, nasal cavities, parotid gland."></td>
+                    </tr>
+                    <tr data-level="IX (Bucco-facial)">
+                        <td data-label="Level">IX (Bucco-facial)</td>
+                        <td data-label="Cranial">Caudal edge of orbit</td>
+                        <td data-label="Caudal">Caudal edge of mandible</td>
+                        <td data-label="Anterior">SMAS layer in subcutaneous tissue</td>
+                        <td data-label="Posterior">Anterior edge of masseter muscle; Bichat's fat pad</td>
+                        <td data-label="Lateral">SMAS layer in subcutaneous tissue</td>
+                        <td data-label="Medial">Buccinator muscle</td>
+                        <td data-label="Details" class="popup-button-cell">
+                            <button class="view-details-btn"><i class="fas fa-info-circle"></i> View Details</button>
+                        </td>
+                        <td class="details-cell" style="display: none;" data-details="Includes superficial nodes around facial vessels. Receives lymphatics from nose, eyelids, cheek. At risk for metastases from skin of face, nose, maxillary sinus, buccal mucosa."></td>
+                    </tr>
+                    <tr data-level="Xa (Retroauricular)">
+                        <td data-label="Level">Xa (Retroauricular)</td>
+                        <td data-label="Cranial">Cranial edge of external auditory canal</td>
+                        <td data-label="Caudal">Tip of mastoid</td>
+                        <td data-label="Anterior">Anterior edge of mastoid (caudally); posterior edge of external auditory canal (cranially)</td>
+                        <td data-label="Posterior">Anterior border of occipital nodes; posterior edge of sternocleidomastoid muscle</td>
+                        <td data-label="Lateral">Subcutaneous tissue</td>
+                        <td data-label="Medial">Splenius capitis muscle (caudally); temporal bone (cranially)</td>
+                        <td data-label="Details" class="popup-button-cell">
+                            <button class="view-details-btn"><i class="fas fa-info-circle"></i> View Details</button>
+                        </td>
+                        <td class="details-cell" style="display: none;" data-details="Includes superficial nodes on mastoid process. Receives lymphatics from posterior auricle, external auditory canal, adjacent scalp. At risk for metastases from retro-auricular skin cancers."></td>
+                    </tr>
+                    <tr data-level="Xb (Occipital)">
+                        <td data-label="Level">Xb (Occipital)</td>
+                        <td data-label="Cranial">External occipital protuberance</td>
+                        <td data-label="Caudal">Cranial occurrence</td>
+                        <td data-label="Anterior">Posterior edge of sternocleidomastoid muscle</td>
+                        <td data-label="Posterior">Anterior (lateral) edge of trapezius muscle</td>
+                        <td data-label="Lateral">Subcutaneous tissue</td>
+                        <td data-label="Medial">Splenius capitis muscle</td>
+                        <td data-label="Details" class="popup-button-cell">
+                            <button class="view-details-btn"><i class="fas fa-info-circle"></i> View Details</button>
+                        </td>
+                        <td class="details-cell" style="display: none;" data-details="Cranial continuation of level Va nodes. Receives lymphatics from posterior hair-bearing scalp. At risk for metastases from occipital skin cancers."></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="popup-blur-overlay" id="popupBlurOverlay"></div>
+    <div class="popup-card" id="popupCard"></div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        
+        // Function to update the theme
+        function updateTheme(newTheme) {
+            const html = document.documentElement;
+            html.setAttribute('data-theme', newTheme);
+            
+            // Update theme toggle icon
+            const themeIcon = themeToggle.querySelector('i');
+            if (newTheme === 'dark') {
+                themeIcon.className = 'fas fa-moon';
+            } else {
+                themeIcon.className = 'fas fa-sun';
+            }
+            // Save theme preference
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Toggle theme on button click
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            updateTheme(newTheme);
+        });
+
+        // Load saved theme on DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                updateTheme(savedTheme);
+            } else {
+                // Set default theme to dark if no preference saved
+                updateTheme('dark');
+            }
+
+            // Restore scroll position
+            const scrollPos = localStorage.getItem('scrollPos') || 0;
+            document.querySelector('.table-container').scrollTop = scrollPos;
+        });
+
+        // Save scroll position on scroll
+        document.querySelector('.table-container').addEventListener('scroll', function() {
+            localStorage.setItem('scrollPos', this.scrollTop);
+        });
+
+        function goHome() {
+            window.location.href = '..\\Contouring.html';
+        }
+
+        // Function to show the popup
+        function showPopup(details, levelText, triggerElement) {
+            const popup = document.getElementById('popupCard');
+            const blurOverlay = document.getElementById('popupBlurOverlay');
+
+            if (!details) { // If no details, simply close any active popup
+                closePopupAndOverlay();
+                return;
+            }
+
+            popup.innerHTML = `<div style='font-weight:bold; margin-bottom:8px;'>${levelText} Details</div>${details}`;
+            popup.classList.add('active');
+            blurOverlay.classList.add('active');
+
+            const isMobile = window.innerWidth <= 600;
+
+            if (!isMobile) { // Desktop behavior: position popup relative to the button
+                const buttonRect = triggerElement.getBoundingClientRect();
+                let left = buttonRect.right + 8;
+                let top = buttonRect.top;
+
+                // Ensure popup stays within viewport horizontally
+                const popupWidth = popup.offsetWidth || 300;
+                if (left + popupWidth > window.innerWidth - 8) {
+                    left = Math.max(buttonRect.left - popupWidth - 8, 8);
+                }
+                // Ensure popup stays within viewport vertically
+                const popupHeight = popup.offsetHeight || 200;
+                if (top + popupHeight > window.innerHeight - 8) {
+                    top = Math.max(window.innerHeight - popupHeight - 8, 8);
+                }
+                popup.style.top = `${top}px`;
+                popup.style.left = `${left}px`;
+            } else { // Mobile behavior: center popup
+                popup.style.top = '50%';
+                popup.style.left = '50%';
+                popup.style.transform = 'translate(-50%, -50%)';
+            }
+        }
+
+        // Function to close the popup and overlay
+        function closePopupAndOverlay() {
+            const popup = document.getElementById('popupCard');
+            const blurOverlay = document.getElementById('popupBlurOverlay');
+            popup.classList.remove('active');
+            blurOverlay.classList.remove('active');
+        }
+
+        // Event delegation for table clicks
+        document.querySelector('table').addEventListener('click', function(event) {
+            const clickedRow = event.target.closest('tr');
+
+            if (clickedRow) {
+                // If the clicked element is the "View Details" button or its icon
+                if (event.target.closest('.view-details-btn')) {
+                    event.stopPropagation(); // Prevent row click from firing
+                    const detailsCell = clickedRow.querySelector('.details-cell');
+                    const details = detailsCell ? detailsCell.getAttribute('data-details') : '';
+                    const levelText = clickedRow.querySelector('td[data-label="Level"]').textContent;
+                    showPopup(details, levelText, event.target.closest('.view-details-btn')); // Pass the button element for positioning
+                } else {
+                    // This is a click on the row itself (but not the details button)
+                    const isMobile = window.innerWidth <= 600;
+                    if (isMobile) {
+                        // Collapse other expanded rows
+                        document.querySelectorAll('tr.expanded').forEach(expandedRow => {
+                            if (expandedRow !== clickedRow) {
+                                expandedRow.classList.remove('expanded');
+                            }
+                        });
+                        // Toggle the 'expanded' class on the clicked row
+                        clickedRow.classList.toggle('expanded');
+                    }
+                }
+            }
+        });
+
+        // Close popup and overlay on any click outside popup (desktop/mobile)
+        document.addEventListener('click', function(event) {
+            const popup = document.getElementById('popupCard');
+            const blurOverlay = document.getElementById('popupBlurOverlay');
+            
+            // If the click is inside the popup, do nothing (prevent closing)
+            if (popup.contains(event.target) && popup.classList.contains('active')) {
+                return;
+            }
+
+            // Close if active and clicked outside popup, or if blur overlay is clicked
+            if (popup.classList.contains('active') || blurOverlay.classList.contains('active')) {
+                closePopupAndOverlay();
+            }
+        });
+
+        // Close popup and overlay on scroll (both mobile and desktop)
+        window.addEventListener('scroll', function() {
+            closePopupAndOverlay();
+        });
+    </script>
+</body>
+</html>
