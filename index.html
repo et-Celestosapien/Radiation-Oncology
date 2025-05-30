@@ -295,6 +295,16 @@
       --accent-gradient-end: #fbbf24;
     }
 
+    #contouringCard {
+      --accent-gradient-start: #06b6d4;
+      --accent-gradient-end: #0891b2;
+    }
+
+    #neckNodeCard {
+      --accent-gradient-start: #14b8a6;
+      --accent-gradient-end: #0d9488;
+    }
+
     .mode-card-link {
       text-decoration: none;
       color: inherit;
@@ -315,10 +325,34 @@
   </button>
 
   <div class="header">
-    <h1 class="title">Radiation Physics</h1>
+    <h1 class="title">Radiation Oncology</h1>
   </div>
 
   <div class="mode-selection">
+    <a href=".\Contouring\Contouring.html" class="mode-card-link">
+      <div class="mode-card" id="contouringCard">
+        <div class="mode-icon">
+          <i class="fas fa-draw-polygon"></i>
+        </div>
+        <div class="mode-title">Contouring</div>
+        <div class="btn">
+          <i class="fas fa-play"></i> Contouring Guidelines
+        </div>
+      </div>
+    </a>
+
+    <a href=".\HeadNeck\NeckNodeTable.html" class="mode-card-link">
+      <div class="mode-card" id="neckNodeCard">
+        <div class="mode-icon">
+          <i class="fas fa-network-wired"></i>
+        </div>
+        <div class="mode-title">Neck Node Boundaries</div>
+        <div class="btn">
+          <i class="fas fa-play"></i> View Guidelines
+        </div>
+      </div>
+    </a>
+
     <a href="ExamMode.html" class="mode-card-link">
       <div class="mode-card" id="examModeCard">
         <div class="mode-icon">
